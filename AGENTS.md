@@ -91,3 +91,12 @@ Vite 8 + Nitro.
 - **Supply-chain guard**: `bunfig.toml` blocks installing any package version
   published less than 24h ago (`minimumReleaseAge`). Adding a package to
   `minimumReleaseAgeExcludes` bypasses this — confirm with the user first.
+- **Word pronunciation audio**: vocabulary audio is pre-generated at dev time,
+  not synthesized live in the app. `scripts/generate-audio.mjs` uses
+  `msedge-tts` (free neural voices via Microsoft Edge's Read Aloud service, no
+  API key) to render each word in `WORDS` to an mp3 under `public/audio/` and
+  regenerates the manifest `src/data/word-audio.generated.ts` (auto-generated —
+  don't hand-edit it; add new words to the `WORDS` array in the script instead,
+  then run `bun run generate-audio`). `src/lib/word-audio.ts`'s `playWord(word)`
+  plays the matching file, falling back to `speechSynthesis` for any word that
+  doesn't have one yet.

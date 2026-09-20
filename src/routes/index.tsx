@@ -4,6 +4,7 @@ import { ArrowLeft, Check, ExternalLink, Flame, Heart, Lock, RotateCcw, Share, S
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import { playWord } from "@/lib/word-audio";
 
 const PROFILE_KEY = "wortwunder:profile";
 type Profile = { name: string; age: string };
@@ -118,13 +119,7 @@ function Index() {
   };
   const speak = () => {
     setHeard(true);
-    if (typeof window !== "undefined" && "speechSynthesis" in window) {
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance("das Buch");
-      utterance.lang = "de-DE";
-      utterance.rate = 0.78;
-      window.speechSynthesis.speak(utterance);
-    }
+    playWord("das Buch");
   };
 
   return (
