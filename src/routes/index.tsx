@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { playLetter, playWord } from "@/lib/word-audio";
+import { TIERE_WORDS, type VocabWord } from "@/data/vocabulary";
 
 const PROFILE_KEY = "wortwunder:profile";
 type Profile = { name: string; age: string };
@@ -26,7 +27,7 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-type Screen = "home" | "picture" | "build" | "listen";
+type Screen = "home" | "picture" | "meaning" | "translate" | "build" | "missing" | "unscramble" | "listen" | "listenPicture" | "listenBuild" | "match";
 
 function Index() {
   const [screen, setScreen] = useState<Screen>("home");
@@ -34,6 +35,7 @@ function Index() {
   const [letters, setLetters] = useState<number[]>([]);
   const [heard, setHeard] = useState(false);
   const [checked, setChecked] = useState(false);
+  const [lastCorrect, setLastCorrect] = useState(false);
   const [attempts, setAttempts] = useState(0);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [profileChecked, setProfileChecked] = useState(false);
@@ -43,6 +45,12 @@ function Index() {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
   const letterTiles = useMemo(() => ["G", "V", "O", "L", "E", "O"], []);
+  const unscrambleTiles = useMemo(() => ["L", "O", "G", "E", "V"], []);
+  const listenBuildTiles = useMemo(() => ["E", "V", "L", "O", "G"], []);
+  const missingLetterOptions = useMemo(() => ["O", "A", "U", "I"], []);
+  const meaningOptions = useMemo(() => TIERE_WORDS.map((w) => w.english), []);
+  const translateOptions = useMemo(() => TIERE_WORDS.map((w) => w.full), []);
+  const pictureOptions = useMemo(() => TIERE_WORDS.map((w) => ({ id: w.id, emoji: w.emoji, label: w.english })), []);
 
   useEffect(() => {
     try {
@@ -102,14 +110,13 @@ function Index() {
     const isIOS = /iPhone|iPad|iPod/i.test(ua) || (/Macintosh/i.test(ua) && navigator.maxTouchPoints > 1);
     if (isIOS) setShowInstallHelp(true);
   };
-  const sequence: Screen[] = ["home", "picture", "build", "listen"];
+  const sequence: Screen[] = ["home", "picture", "meaning", "translate", "build", "missing", "unscramble", "listen", "listenPicture", "listenBuild", "match"];
   const step = sequence.indexOf(screen);
   const previousScreen = sequence[Math.max(0, step - 1)] ?? "home";
 
   const go = (next: Screen) => { setAnswer(null); setLetters([]); setHeard(false); setChecked(false); setAttempts(0); setScreen(next); };
-  const checkAnswer = (isCorrect: boolean) => { setChecked(true); if (!isCorrect) setAttempts((a) => a + 1); };
-  const retry = () => { setChecked(false); setAnswer(null); };
-  const retryBuild = () => { setChecked(false); setLetters([]); };
+  const checkAnswer = (isCorrect: boolean) => { setChecked(true); setLastCorrect(isCorrect); if (!isCorrect) setAttempts((a) => a + 1); };
+  const retry = () => { setChecked(false); setAnswer(null); setLetters([]); };
   const startLesson = () => {
     if (typeof document !== "undefined") {
       const root = document.documentElement as HTMLElement & {
@@ -154,28 +161,72 @@ function Index() {
 
       <main className="relative z-10 mx-auto max-w-5xl px-4 pb-10 sm:px-6">
         {screen === "home" && <Home onStart={startLesson} name={profile?.name} showInstall={!installed} onAddToHomeScreen={addToHomeScreen} />}
+
         {screen === "picture" && <LessonFrame eyebrow="Picture challenge" title="Was ist das?" subtitle="Choose the German word for this picture.">
           <Picture emoji="🐦" />
           <AnswerGrid options={["der Hund", "der Vogel", "das Pferd", "die Katze"]} selected={answer} correct="der Vogel" revealed={checked} onSelect={setAnswer} />
           {!checked && <Continue label="Check" disabled={!answer} onClick={() => checkAnswer(answer === "der Vogel")} />}
         </LessonFrame>}
+
+        {screen === "meaning" && <LessonFrame eyebrow="Meaning check" title="Was bedeutet das?" subtitle="Choose the English meaning.">
+          <WordCard text="der Vogel" speak />
+          <AnswerGrid options={meaningOptions} selected={answer} correct="Bird" revealed={checked} onSelect={setAnswer} speak={false} />
+          {!checked && <Continue label="Check" disabled={!answer} onClick={() => checkAnswer(answer === "Bird")} />}
+        </LessonFrame>}
+
+        {screen === "translate" && <LessonFrame eyebrow="Translation" title="Wie sagt man das auf Deutsch?" subtitle="Choose the German word.">
+          <WordCard text="Bird" />
+          <AnswerGrid options={translateOptions} selected={answer} correct="der Vogel" revealed={checked} onSelect={setAnswer} />
+          {!checked && <Continue label="Check" disabled={!answer} onClick={() => checkAnswer(answer === "der Vogel")} />}
+        </LessonFrame>}
+
         {screen === "build" && <LessonFrame eyebrow="Word builder" title="Baue das Wort" subtitle="Tap the letters to spell Vogel.">
           <Picture emoji="🐦" />
-          <div className="my-5 flex min-h-14 flex-wrap justify-center gap-2">{[0,1,2,3,4].map((i) => <span key={i} className="grid size-12 place-items-center rounded-xl border-2 border-dashed border-ring/50 bg-glass font-display text-xl font-extrabold">{letters[i] !== undefined ? letterTiles[letters[i]] : ""}</span>)}</div>
-          <div className="flex flex-wrap justify-center gap-2">{letterTiles.map((letter, i) => <Button key={`${letter}-${i}`} variant="tile" size="tile" disabled={checked || letters.includes(i) || letters.length >= 5} onClick={() => { playLetter(letter); setLetters((old) => [...old, i]); }}>{letter}</Button>)}<Button variant="tile" size="tile" disabled={checked} onClick={() => setLetters([])} aria-label="Reset letters"><RotateCcw /></Button></div>
+          <LetterBuilder answerLength={5} tiles={letterTiles} letters={letters} disabled={checked} onTapTile={(i, letter) => { playLetter(letter); setLetters((old) => [...old, i]); }} onReset={() => setLetters([])} />
           {!checked && <Continue label="Check" disabled={letters.length !== 5} onClick={() => checkAnswer(letters.map((i) => letterTiles[i]).join("") === "VOGEL")} />}
         </LessonFrame>}
+
+        {screen === "missing" && <LessonFrame eyebrow="Missing letter" title="Welcher Buchstabe fehlt?" subtitle="Pick the letter that completes the word.">
+          <Picture emoji="🐦" />
+          <div className="my-5 flex justify-center gap-2">
+            {["V", checked ? (answer ?? "_") : "_", "G", "E", "L"].map((ch, i) => <span key={i} className={cn("grid size-12 place-items-center rounded-xl font-display text-xl font-extrabold", i === 1 ? cn("border-2 bg-glass", !checked && "border-dashed border-ring/50", checked && lastCorrect && "border-success text-success", checked && !lastCorrect && "border-destructive text-destructive") : "bg-card ring-1 ring-border")}>{ch}</span>)}
+          </div>
+          <LetterOptions options={missingLetterOptions} selected={answer} correct="O" revealed={checked} onSelect={setAnswer} />
+          {!checked && <Continue label="Check" disabled={!answer} onClick={() => checkAnswer(answer === "O")} />}
+        </LessonFrame>}
+
+        {screen === "unscramble" && <LessonFrame eyebrow="Unscramble" title="Ordne die Buchstaben" subtitle="Arrange the letters to spell the word.">
+          <Picture emoji="🐦" />
+          <LetterBuilder answerLength={5} tiles={unscrambleTiles} letters={letters} disabled={checked} onTapTile={(i, letter) => { playLetter(letter); setLetters((old) => [...old, i]); }} onReset={() => setLetters([])} />
+          {!checked && <Continue label="Check" disabled={letters.length !== 5} onClick={() => checkAnswer(letters.map((i) => unscrambleTiles[i]).join("") === "VOGEL")} />}
+        </LessonFrame>}
+
         {screen === "listen" && <LessonFrame eyebrow="Listening challenge" title="Was hörst du?" subtitle="Listen, then choose the word you hear.">
           <div className="my-5 flex justify-center"><Button onClick={speak} className="size-24 rounded-full bg-berry text-primary-foreground shadow-[0_8px_0_var(--primary-shadow)] hover:bg-berry/90 active:translate-y-1 active:shadow-none" aria-label="Play German word"><Volume2 className="size-10" /></Button></div>
           {heard && <p className="mb-4 text-center text-sm font-bold text-ink-soft">Listen again as many times as you like.</p>}
           <AnswerGrid options={["der Hund", "der Vogel", "das Pferd", "die Katze"]} selected={answer} correct="der Vogel" revealed={checked} onSelect={setAnswer} />
-          {checked && answer === "der Vogel" && <div className="animate-pop mt-5 rounded-3xl bg-sun/35 p-5 text-center ring-2 ring-sun"><Star className="mx-auto size-10 fill-sun text-foreground" /><p className="mt-1 font-display text-2xl font-extrabold">Lektion geschafft!</p><p className="font-bold text-ink-soft">+25 XP · Your 5 day streak continues!</p></div>}
           {!checked && <Continue label="Check" disabled={!answer} onClick={() => checkAnswer(answer === "der Vogel")} />}
         </LessonFrame>}
 
-        {checked && screen === "picture" && <ResultCard correct={answer === "der Vogel"} correctText="der Vogel means the bird!" hint={attempts >= 2 ? "Hint: this animal has feathers and loves to sing." : undefined} actionLabel={answer === "der Vogel" ? "Weiter" : "Try again"} onAction={answer === "der Vogel" ? () => go("build") : retry} />}
-        {checked && screen === "build" && <ResultCard correct={letters.map((i) => letterTiles[i]).join("") === "VOGEL"} correctText="der Vogel means the bird!" hint={attempts >= 2 ? "Hint: this animal has feathers and loves to sing." : undefined} actionLabel={letters.map((i) => letterTiles[i]).join("") === "VOGEL" ? "Weiter" : "Try again"} onAction={letters.map((i) => letterTiles[i]).join("") === "VOGEL" ? () => go("listen") : retryBuild} />}
-        {checked && screen === "listen" && <ResultCard correct={answer === "der Vogel"} correctText="der Vogel means the bird!" hint={attempts >= 2 ? "Hint: this animal has feathers and loves to sing." : undefined} actionLabel={answer === "der Vogel" ? "Back to my path" : "Try again"} onAction={answer === "der Vogel" ? () => go("home") : retry} />}
+        {screen === "listenPicture" && <LessonFrame eyebrow="Listening challenge" title="Welches Bild hörst du?" subtitle="Listen, then tap the matching picture.">
+          <div className="my-5 flex justify-center"><Button onClick={speak} className="size-24 rounded-full bg-berry text-primary-foreground shadow-[0_8px_0_var(--primary-shadow)] hover:bg-berry/90 active:translate-y-1 active:shadow-none" aria-label="Play German word"><Volume2 className="size-10" /></Button></div>
+          {heard && <p className="mb-4 text-center text-sm font-bold text-ink-soft">Listen again as many times as you like.</p>}
+          <PictureOptions options={pictureOptions} selected={answer} correct="vogel" revealed={checked} onSelect={setAnswer} />
+          {!checked && <Continue label="Check" disabled={!answer} onClick={() => checkAnswer(answer === "vogel")} />}
+        </LessonFrame>}
+
+        {screen === "listenBuild" && <LessonFrame eyebrow="Listening challenge" title="Baue das Wort" subtitle="Listen, then spell the word you hear.">
+          <div className="my-5 flex justify-center"><Button onClick={speak} className="size-24 rounded-full bg-berry text-primary-foreground shadow-[0_8px_0_var(--primary-shadow)] hover:bg-berry/90 active:translate-y-1 active:shadow-none" aria-label="Play German word"><Volume2 className="size-10" /></Button></div>
+          {heard && <p className="mb-4 text-center text-sm font-bold text-ink-soft">Listen again as many times as you like.</p>}
+          <LetterBuilder answerLength={5} tiles={listenBuildTiles} letters={letters} disabled={checked} onTapTile={(i, letter) => { playLetter(letter); setLetters((old) => [...old, i]); }} onReset={() => setLetters([])} />
+          {!checked && <Continue label="Check" disabled={letters.length !== 5} onClick={() => checkAnswer(letters.map((i) => listenBuildTiles[i]).join("") === "VOGEL")} />}
+        </LessonFrame>}
+
+        {screen === "match" && <LessonFrame eyebrow="Round-up" title="Finde die Paare" subtitle="Match each German word to its meaning.">
+          <MatchPairs words={TIERE_WORDS} onComplete={() => go("home")} />
+        </LessonFrame>}
+
+        {checked && screen !== "home" && <ResultCard correct={lastCorrect} correctText="der Vogel means the bird!" hint={attempts >= 2 ? "Hint: this animal has feathers and loves to sing." : undefined} actionLabel={lastCorrect ? "Weiter" : "Try again"} onAction={lastCorrect ? () => go(sequence[step + 1] ?? "home") : retry} />}
       </main>
 
       {profileChecked && !profile && <Onboarding onSubmit={saveProfile} />}
@@ -316,9 +367,66 @@ function InstallHelp({ onClose }: { onClose: () => void }) {
   </div>;
 }
 
-function LessonFrame({ eyebrow, title, subtitle, children }: { eyebrow: string; title: string; subtitle: string; children: React.ReactNode }) { return <section className="glass-panel mx-auto max-w-3xl rounded-[28px] p-5 sm:p-8"><p className="text-xs font-extrabold uppercase tracking-[0.14em] text-ink-soft">{eyebrow}</p><h1 className="mt-1 font-display text-3xl font-extrabold sm:text-4xl">{title}</h1><p className="font-bold text-ink-soft">{subtitle}</p><div className="mt-6">{children}</div></section>; }
+function LessonFrame({ eyebrow, title, subtitle, children }: { eyebrow: string; title: string; subtitle: string; children: React.ReactNode }) {
+  return <section className="glass-panel mx-auto max-w-3xl rounded-[28px] p-5 sm:p-8">
+    <p className="text-xs font-extrabold uppercase tracking-[0.14em] text-ink-soft">{eyebrow}</p>
+    <h1 className="mt-1 font-display text-3xl font-extrabold sm:text-4xl">
+      <button type="button" onClick={() => playWord(title)} className="inline-flex items-center gap-2 text-left" aria-label={`${title} — tap to hear`}>{title} <Volume2 className="size-6 shrink-0 text-ink-soft" /></button>
+    </h1>
+    <p className="font-bold text-ink-soft">{subtitle}</p>
+    <div className="mt-6">{children}</div>
+  </section>;
+}
 function Picture({ emoji }: { emoji: string }) { return <div className="mx-auto my-5 grid size-36 place-items-center rounded-[28px] bg-card text-7xl shadow-inner ring-1 ring-border sm:size-40">{emoji}</div>; }
-function AnswerGrid({ options, selected, correct, revealed, onSelect }: { options: string[]; selected: string | null; correct: string; revealed: boolean; onSelect: (answer: string) => void }) { return <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">{options.map((option) => <Button key={option} variant="answer" disabled={revealed} onClick={() => { playWord(option); onSelect(option); }} className={cn(!revealed && selected === option && "border-primary bg-primary/10", revealed && selected === option && option === correct && "border-success bg-success-soft", revealed && selected === option && option !== correct && "border-destructive bg-danger-soft", revealed && option === correct && "border-success")}>{option}</Button>)}</div>; }
+function AnswerGrid({ options, selected, correct, revealed, onSelect, speak = true }: { options: string[]; selected: string | null; correct: string; revealed: boolean; onSelect: (answer: string) => void; speak?: boolean }) { return <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">{options.map((option) => <Button key={option} variant="answer" disabled={revealed} onClick={() => { if (speak) playWord(option); onSelect(option); }} className={cn(!revealed && selected === option && "border-primary bg-primary/10", revealed && selected === option && option === correct && "border-success bg-success-soft", revealed && selected === option && option !== correct && "border-destructive bg-danger-soft", revealed && option === correct && "border-success")}>{option}</Button>)}</div>; }
+function WordCard({ text, speak = false }: { text: string; speak?: boolean }) {
+  if (!speak) return <div className="mx-auto my-5 grid min-h-32 max-w-xs place-items-center rounded-[28px] bg-card px-6 py-4 text-center font-display text-2xl font-extrabold shadow-inner ring-1 ring-border sm:min-h-36 sm:text-3xl">{text}</div>;
+  return <button type="button" onClick={() => playWord(text)} aria-label={`${text} — tap to hear`} className="mx-auto my-5 flex min-h-32 max-w-xs items-center justify-center gap-2 rounded-[28px] bg-card px-6 py-4 text-center font-display text-2xl font-extrabold shadow-inner ring-1 ring-border transition hover:bg-card/80 sm:min-h-36 sm:text-3xl">{text} <Volume2 className="size-6 shrink-0 text-ink-soft" /></button>;
+}
+function LetterOptions({ options, selected, correct, revealed, onSelect }: { options: string[]; selected: string | null; correct: string; revealed: boolean; onSelect: (letter: string) => void }) { return <div className="flex flex-wrap justify-center gap-3">{options.map((option) => <Button key={option} variant="tile" size="tile" disabled={revealed} onClick={() => { playLetter(option); onSelect(option); }} className={cn(!revealed && selected === option && "border-primary bg-primary/10", revealed && selected === option && option === correct && "border-success bg-success-soft", revealed && selected === option && option !== correct && "border-destructive bg-danger-soft", revealed && option === correct && "border-success")}>{option}</Button>)}</div>; }
+function PictureOptions({ options, selected, correct, revealed, onSelect }: { options: { id: string; emoji: string; label: string }[]; selected: string | null; correct: string; revealed: boolean; onSelect: (id: string) => void }) {
+  return <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">{options.map((option) => <button key={option.id} type="button" disabled={revealed} aria-label={option.label} onClick={() => onSelect(option.id)} className={cn("grid aspect-square place-items-center rounded-3xl bg-card text-5xl ring-2 ring-border transition", !revealed && selected === option.id && "ring-primary bg-primary/10", revealed && selected === option.id && option.id === correct && "ring-success bg-success-soft", revealed && selected === option.id && option.id !== correct && "ring-destructive bg-danger-soft", revealed && option.id === correct && "ring-success")}>{option.emoji}</button>)}</div>;
+}
+function LetterBuilder({ answerLength, tiles, letters, onTapTile, onReset, disabled }: { answerLength: number; tiles: string[]; letters: number[]; onTapTile: (index: number, letter: string) => void; onReset: () => void; disabled: boolean }) {
+  return <>
+    <div className="my-5 flex min-h-14 flex-wrap justify-center gap-2">{Array.from({ length: answerLength }).map((_, i) => { const tileIndex = letters[i]; return <span key={i} className="grid size-12 place-items-center rounded-xl border-2 border-dashed border-ring/50 bg-glass font-display text-xl font-extrabold">{tileIndex !== undefined ? tiles[tileIndex] : ""}</span>; })}</div>
+    <div className="flex flex-wrap justify-center gap-2">{tiles.map((letter, i) => <Button key={`${letter}-${i}`} variant="tile" size="tile" disabled={disabled || letters.includes(i) || letters.length >= answerLength} onClick={() => onTapTile(i, letter)}>{letter}</Button>)}<Button variant="tile" size="tile" disabled={disabled} onClick={onReset} aria-label="Reset letters"><RotateCcw /></Button></div>
+  </>;
+}
+function MatchPairs({ words, onComplete }: { words: VocabWord[]; onComplete: () => void }) {
+  const rightOrder = useMemo(() => { const order = [2, 0, 3, 1].map((i) => words[i % words.length]?.id).filter((id): id is string => Boolean(id)); return order.length === words.length ? order : words.map((w) => w.id); }, [words]);
+  const byId = useMemo(() => Object.fromEntries(words.map((w) => [w.id, w])), [words]);
+  const [selectedLeft, setSelectedLeft] = useState<string | null>(null);
+  const [matched, setMatched] = useState<string[]>([]);
+  const [wrong, setWrong] = useState<{ left: string; right: string } | null>(null);
+  const allMatched = matched.length === words.length;
+
+  useEffect(() => {
+    if (!wrong) return;
+    const timer = setTimeout(() => setWrong(null), 600);
+    return () => clearTimeout(timer);
+  }, [wrong]);
+
+  const selectLeft = (id: string) => { if (matched.includes(id)) return; const word = byId[id]; if (word) playWord(word.full); setSelectedLeft(id); setWrong(null); };
+  const selectRight = (id: string) => {
+    if (!selectedLeft || matched.includes(id)) return;
+    if (selectedLeft === id) { const word = byId[id]; if (word) playWord(word.full); setMatched((old) => [...old, id]); setSelectedLeft(null); }
+    else { setWrong({ left: selectedLeft, right: id }); setSelectedLeft(null); }
+  };
+
+  return <div>
+    <div className="grid grid-cols-2 gap-3 sm:gap-4">
+      <div className="space-y-3">{words.map((w) => <button key={w.id} type="button" disabled={matched.includes(w.id)} onClick={() => selectLeft(w.id)} className={cn("flex w-full items-center gap-2 rounded-2xl bg-card p-3 text-left ring-2 ring-border transition sm:p-4", matched.includes(w.id) && "bg-success-soft ring-success opacity-70", selectedLeft === w.id && "ring-primary bg-primary/10", wrong?.left === w.id && "ring-destructive bg-danger-soft")}><span className="text-2xl">{w.emoji}</span><span className="font-display text-sm font-extrabold sm:text-base">{w.full}</span></button>)}</div>
+      <div className="space-y-3">{rightOrder.map((id) => { const w = byId[id]; if (!w) return null; return <button key={id} type="button" disabled={matched.includes(id)} onClick={() => selectRight(id)} className={cn("w-full rounded-2xl bg-card p-3 text-center ring-2 ring-border transition sm:p-4", matched.includes(id) && "bg-success-soft ring-success opacity-70", wrong?.right === id && "ring-destructive bg-danger-soft")}><span className="font-display text-sm font-extrabold sm:text-base">{w.english}</span></button>; })}</div>
+    </div>
+    {allMatched && <div className="animate-pop mt-6 rounded-3xl bg-sun/35 p-5 text-center ring-2 ring-sun">
+      <Star className="mx-auto size-10 fill-sun text-foreground" />
+      <p className="mt-1 font-display text-2xl font-extrabold">Lektion geschafft!</p>
+      <p className="font-bold text-ink-soft">+25 XP · Your 5 day streak continues!</p>
+      <Button variant="adventure" size="lesson" className="mt-4 w-full" onClick={onComplete}>Back to my path</Button>
+    </div>}
+  </div>;
+}
 function ResultCard({ correct, correctText, hint, actionLabel, onAction }: { correct: boolean; correctText: string; hint?: string | undefined; actionLabel: string; onAction: () => void }) {
   return <div className="fixed inset-x-0 bottom-0 z-40 flex justify-center px-4">
     <div className={cn("animate-slide-in-up w-full max-w-3xl rounded-t-[28px] p-5 pb-[calc(1.25rem+env(safe-area-inset-bottom))] shadow-[0_-12px_30px_rgba(0,0,0,0.18)] sm:p-7", correct ? "bg-success-soft" : "bg-danger-soft")}>
