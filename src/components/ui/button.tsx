@@ -10,6 +10,12 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default: "bg-primary text-primary-foreground shadow hover:bg-primary/90",
+        adventure:
+          "rounded-2xl bg-primary text-primary-foreground font-display font-extrabold shadow-[0_6px_0_var(--primary-shadow)] hover:brightness-105 active:translate-y-1 active:shadow-[0_2px_0_var(--primary-shadow)]",
+        answer:
+          "h-auto min-h-14 whitespace-normal rounded-2xl border-2 border-transparent bg-glass text-foreground font-display text-base font-bold shadow-[0_3px_0_var(--glass-edge)] hover:border-primary/40 hover:bg-card",
+        tile:
+          "rounded-xl bg-card text-foreground font-display text-xl font-extrabold shadow-[0_4px_0_var(--glass-edge)] ring-1 ring-border hover:-translate-y-0.5 active:translate-y-1 active:shadow-none",
         destructive: "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
         outline:
           "border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground",
@@ -22,6 +28,8 @@ const buttonVariants = cva(
         sm: "h-8 rounded-md px-3 text-xs",
         lg: "h-10 rounded-md px-8",
         icon: "h-9 w-9",
+        lesson: "min-h-14 px-6 py-3 text-base",
+        tile: "size-12 p-0",
       },
     },
     defaultVariants: {
