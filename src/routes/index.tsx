@@ -36,6 +36,7 @@ function Index() {
   const letterTiles = useMemo(() => ["F", "A", "P", "E", "L", "P"], []);
   const sequence: Screen[] = ["home", "vocab", "picture", "build", "listen"];
   const step = sequence.indexOf(screen);
+  const previousScreen = sequence[Math.max(0, step - 1)] ?? "home";
 
   const go = (next: Screen) => { setAnswer(null); setLetters([]); setHeard(false); setScreen(next); };
   const speak = () => {
@@ -65,7 +66,7 @@ function Index() {
 
       {screen !== "home" && (
         <div className="relative z-10 mx-auto flex max-w-3xl items-center gap-3 px-4 pb-3 sm:px-6">
-          <Button variant="ghost" size="icon" onClick={() => go(sequence[Math.max(0, step - 1)])} aria-label="Previous screen"><ArrowLeft /></Button>
+          <Button variant="ghost" size="icon" onClick={() => go(previousScreen)} aria-label="Previous screen"><ArrowLeft /></Button>
           <div className="h-3 flex-1 overflow-hidden rounded-full bg-glass ring-1 ring-border"><div className="h-full rounded-full bg-mint transition-all duration-500" style={{ width: `${step * 25}%` }} /></div>
           <span className="font-display text-sm font-bold">{step}/4</span>
         </div>
