@@ -16,6 +16,12 @@ dist-ssr
 .nitro
 *.local
 
+# npm lockfile (project uses bun.lock)
+package-lock.json
+
+# Claude Code local state
+.claude/
+
 # Wrangler / Cloudflare
 .wrangler/
 .dev.vars
