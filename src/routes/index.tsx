@@ -47,13 +47,6 @@ function Index() {
     setProfileChecked(true);
     setInstalled(window.matchMedia("(display-mode: standalone)").matches || (window.navigator as Navigator & { standalone?: boolean }).standalone === true);
 
-    const redirectUrl = new URL(window.location.href);
-    if (redirectUrl.searchParams.get("install") === "1") {
-      redirectUrl.searchParams.delete("install");
-      window.history.replaceState({}, "", redirectUrl.pathname + redirectUrl.search + redirectUrl.hash);
-      setShowInstallHelp(true);
-    }
-
     const w = window as Window & { __bip?: InstallPromptEvent | null };
     const pickUpPrompt = () => { if (w.__bip) setInstallPrompt(w.__bip); };
     pickUpPrompt();
@@ -62,6 +55,16 @@ function Index() {
     window.addEventListener("bip-ready", pickUpPrompt);
     window.addEventListener("beforeinstallprompt", onPrompt);
     window.addEventListener("appinstalled", onInstalled);
+
+    try {
+      const redirectUrl = new URL(window.location.href);
+      if (redirectUrl.searchParams.get("install") === "1") {
+        redirectUrl.searchParams.delete("install");
+        window.history.replaceState({}, "", redirectUrl.pathname + redirectUrl.search + redirectUrl.hash);
+        setShowInstallHelp(true);
+      }
+    } catch { /* URL parsing failed — skip the auto-reopen, rest of the app still works */ }
+
     return () => {
       window.removeEventListener("bip-ready", pickUpPrompt);
       window.removeEventListener("beforeinstallprompt", onPrompt);
