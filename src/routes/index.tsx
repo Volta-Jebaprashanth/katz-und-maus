@@ -33,6 +33,8 @@ function Index() {
   const [answer, setAnswer] = useState<string | null>(null);
   const [letters, setLetters] = useState<number[]>([]);
   const [heard, setHeard] = useState(false);
+  const [checked, setChecked] = useState(false);
+  const [attempts, setAttempts] = useState(0);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [profileChecked, setProfileChecked] = useState(false);
   const [installPrompt, setInstallPrompt] = useState<InstallPromptEvent | null>(null);
@@ -104,7 +106,10 @@ function Index() {
   const step = sequence.indexOf(screen);
   const previousScreen = sequence[Math.max(0, step - 1)] ?? "home";
 
-  const go = (next: Screen) => { setAnswer(null); setLetters([]); setHeard(false); setScreen(next); };
+  const go = (next: Screen) => { setAnswer(null); setLetters([]); setHeard(false); setChecked(false); setAttempts(0); setScreen(next); };
+  const checkAnswer = (isCorrect: boolean) => { setChecked(true); if (!isCorrect) setAttempts((a) => a + 1); };
+  const retry = () => { setChecked(false); setAnswer(null); };
+  const retryBuild = () => { setChecked(false); setLetters([]); };
   const startLesson = () => {
     if (typeof document !== "undefined") {
       const root = document.documentElement as HTMLElement & {
@@ -151,25 +156,26 @@ function Index() {
         {screen === "home" && <Home onStart={startLesson} name={profile?.name} showInstall={!installed} onAddToHomeScreen={addToHomeScreen} />}
         {screen === "picture" && <LessonFrame eyebrow="Picture challenge" title="Was ist das?" subtitle="Choose the German word for this picture.">
           <Picture emoji="🐦" />
-          <AnswerGrid options={["der Hund", "der Vogel", "das Pferd", "die Katze"]} selected={answer} correct="der Vogel" onSelect={setAnswer} />
-          {answer && <Feedback correct={answer === "der Vogel"} correctText="der Vogel means the bird!" />}
-          <Continue disabled={answer !== "der Vogel"} onClick={() => go("build")} />
+          <AnswerGrid options={["der Hund", "der Vogel", "das Pferd", "die Katze"]} selected={answer} correct="der Vogel" revealed={checked} onSelect={setAnswer} />
+          {!checked && <Continue label="Check" disabled={!answer} onClick={() => checkAnswer(answer === "der Vogel")} />}
         </LessonFrame>}
         {screen === "build" && <LessonFrame eyebrow="Word builder" title="Baue das Wort" subtitle="Tap the letters to spell Apfel.">
           <Picture emoji="🍎" />
           <div className="my-5 flex min-h-14 flex-wrap justify-center gap-2">{[0,1,2,3,4].map((i) => <span key={i} className="grid size-12 place-items-center rounded-xl border-2 border-dashed border-ring/50 bg-glass font-display text-xl font-extrabold">{letters[i] !== undefined ? letterTiles[letters[i]] : ""}</span>)}</div>
-          <div className="flex flex-wrap justify-center gap-2">{letterTiles.map((letter, i) => <Button key={`${letter}-${i}`} variant="tile" size="tile" disabled={letters.includes(i) || letters.length >= 5} onClick={() => { playLetter(letter); setLetters((old) => [...old, i]); }}>{letter}</Button>)}<Button variant="tile" size="tile" onClick={() => setLetters([])} aria-label="Reset letters"><RotateCcw /></Button></div>
-          {letters.length === 5 && <Feedback correct={letters.map((i) => letterTiles[i]).join("") === "APFEL"} correctText="Apfel means apple!" />}
-          <Continue disabled={letters.map((i) => letterTiles[i]).join("") !== "APFEL"} onClick={() => go("listen")} />
+          <div className="flex flex-wrap justify-center gap-2">{letterTiles.map((letter, i) => <Button key={`${letter}-${i}`} variant="tile" size="tile" disabled={checked || letters.includes(i) || letters.length >= 5} onClick={() => { playLetter(letter); setLetters((old) => [...old, i]); }}>{letter}</Button>)}<Button variant="tile" size="tile" disabled={checked} onClick={() => setLetters([])} aria-label="Reset letters"><RotateCcw /></Button></div>
+          {!checked && <Continue label="Check" disabled={letters.length !== 5} onClick={() => checkAnswer(letters.map((i) => letterTiles[i]).join("") === "APFEL")} />}
         </LessonFrame>}
         {screen === "listen" && <LessonFrame eyebrow="Listening challenge" title="Was hörst du?" subtitle="Listen, then choose the word you hear.">
           <div className="my-5 flex justify-center"><Button onClick={speak} className="size-24 rounded-full bg-berry text-primary-foreground shadow-[0_8px_0_var(--primary-shadow)] hover:bg-berry/90 active:translate-y-1 active:shadow-none" aria-label="Play German word"><Volume2 className="size-10" /></Button></div>
           {heard && <p className="mb-4 text-center text-sm font-bold text-ink-soft">Listen again as many times as you like.</p>}
-          <AnswerGrid options={["das Wasser", "das Buch", "die Banane", "der Apfel"]} selected={answer} correct="das Buch" onSelect={setAnswer} />
-          {answer && <Feedback correct={answer === "das Buch"} correctText="das Buch means the book!" />}
-          {answer === "das Buch" && <div className="animate-pop mt-5 rounded-3xl bg-sun/35 p-5 text-center ring-2 ring-sun"><Star className="mx-auto size-10 fill-sun text-foreground" /><p className="mt-1 font-display text-2xl font-extrabold">Lektion geschafft!</p><p className="font-bold text-ink-soft">+25 XP · Your 5 day streak continues!</p></div>}
-          <Continue label="Back to my path" disabled={answer !== "das Buch"} onClick={() => go("home")} />
+          <AnswerGrid options={["das Wasser", "das Buch", "die Banane", "der Apfel"]} selected={answer} correct="das Buch" revealed={checked} onSelect={setAnswer} />
+          {checked && answer === "das Buch" && <div className="animate-pop mt-5 rounded-3xl bg-sun/35 p-5 text-center ring-2 ring-sun"><Star className="mx-auto size-10 fill-sun text-foreground" /><p className="mt-1 font-display text-2xl font-extrabold">Lektion geschafft!</p><p className="font-bold text-ink-soft">+25 XP · Your 5 day streak continues!</p></div>}
+          {!checked && <Continue label="Check" disabled={!answer} onClick={() => checkAnswer(answer === "das Buch")} />}
         </LessonFrame>}
+
+        {checked && screen === "picture" && <ResultCard correct={answer === "der Vogel"} correctText="der Vogel means the bird!" hint={attempts >= 2 ? "Hint: this animal has feathers and loves to sing." : undefined} actionLabel={answer === "der Vogel" ? "Weiter" : "Try again"} onAction={answer === "der Vogel" ? () => go("build") : retry} />}
+        {checked && screen === "build" && <ResultCard correct={letters.map((i) => letterTiles[i]).join("") === "APFEL"} correctText="Apfel means apple!" hint={attempts >= 2 ? "Hint: it starts with A and is a fruit that keeps the doctor away." : undefined} actionLabel={letters.map((i) => letterTiles[i]).join("") === "APFEL" ? "Weiter" : "Try again"} onAction={letters.map((i) => letterTiles[i]).join("") === "APFEL" ? () => go("listen") : retryBuild} />}
+        {checked && screen === "listen" && <ResultCard correct={answer === "das Buch"} correctText="das Buch means the book!" hint={attempts >= 2 ? "Hint: it has pages and you read it." : undefined} actionLabel={answer === "das Buch" ? "Back to my path" : "Try again"} onAction={answer === "das Buch" ? () => go("home") : retry} />}
       </main>
 
       {profileChecked && !profile && <Onboarding onSubmit={saveProfile} />}
@@ -312,6 +318,20 @@ function InstallHelp({ onClose }: { onClose: () => void }) {
 
 function LessonFrame({ eyebrow, title, subtitle, children }: { eyebrow: string; title: string; subtitle: string; children: React.ReactNode }) { return <section className="glass-panel mx-auto max-w-3xl rounded-[28px] p-5 sm:p-8"><p className="text-xs font-extrabold uppercase tracking-[0.14em] text-ink-soft">{eyebrow}</p><h1 className="mt-1 font-display text-3xl font-extrabold sm:text-4xl">{title}</h1><p className="font-bold text-ink-soft">{subtitle}</p><div className="mt-6">{children}</div></section>; }
 function Picture({ emoji }: { emoji: string }) { return <div className="mx-auto my-5 grid size-36 place-items-center rounded-[28px] bg-card text-7xl shadow-inner ring-1 ring-border sm:size-40">{emoji}</div>; }
-function AnswerGrid({ options, selected, correct, onSelect }: { options: string[]; selected: string | null; correct: string; onSelect: (answer: string) => void }) { return <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">{options.map((option) => <Button key={option} variant="answer" onClick={() => { playWord(option); onSelect(option); }} className={cn(selected === option && option === correct && "border-success bg-success-soft", selected === option && option !== correct && "border-destructive bg-danger-soft", selected && option === correct && "border-success")}>{option}</Button>)}</div>; }
-function Feedback({ correct, correctText }: { correct: boolean; correctText: string }) { return <div className={cn("animate-pop mt-4 flex items-center gap-3 rounded-2xl p-4 ring-1", correct ? "bg-success-soft ring-success" : "bg-danger-soft ring-destructive")}><span className={cn("grid size-9 shrink-0 place-items-center rounded-full", correct ? "bg-success" : "bg-destructive")}>{correct ? <Check className="text-primary-foreground" /> : <RotateCcw className="text-primary-foreground" />}</span><div><p className="font-display text-lg font-extrabold">{correct ? "Richtig!" : "Fast! Try again."}</p>{correct && <p className="text-sm font-bold text-ink-soft">{correctText}</p>}</div></div>; }
+function AnswerGrid({ options, selected, correct, revealed, onSelect }: { options: string[]; selected: string | null; correct: string; revealed: boolean; onSelect: (answer: string) => void }) { return <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">{options.map((option) => <Button key={option} variant="answer" disabled={revealed} onClick={() => { playWord(option); onSelect(option); }} className={cn(!revealed && selected === option && "border-primary bg-primary/10", revealed && selected === option && option === correct && "border-success bg-success-soft", revealed && selected === option && option !== correct && "border-destructive bg-danger-soft", revealed && option === correct && "border-success")}>{option}</Button>)}</div>; }
+function ResultCard({ correct, correctText, hint, actionLabel, onAction }: { correct: boolean; correctText: string; hint?: string | undefined; actionLabel: string; onAction: () => void }) {
+  return <div className="fixed inset-x-0 bottom-0 z-40 flex justify-center px-4">
+    <div className={cn("animate-slide-in-up w-full max-w-3xl rounded-t-[28px] p-5 pb-[calc(1.25rem+env(safe-area-inset-bottom))] shadow-[0_-12px_30px_rgba(0,0,0,0.18)] sm:p-7", correct ? "bg-success-soft" : "bg-danger-soft")}>
+      <div className="flex items-center gap-3">
+        <span className={cn("grid size-11 shrink-0 place-items-center rounded-full", correct ? "bg-success" : "bg-destructive")}>{correct ? <Check className="text-primary-foreground" /> : <X className="text-primary-foreground" />}</span>
+        <div className="min-w-0">
+          <p className={cn("font-display text-xl font-extrabold", correct ? "text-success" : "text-destructive")}>{correct ? "Richtig!" : "Fast! Versuch's nochmal."}</p>
+          {correct && <p className="text-sm font-bold text-ink-soft">{correctText}</p>}
+          {!correct && hint && <p className="text-sm font-bold text-ink-soft">💡 {hint}</p>}
+        </div>
+      </div>
+      <Button variant="adventure" size="lesson" className="mt-4 w-full" onClick={onAction}>{actionLabel}</Button>
+    </div>
+  </div>;
+}
 function Continue({ onClick, disabled, label = "Weiter" }: { onClick: () => void; disabled?: boolean; label?: string }) { return <Button variant="adventure" size="lesson" className="mt-6 w-full" disabled={disabled} onClick={onClick}>{label}</Button>; }
