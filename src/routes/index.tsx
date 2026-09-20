@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { ArrowLeft, Check, ExternalLink, Flame, Heart, Lock, MoreVertical, RotateCcw, Share, Smartphone, SquarePlus, Sparkles, Star, Volume2, Zap } from "lucide-react";
+import { ArrowLeft, Check, ExternalLink, Flame, Heart, Lock, RotateCcw, Share, Smartphone, SquarePlus, Sparkles, Star, Volume2, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
@@ -47,6 +47,13 @@ function Index() {
     setProfileChecked(true);
     setInstalled(window.matchMedia("(display-mode: standalone)").matches || (window.navigator as Navigator & { standalone?: boolean }).standalone === true);
 
+    const redirectUrl = new URL(window.location.href);
+    if (redirectUrl.searchParams.get("install") === "1") {
+      redirectUrl.searchParams.delete("install");
+      window.history.replaceState({}, "", redirectUrl.pathname + redirectUrl.search + redirectUrl.hash);
+      setShowInstallHelp(true);
+    }
+
     const w = window as Window & { __bip?: InstallPromptEvent | null };
     const pickUpPrompt = () => { if (w.__bip) setInstallPrompt(w.__bip); };
     pickUpPrompt();
@@ -73,9 +80,11 @@ function Index() {
       await installPrompt.userChoice;
       (window as Window & { __bip?: InstallPromptEvent | null }).__bip = null;
       setInstallPrompt(null);
-    } else {
-      setShowInstallHelp(true);
+      return;
     }
+    const ua = navigator.userAgent;
+    const isIOS = /iPhone|iPad|iPod/i.test(ua) || (/Macintosh/i.test(ua) && navigator.maxTouchPoints > 1);
+    if (isIOS) setShowInstallHelp(true);
   };
   const sequence: Screen[] = ["home", "picture", "build", "listen"];
   const step = sequence.indexOf(screen);
@@ -210,24 +219,21 @@ function Onboarding({ onSubmit }: { onSubmit: (profile: Profile) => void }) {
 
 function InstallHelp({ onClose }: { onClose: () => void }) {
   const ua = typeof navigator !== "undefined" ? navigator.userAgent : "";
-  const isIOS = /iPhone|iPad|iPod/i.test(ua) || (/Macintosh/i.test(ua) && typeof navigator !== "undefined" && navigator.maxTouchPoints > 1);
-  const isSafari = isIOS && !/CriOS|FxiOS|EdgiOS|OPiOS/i.test(ua);
-  const safariLink = typeof window !== "undefined" ? window.location.href.replace(/^https?:\/\//, (m) => `x-safari-${m}`) : "#";
+  const isSafari = !/CriOS|FxiOS|EdgiOS|OPiOS/i.test(ua);
+  const safariLink = (() => {
+    if (typeof window === "undefined") return "#";
+    const url = new URL(window.location.href);
+    url.searchParams.set("install", "1");
+    return url.toString().replace(/^https?:\/\//, (m) => `x-safari-${m}`);
+  })();
 
-  const steps: { icon: React.ReactNode; text: React.ReactNode; href?: string }[] = isIOS
-    ? [
-        ...(!isSafari ? [{ icon: <ExternalLink />, text: <>Open this page in <strong>Safari</strong> — tap the button below.</>, href: safariLink }] : []),
-        { icon: <Share />, text: <>Tap the <strong>Share</strong> button (square with an arrow ⬆️) at the bottom of the screen.</> },
-        { icon: <SquarePlus />, text: <>Scroll down the menu and tap <strong>"Add to Home Screen"</strong>.</> },
-        { icon: <Check />, text: <>Tap <strong>"Add"</strong> in the top-right corner.</> },
-        { icon: <Smartphone />, text: <>Find the WortWunder icon on your Home Screen and tap it to play!</> },
-      ]
-    : [
-        { icon: <MoreVertical />, text: <>Tap the <strong>menu button</strong> (⋮) in your browser.</> },
-        { icon: <SquarePlus />, text: <>Tap <strong>"Add to Home screen"</strong> or <strong>"Install app"</strong>.</> },
-        { icon: <Check />, text: <>Tap <strong>"Add"</strong> or <strong>"Install"</strong> to confirm.</> },
-        { icon: <Smartphone />, text: <>Find the WortWunder icon on your Home Screen and tap it to play!</> },
-      ];
+  const steps: { icon: React.ReactNode; text: React.ReactNode; href?: string }[] = [
+    ...(!isSafari ? [{ icon: <ExternalLink />, text: <>Open this page in <strong>Safari</strong> — tap the button below.</>, href: safariLink }] : []),
+    { icon: <Share />, text: <>Tap the <strong>Share</strong> button (square with an arrow ⬆️) at the bottom of the screen.</> },
+    { icon: <SquarePlus />, text: <>Scroll down the menu and tap <strong>"Add to Home Screen"</strong>.</> },
+    { icon: <Check />, text: <>Tap <strong>"Add"</strong> in the top-right corner.</> },
+    { icon: <Smartphone />, text: <>Find the WortWunder icon on your Home Screen and tap it to play!</> },
+  ];
 
   return <div className="fixed inset-0 z-50 grid place-items-center bg-foreground/40 p-4 backdrop-blur-sm" onClick={onClose}>
     <div onClick={(e) => e.stopPropagation()} className="animate-pop glass-panel w-full max-w-sm rounded-[28px] bg-card p-6 sm:p-7">
