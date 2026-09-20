@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { ArrowLeft, Check, ExternalLink, Flame, Heart, Lock, RotateCcw, Share, Smartphone, SquarePlus, Sparkles, Star, Volume2, Zap } from "lucide-react";
+import { ArrowLeft, Check, ExternalLink, Flame, Heart, Lock, RotateCcw, Share, Smartphone, SquarePlus, Sparkles, Star, Trash2, Volume2, X, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
@@ -37,6 +37,8 @@ function Index() {
   const [installPrompt, setInstallPrompt] = useState<InstallPromptEvent | null>(null);
   const [installed, setInstalled] = useState(false);
   const [showInstallHelp, setShowInstallHelp] = useState(false);
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const [showClearConfirm, setShowClearConfirm] = useState(false);
   const letterTiles = useMemo(() => ["F", "A", "P", "E", "L", "P"], []);
 
   useEffect(() => {
@@ -75,6 +77,14 @@ function Index() {
   const saveProfile = (next: Profile) => {
     try { localStorage.setItem(PROFILE_KEY, JSON.stringify(next)); } catch { /* localStorage unavailable — profile still works for this session */ }
     setProfile(next);
+  };
+
+  const clearAllData = () => {
+    try { localStorage.clear(); } catch { /* localStorage unavailable — nothing to clear */ }
+    setProfile(null);
+    setShowClearConfirm(false);
+    setShowProfileMenu(false);
+    go("home");
   };
 
   const addToHomeScreen = async () => {
@@ -120,10 +130,13 @@ function Index() {
   return (
     <div className="app-sky relative min-h-dvh overflow-hidden text-foreground [padding:env(safe-area-inset-top)_env(safe-area-inset-right)_env(safe-area-inset-bottom)_env(safe-area-inset-left)]">
       <header className="relative z-20 mx-auto grid max-w-5xl grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 py-4 sm:px-6">
-        <button onClick={() => go("home")} className="flex min-w-0 items-center gap-2 text-left" aria-label="Go to learning path">
-          <span className="glass-panel grid size-11 shrink-0 place-items-center rounded-2xl text-2xl">🦉</span>
-          <span className="min-w-0"><span className="block truncate font-display text-xl font-extrabold leading-none">WortWunder</span><span className="block text-[10px] font-bold uppercase tracking-[0.18em] text-ink-soft">Little German</span></span>
-        </button>
+        <div className="flex min-w-0 items-center gap-2">
+          <button onClick={() => setShowProfileMenu(true)} className="glass-panel grid size-11 shrink-0 place-items-center rounded-2xl text-2xl" aria-label="Open profile menu">🦉</button>
+          <button onClick={() => go("home")} className="min-w-0 text-left" aria-label="Go to learning path">
+            <span className="block truncate font-display text-xl font-extrabold leading-none">WortWunder</span>
+            <span className="block text-[10px] font-bold uppercase tracking-[0.18em] text-ink-soft">{profile?.name || "Freund"}</span>
+          </button>
+        </div>
         <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
           <Stat icon={<Flame />} value="5" label="day streak" />
           <Stat icon={<Zap />} value="240" label="experience points" />
@@ -166,6 +179,8 @@ function Index() {
 
       {profileChecked && !profile && <Onboarding onSubmit={saveProfile} />}
       {showInstallHelp && <InstallHelp onClose={() => setShowInstallHelp(false)} />}
+      {showProfileMenu && <ProfileMenu profile={profile} onClose={() => setShowProfileMenu(false)} onSave={(next) => { saveProfile(next); setShowProfileMenu(false); }} onRequestClear={() => setShowClearConfirm(true)} />}
+      {showClearConfirm && <ClearConfirm onCancel={() => setShowClearConfirm(false)} onConfirm={clearAllData} />}
     </div>
   );
 }
@@ -183,7 +198,7 @@ function Home({ onStart, name, showInstall, onAddToHomeScreen }: { onStart: () =
   ];
   return <div className="grid gap-5 lg:grid-cols-[1fr_0.72fr]">
     <section className="glass-panel rounded-[28px] p-5 sm:p-7">
-      <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-4"><div className="min-w-0"><p className="text-sm font-extrabold text-ink-soft">Hallo, {name || "Freund"}!</p><h1 className="font-display text-3xl font-extrabold sm:text-4xl">Dein Lernweg</h1><p className="mt-1 font-bold text-ink-soft">Ready for a little German adventure?</p></div><div className="animate-bob grid size-20 shrink-0 place-items-center rounded-3xl bg-sun/40 text-5xl ring-2 ring-border">🦉</div></div>
+      <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-4"><div className="min-w-0"><p className="text-sm font-extrabold text-ink-soft">Hallo, {name || "Freund"}!</p><h1 className="font-display text-3xl font-extrabold sm:text-4xl">Dein Lernweg</h1><p className="mt-1 font-bold text-ink-soft">Ready for a little German adventure?</p>{showInstall && <Button variant="outline" size="sm" className="mt-3 rounded-xl border-2 border-border bg-card font-display font-extrabold" onClick={onAddToHomeScreen}><Smartphone /> Add to Home Screen</Button>}</div><div className="animate-bob grid size-20 shrink-0 place-items-center rounded-3xl bg-sun/40 text-5xl ring-2 ring-border">🦉</div></div>
       <div className="relative mx-auto mt-7 max-w-lg space-y-4 before:absolute before:bottom-8 before:left-7 before:top-8 before:w-2 before:rounded-full before:bg-ice">
         {levels.map((level, index) => <button key={level.title} disabled={level.state === "locked"} onClick={level.state === "active" ? onStart : undefined} className={cn("relative grid w-full grid-cols-[3.5rem_minmax(0,1fr)] items-center gap-4 text-left", index % 2 === 1 && "sm:translate-x-10")}><span className={cn("z-10 grid size-14 place-items-center rounded-full border-4 border-frost text-2xl shadow-md [&_svg]:size-6", level.state === "done" && "bg-mint", level.state === "active" && "animate-bob bg-sun", level.state === "locked" && "bg-ice text-ink-soft")}>{level.state === "locked" ? <Lock className="size-5" /> : level.icon}</span><span className={cn("rounded-2xl p-4 ring-1 ring-border", level.state === "active" ? "bg-sun/30 ring-2 ring-sun" : "bg-card", level.state === "locked" && "opacity-65")}><span className="block font-display text-lg font-extrabold">{level.title}</span><span className="block text-xs font-bold text-ink-soft">{level.detail}</span></span></button>)}
       </div>
@@ -191,7 +206,6 @@ function Home({ onStart, name, showInstall, onAddToHomeScreen }: { onStart: () =
     <aside className="space-y-5">
       <section className="glass-panel rounded-[28px] p-5"><p className="text-sm font-extrabold text-ink-soft">TODAY'S GOAL</p><div className="mt-2 flex items-center gap-4"><div className="grid size-16 shrink-0 place-items-center rounded-2xl bg-mint/35"><Sparkles className="size-8" /></div><div className="min-w-0 flex-1"><p className="font-display text-xl font-extrabold">10 of 20 XP</p><div className="mt-2 h-3 overflow-hidden rounded-full bg-ice"><div className="h-full w-1/2 rounded-full bg-mint" /></div></div></div></section>
       <Button variant="adventure" size="lesson" className="w-full" onClick={onStart}>Start lesson <Zap /></Button>
-      {showInstall && <Button variant="outline" size="lesson" className="w-full rounded-2xl border-2 border-border bg-card font-display font-extrabold" onClick={onAddToHomeScreen}><Smartphone /> Add to Home Screen</Button>}
     </aside>
   </div>;
 }
@@ -212,11 +226,55 @@ function Onboarding({ onSubmit }: { onSubmit: (profile: Profile) => void }) {
         </div>
         <div>
           <label htmlFor="onboarding-age" className="mb-1 block text-xs font-extrabold uppercase tracking-[0.14em] text-ink-soft">Age</label>
-          <Input id="onboarding-age" type="number" min={1} max={17} inputMode="numeric" value={age} onChange={(e) => setAge(e.target.value)} placeholder="e.g. 7" className="h-12 rounded-2xl border-2 border-border bg-glass px-4 font-display text-base font-bold" />
+          <Input id="onboarding-age" type="number" min={1} inputMode="numeric" value={age} onChange={(e) => setAge(e.target.value)} placeholder="e.g. 7" className="h-12 rounded-2xl border-2 border-border bg-glass px-4 font-display text-base font-bold" />
         </div>
       </div>
       <Button type="submit" variant="adventure" size="lesson" className="mt-6 w-full" disabled={!valid}>Los geht's!</Button>
     </form>
+  </div>;
+}
+
+function ProfileMenu({ profile, onClose, onSave, onRequestClear }: { profile: Profile | null; onClose: () => void; onSave: (profile: Profile) => void; onRequestClear: () => void }) {
+  const [name, setName] = useState(profile?.name ?? "");
+  const [age, setAge] = useState(profile?.age ?? "");
+  const valid = name.trim().length > 0 && Number(age) > 0;
+  return <div className="fixed inset-0 z-50 flex bg-foreground/40 backdrop-blur-sm" onClick={onClose}>
+    <div onClick={(e) => e.stopPropagation()} className="animate-slide-in-left glass-panel flex h-full w-full max-w-xs flex-col rounded-r-[28px] bg-card p-6">
+      <div className="flex items-center justify-between">
+        <div className="grid size-12 place-items-center rounded-2xl bg-sun/40 text-2xl ring-2 ring-border">🦉</div>
+        <Button variant="ghost" size="icon" onClick={onClose} aria-label="Close menu"><X /></Button>
+      </div>
+      <h2 className="mt-4 font-display text-xl font-extrabold">About me</h2>
+      <div className="mt-4 space-y-3">
+        <div>
+          <label htmlFor="profile-name" className="mb-1 block text-xs font-extrabold uppercase tracking-[0.14em] text-ink-soft">Name</label>
+          <Input id="profile-name" value={name} onChange={(e) => setName(e.target.value)} className="h-12 rounded-2xl border-2 border-border bg-glass px-4 font-display text-base font-bold" />
+        </div>
+        <div>
+          <label htmlFor="profile-age" className="mb-1 block text-xs font-extrabold uppercase tracking-[0.14em] text-ink-soft">Age</label>
+          <Input id="profile-age" type="number" min={1} inputMode="numeric" value={age} onChange={(e) => setAge(e.target.value)} className="h-12 rounded-2xl border-2 border-border bg-glass px-4 font-display text-base font-bold" />
+        </div>
+      </div>
+      <Button variant="adventure" size="lesson" className="mt-4 w-full" disabled={!valid} onClick={() => onSave({ name: name.trim(), age: age.trim() })}>Save</Button>
+
+      <div className="mt-auto border-t border-border pt-4">
+        <Button variant="outline" className="w-full rounded-2xl border-2 border-destructive text-destructive hover:bg-danger-soft" onClick={onRequestClear}><Trash2 className="size-4" /> Clear all my data</Button>
+      </div>
+    </div>
+  </div>;
+}
+
+function ClearConfirm({ onCancel, onConfirm }: { onCancel: () => void; onConfirm: () => void }) {
+  return <div className="fixed inset-0 z-[60] grid place-items-center bg-foreground/40 p-4 backdrop-blur-sm" onClick={onCancel}>
+    <div onClick={(e) => e.stopPropagation()} className="animate-pop glass-panel w-full max-w-sm rounded-[28px] bg-card p-6 text-center sm:p-7">
+      <div className="mx-auto grid size-14 place-items-center rounded-3xl bg-danger-soft"><Trash2 className="size-7 text-destructive" /></div>
+      <h2 className="mt-4 font-display text-xl font-extrabold">Delete everything?</h2>
+      <p className="mt-2 font-bold text-ink-soft">This will erase your name, age, and progress. You can't undo this.</p>
+      <div className="mt-6 flex gap-3">
+        <Button variant="outline" className="flex-1 rounded-2xl" onClick={onCancel}>Cancel</Button>
+        <Button variant="destructive" className="flex-1 rounded-2xl" onClick={onConfirm}>Yes, delete</Button>
+      </div>
+    </div>
   </div>;
 }
 

@@ -185,8 +185,14 @@
   50% { transform: scaleY(1); }
 }
 
+@keyframes slide-in-left {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(0); }
+}
+
 @utility animate-bob { animation: bob 3s ease-in-out infinite; }
 @utility animate-pop { animation: pop 0.35s ease-out both; }
+@utility animate-slide-in-left { animation: slide-in-left 0.3s ease-out both; }
 @utility glass-panel {
   background: var(--glass);
   backdrop-filter: blur(24px);
