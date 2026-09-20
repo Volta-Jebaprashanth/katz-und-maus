@@ -46,11 +46,17 @@ function Index() {
     } catch { /* localStorage unavailable — treat as no saved profile */ }
     setProfileChecked(true);
     setInstalled(window.matchMedia("(display-mode: standalone)").matches || (window.navigator as Navigator & { standalone?: boolean }).standalone === true);
+
+    const w = window as Window & { __bip?: InstallPromptEvent | null };
+    const pickUpPrompt = () => { if (w.__bip) setInstallPrompt(w.__bip); };
+    pickUpPrompt();
     const onPrompt = (event: Event) => { event.preventDefault(); setInstallPrompt(event as InstallPromptEvent); };
     const onInstalled = () => { setInstalled(true); setInstallPrompt(null); };
+    window.addEventListener("bip-ready", pickUpPrompt);
     window.addEventListener("beforeinstallprompt", onPrompt);
     window.addEventListener("appinstalled", onInstalled);
     return () => {
+      window.removeEventListener("bip-ready", pickUpPrompt);
       window.removeEventListener("beforeinstallprompt", onPrompt);
       window.removeEventListener("appinstalled", onInstalled);
     };
@@ -65,6 +71,7 @@ function Index() {
     if (installPrompt) {
       await installPrompt.prompt();
       await installPrompt.userChoice;
+      (window as Window & { __bip?: InstallPromptEvent | null }).__bip = null;
       setInstallPrompt(null);
     } else {
       setShowInstallHelp(true);
