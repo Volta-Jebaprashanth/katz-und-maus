@@ -1,4 +1,27 @@
 import { WORD_AUDIO } from "@/data/word-audio.generated";
+import { LETTER_AUDIO } from "@/data/letter-audio.generated";
+
+// Only one clip plays at a time — otherwise rapid taps (e.g. spelling a word
+// letter by letter) pile up overlapping audio.
+let activeClip: HTMLAudioElement | null = null;
+
+function playClip(src: string) {
+  activeClip?.pause();
+  const audio = new Audio(src);
+  activeClip = audio;
+  audio.play().catch(() => {
+    /* autoplay/decoding blocked — user can just tap again */
+  });
+}
+
+function speak(text: string) {
+  if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
+  window.speechSynthesis.cancel();
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = "de-DE";
+  utterance.rate = 0.78;
+  window.speechSynthesis.speak(utterance);
+}
 
 // Plays a recorded pronunciation for `word` if one has been generated
 // (see scripts/generate-audio.mjs). Falls back to the device's speech
@@ -6,18 +29,14 @@ import { WORD_AUDIO } from "@/data/word-audio.generated";
 // still speaks something before its audio is recorded.
 export function playWord(word: string) {
   const src = WORD_AUDIO[word];
-  if (src) {
-    new Audio(src).play().catch(() => {
-      /* autoplay/decoding blocked — user can just tap the button again */
-    });
-    return;
-  }
+  if (src) playClip(src);
+  else speak(word);
+}
 
-  if (typeof window !== "undefined" && "speechSynthesis" in window) {
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(word);
-    utterance.lang = "de-DE";
-    utterance.rate = 0.78;
-    window.speechSynthesis.speak(utterance);
-  }
+// Plays the German name of a single letter (e.g. "P" -> "peh"), for the
+// word-builder's letter tiles.
+export function playLetter(letter: string) {
+  const src = LETTER_AUDIO[letter.toUpperCase()];
+  if (src) playClip(src);
+  else speak(letter);
 }

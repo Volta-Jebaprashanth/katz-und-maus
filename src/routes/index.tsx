@@ -4,7 +4,7 @@ import { ArrowLeft, Check, ExternalLink, Flame, Heart, Lock, RotateCcw, Share, S
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { playWord } from "@/lib/word-audio";
+import { playLetter, playWord } from "@/lib/word-audio";
 
 const PROFILE_KEY = "wortwunder:profile";
 type Profile = { name: string; age: string };
@@ -158,7 +158,7 @@ function Index() {
         {screen === "build" && <LessonFrame eyebrow="Word builder" title="Baue das Wort" subtitle="Tap the letters to spell Apfel.">
           <Picture emoji="🍎" />
           <div className="my-5 flex min-h-14 flex-wrap justify-center gap-2">{[0,1,2,3,4].map((i) => <span key={i} className="grid size-12 place-items-center rounded-xl border-2 border-dashed border-ring/50 bg-glass font-display text-xl font-extrabold">{letters[i] !== undefined ? letterTiles[letters[i]] : ""}</span>)}</div>
-          <div className="flex flex-wrap justify-center gap-2">{letterTiles.map((letter, i) => <Button key={`${letter}-${i}`} variant="tile" size="tile" disabled={letters.includes(i) || letters.length >= 5} onClick={() => setLetters((old) => [...old, i])}>{letter}</Button>)}<Button variant="tile" size="tile" onClick={() => setLetters([])} aria-label="Reset letters"><RotateCcw /></Button></div>
+          <div className="flex flex-wrap justify-center gap-2">{letterTiles.map((letter, i) => <Button key={`${letter}-${i}`} variant="tile" size="tile" disabled={letters.includes(i) || letters.length >= 5} onClick={() => { playLetter(letter); setLetters((old) => [...old, i]); }}>{letter}</Button>)}<Button variant="tile" size="tile" onClick={() => setLetters([])} aria-label="Reset letters"><RotateCcw /></Button></div>
           {letters.length === 5 && <Feedback correct={letters.map((i) => letterTiles[i]).join("") === "APFEL"} correctText="Apfel means apple!" />}
           <Continue disabled={letters.map((i) => letterTiles[i]).join("") !== "APFEL"} onClick={() => go("listen")} />
         </LessonFrame>}
@@ -312,6 +312,6 @@ function InstallHelp({ onClose }: { onClose: () => void }) {
 
 function LessonFrame({ eyebrow, title, subtitle, children }: { eyebrow: string; title: string; subtitle: string; children: React.ReactNode }) { return <section className="glass-panel mx-auto max-w-3xl rounded-[28px] p-5 sm:p-8"><p className="text-xs font-extrabold uppercase tracking-[0.14em] text-ink-soft">{eyebrow}</p><h1 className="mt-1 font-display text-3xl font-extrabold sm:text-4xl">{title}</h1><p className="font-bold text-ink-soft">{subtitle}</p><div className="mt-6">{children}</div></section>; }
 function Picture({ emoji }: { emoji: string }) { return <div className="mx-auto my-5 grid size-36 place-items-center rounded-[28px] bg-card text-7xl shadow-inner ring-1 ring-border sm:size-40">{emoji}</div>; }
-function AnswerGrid({ options, selected, correct, onSelect }: { options: string[]; selected: string | null; correct: string; onSelect: (answer: string) => void }) { return <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">{options.map((option) => <Button key={option} variant="answer" onClick={() => onSelect(option)} className={cn(selected === option && option === correct && "border-success bg-success-soft", selected === option && option !== correct && "border-destructive bg-danger-soft", selected && option === correct && "border-success")}>{option}</Button>)}</div>; }
+function AnswerGrid({ options, selected, correct, onSelect }: { options: string[]; selected: string | null; correct: string; onSelect: (answer: string) => void }) { return <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">{options.map((option) => <Button key={option} variant="answer" onClick={() => { playWord(option); onSelect(option); }} className={cn(selected === option && option === correct && "border-success bg-success-soft", selected === option && option !== correct && "border-destructive bg-danger-soft", selected && option === correct && "border-success")}>{option}</Button>)}</div>; }
 function Feedback({ correct, correctText }: { correct: boolean; correctText: string }) { return <div className={cn("animate-pop mt-4 flex items-center gap-3 rounded-2xl p-4 ring-1", correct ? "bg-success-soft ring-success" : "bg-danger-soft ring-destructive")}><span className={cn("grid size-9 shrink-0 place-items-center rounded-full", correct ? "bg-success" : "bg-destructive")}>{correct ? <Check className="text-primary-foreground" /> : <RotateCcw className="text-primary-foreground" />}</span><div><p className="font-display text-lg font-extrabold">{correct ? "Richtig!" : "Fast! Try again."}</p>{correct && <p className="text-sm font-bold text-ink-soft">{correctText}</p>}</div></div>; }
 function Continue({ onClick, disabled, label = "Weiter" }: { onClick: () => void; disabled?: boolean; label?: string }) { return <Button variant="adventure" size="lesson" className="mt-6 w-full" disabled={disabled} onClick={onClick}>{label}</Button>; }
