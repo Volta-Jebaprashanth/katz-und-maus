@@ -42,7 +42,7 @@ function Index() {
   const [showInstallHelp, setShowInstallHelp] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
-  const letterTiles = useMemo(() => ["F", "A", "P", "E", "L", "P"], []);
+  const letterTiles = useMemo(() => ["G", "V", "O", "L", "E", "O"], []);
 
   useEffect(() => {
     try {
@@ -124,7 +124,7 @@ function Index() {
   };
   const speak = () => {
     setHeard(true);
-    playWord("das Buch");
+    playWord("der Vogel");
   };
 
   return (
@@ -159,23 +159,23 @@ function Index() {
           <AnswerGrid options={["der Hund", "der Vogel", "das Pferd", "die Katze"]} selected={answer} correct="der Vogel" revealed={checked} onSelect={setAnswer} />
           {!checked && <Continue label="Check" disabled={!answer} onClick={() => checkAnswer(answer === "der Vogel")} />}
         </LessonFrame>}
-        {screen === "build" && <LessonFrame eyebrow="Word builder" title="Baue das Wort" subtitle="Tap the letters to spell Apfel.">
-          <Picture emoji="🍎" />
+        {screen === "build" && <LessonFrame eyebrow="Word builder" title="Baue das Wort" subtitle="Tap the letters to spell Vogel.">
+          <Picture emoji="🐦" />
           <div className="my-5 flex min-h-14 flex-wrap justify-center gap-2">{[0,1,2,3,4].map((i) => <span key={i} className="grid size-12 place-items-center rounded-xl border-2 border-dashed border-ring/50 bg-glass font-display text-xl font-extrabold">{letters[i] !== undefined ? letterTiles[letters[i]] : ""}</span>)}</div>
           <div className="flex flex-wrap justify-center gap-2">{letterTiles.map((letter, i) => <Button key={`${letter}-${i}`} variant="tile" size="tile" disabled={checked || letters.includes(i) || letters.length >= 5} onClick={() => { playLetter(letter); setLetters((old) => [...old, i]); }}>{letter}</Button>)}<Button variant="tile" size="tile" disabled={checked} onClick={() => setLetters([])} aria-label="Reset letters"><RotateCcw /></Button></div>
-          {!checked && <Continue label="Check" disabled={letters.length !== 5} onClick={() => checkAnswer(letters.map((i) => letterTiles[i]).join("") === "APFEL")} />}
+          {!checked && <Continue label="Check" disabled={letters.length !== 5} onClick={() => checkAnswer(letters.map((i) => letterTiles[i]).join("") === "VOGEL")} />}
         </LessonFrame>}
         {screen === "listen" && <LessonFrame eyebrow="Listening challenge" title="Was hörst du?" subtitle="Listen, then choose the word you hear.">
           <div className="my-5 flex justify-center"><Button onClick={speak} className="size-24 rounded-full bg-berry text-primary-foreground shadow-[0_8px_0_var(--primary-shadow)] hover:bg-berry/90 active:translate-y-1 active:shadow-none" aria-label="Play German word"><Volume2 className="size-10" /></Button></div>
           {heard && <p className="mb-4 text-center text-sm font-bold text-ink-soft">Listen again as many times as you like.</p>}
-          <AnswerGrid options={["das Wasser", "das Buch", "die Banane", "der Apfel"]} selected={answer} correct="das Buch" revealed={checked} onSelect={setAnswer} />
-          {checked && answer === "das Buch" && <div className="animate-pop mt-5 rounded-3xl bg-sun/35 p-5 text-center ring-2 ring-sun"><Star className="mx-auto size-10 fill-sun text-foreground" /><p className="mt-1 font-display text-2xl font-extrabold">Lektion geschafft!</p><p className="font-bold text-ink-soft">+25 XP · Your 5 day streak continues!</p></div>}
-          {!checked && <Continue label="Check" disabled={!answer} onClick={() => checkAnswer(answer === "das Buch")} />}
+          <AnswerGrid options={["der Hund", "der Vogel", "das Pferd", "die Katze"]} selected={answer} correct="der Vogel" revealed={checked} onSelect={setAnswer} />
+          {checked && answer === "der Vogel" && <div className="animate-pop mt-5 rounded-3xl bg-sun/35 p-5 text-center ring-2 ring-sun"><Star className="mx-auto size-10 fill-sun text-foreground" /><p className="mt-1 font-display text-2xl font-extrabold">Lektion geschafft!</p><p className="font-bold text-ink-soft">+25 XP · Your 5 day streak continues!</p></div>}
+          {!checked && <Continue label="Check" disabled={!answer} onClick={() => checkAnswer(answer === "der Vogel")} />}
         </LessonFrame>}
 
         {checked && screen === "picture" && <ResultCard correct={answer === "der Vogel"} correctText="der Vogel means the bird!" hint={attempts >= 2 ? "Hint: this animal has feathers and loves to sing." : undefined} actionLabel={answer === "der Vogel" ? "Weiter" : "Try again"} onAction={answer === "der Vogel" ? () => go("build") : retry} />}
-        {checked && screen === "build" && <ResultCard correct={letters.map((i) => letterTiles[i]).join("") === "APFEL"} correctText="Apfel means apple!" hint={attempts >= 2 ? "Hint: it starts with A and is a fruit that keeps the doctor away." : undefined} actionLabel={letters.map((i) => letterTiles[i]).join("") === "APFEL" ? "Weiter" : "Try again"} onAction={letters.map((i) => letterTiles[i]).join("") === "APFEL" ? () => go("listen") : retryBuild} />}
-        {checked && screen === "listen" && <ResultCard correct={answer === "das Buch"} correctText="das Buch means the book!" hint={attempts >= 2 ? "Hint: it has pages and you read it." : undefined} actionLabel={answer === "das Buch" ? "Back to my path" : "Try again"} onAction={answer === "das Buch" ? () => go("home") : retry} />}
+        {checked && screen === "build" && <ResultCard correct={letters.map((i) => letterTiles[i]).join("") === "VOGEL"} correctText="der Vogel means the bird!" hint={attempts >= 2 ? "Hint: this animal has feathers and loves to sing." : undefined} actionLabel={letters.map((i) => letterTiles[i]).join("") === "VOGEL" ? "Weiter" : "Try again"} onAction={letters.map((i) => letterTiles[i]).join("") === "VOGEL" ? () => go("listen") : retryBuild} />}
+        {checked && screen === "listen" && <ResultCard correct={answer === "der Vogel"} correctText="der Vogel means the bird!" hint={attempts >= 2 ? "Hint: this animal has feathers and loves to sing." : undefined} actionLabel={answer === "der Vogel" ? "Back to my path" : "Try again"} onAction={answer === "der Vogel" ? () => go("home") : retry} />}
       </main>
 
       {profileChecked && !profile && <Onboarding onSubmit={saveProfile} />}
