@@ -28,7 +28,7 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-type Screen = "home" | "picture" | "meaning" | "translate" | "build" | "missing" | "unscramble" | "listen" | "listenPicture" | "listenBuild" | "match";
+type Screen = "home" | "picture" | "wordPicture" | "meaning" | "translate" | "article" | "build" | "missing" | "unscramble" | "listen" | "listenPicture" | "listenBuild" | "match";
 
 function Index() {
   const [screen, setScreen] = useState<Screen>("home");
@@ -117,7 +117,7 @@ function Index() {
     const isIOS = /iPhone|iPad|iPod/i.test(ua) || (/Macintosh/i.test(ua) && navigator.maxTouchPoints > 1);
     if (isIOS) setShowInstallHelp(true);
   };
-  const sequence: Screen[] = ["home", "picture", "meaning", "translate", "build", "missing", "unscramble", "listen", "listenPicture", "listenBuild", "match"];
+  const sequence: Screen[] = ["home", "picture", "wordPicture", "meaning", "translate", "article", "build", "missing", "unscramble", "listen", "listenPicture", "listenBuild", "match"];
   const step = sequence.indexOf(screen);
   const previousScreen = sequence[Math.max(0, step - 1)] ?? "home";
 
@@ -175,6 +175,12 @@ function Index() {
           {!checked && <Continue t={t} disabled={!answer} onClick={() => checkAnswer(answer === "der Vogel")} />}
         </LessonFrame>}
 
+        {screen === "wordPicture" && <LessonFrame t={t} eyebrow={t.wordPictureChallenge} title="Welches Bild ist das?" subtitle={t.chooseGermanPictureForWord}>
+          <WordCard t={t} text="der Vogel" speak />
+          <PictureOptions options={pictureOptions} selected={answer} correct="vogel" revealed={checked} onSelect={setAnswer} />
+          {!checked && <Continue t={t} disabled={!answer} onClick={() => checkAnswer(answer === "vogel")} />}
+        </LessonFrame>}
+
         {screen === "meaning" && <LessonFrame t={t} eyebrow={t.meaningCheck} title="Was bedeutet das?" subtitle={t.chooseMeaning}>
           <WordCard t={t} text="der Vogel" speak />
           <AnswerGrid options={meaningOptions} selected={answer} correct={vogel[lang]} revealed={checked} onSelect={setAnswer} speak={false} />
@@ -185,6 +191,16 @@ function Index() {
           <WordCard t={t} text={vogel[lang]} />
           <AnswerGrid options={translateOptions} selected={answer} correct="der Vogel" revealed={checked} onSelect={setAnswer} />
           {!checked && <Continue t={t} disabled={!answer} onClick={() => checkAnswer(answer === "der Vogel")} />}
+        </LessonFrame>}
+
+        {screen === "article" && <LessonFrame t={t} eyebrow={t.articleChallenge} title="Welcher Artikel passt?" subtitle={t.chooseCorrectArticle}>
+          <Picture emoji="🐦" />
+          <div className="my-5 flex items-center justify-center gap-2">
+            <span className={cn("grid h-12 min-w-20 place-items-center rounded-xl px-3 font-display text-xl font-extrabold", "border-2 bg-glass", !checked && "border-dashed border-ring/50", checked && lastCorrect && "border-success text-success", checked && !lastCorrect && "border-destructive text-destructive")}>{checked ? (answer ?? "___") : "___"}</span>
+            <span className="font-display text-xl font-extrabold">Vogel</span>
+          </div>
+          <ArticleGrid options={["der", "die", "das"]} selected={answer} correct="der" revealed={checked} onSelect={setAnswer} />
+          {!checked && <Continue t={t} disabled={!answer} onClick={() => checkAnswer(answer === "der")} />}
         </LessonFrame>}
 
         {screen === "build" && <LessonFrame t={t} eyebrow={t.wordBuilder} title="Baue das Wort" subtitle={t.tapLettersToSpell("Vogel")}>
@@ -401,6 +417,7 @@ function LessonFrame({ t, eyebrow, title, subtitle, children }: { t: Strings; ey
 }
 function Picture({ emoji }: { emoji: string }) { return <div className="mx-auto my-5 grid size-36 place-items-center rounded-[28px] bg-card text-7xl shadow-inner ring-1 ring-border sm:size-40">{emoji}</div>; }
 function AnswerGrid({ options, selected, correct, revealed, onSelect, speak = true }: { options: string[]; selected: string | null; correct: string; revealed: boolean; onSelect: (answer: string) => void; speak?: boolean }) { return <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">{options.map((option) => <Button key={option} variant="answer" disabled={revealed} onClick={() => { if (speak) playWord(option); onSelect(option); }} className={cn(!revealed && selected === option && "border-primary bg-primary/10", revealed && selected === option && option === correct && "border-success bg-success-soft", revealed && selected === option && option !== correct && "border-destructive bg-danger-soft", revealed && option === correct && "border-success")}>{option}</Button>)}</div>; }
+function ArticleGrid({ options, selected, correct, revealed, onSelect }: { options: string[]; selected: string | null; correct: string; revealed: boolean; onSelect: (answer: string) => void }) { return <div className="grid grid-cols-3 gap-3">{options.map((option) => <Button key={option} variant="answer" disabled={revealed} onClick={() => { playWord(option); onSelect(option); }} className={cn(!revealed && selected === option && "border-primary bg-primary/10", revealed && selected === option && option === correct && "border-success bg-success-soft", revealed && selected === option && option !== correct && "border-destructive bg-danger-soft", revealed && option === correct && "border-success")}>{option}</Button>)}</div>; }
 function WordCard({ t, text, speak = false }: { t: Strings; text: string; speak?: boolean }) {
   if (!speak) return <div className="mx-auto my-5 grid min-h-32 max-w-xs place-items-center rounded-[28px] bg-card px-6 py-4 text-center font-display text-2xl font-extrabold shadow-inner ring-1 ring-border sm:min-h-36 sm:text-3xl">{text}</div>;
   return <button type="button" onClick={() => playWord(text)} aria-label={t.tapToHear(text)} className="mx-auto my-5 flex min-h-32 max-w-xs items-center justify-center gap-2 rounded-[28px] bg-card px-6 py-4 text-center font-display text-2xl font-extrabold shadow-inner ring-1 ring-border transition hover:bg-card/80 sm:min-h-36 sm:text-3xl">{text} <Volume2 className="size-6 shrink-0 text-ink-soft" /></button>;

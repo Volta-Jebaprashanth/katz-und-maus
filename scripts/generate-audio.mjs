@@ -38,6 +38,9 @@ const WORDS = [
   { word: "die Banane", slug: "banane" },
   { word: "das Buch", slug: "buch" },
   { word: "das Wasser", slug: "wasser" },
+  { word: "der", slug: "article-der" },
+  { word: "die", slug: "article-die" },
+  { word: "das", slug: "article-das" },
 ];
 
 // Full lesson-screen titles (e.g. "Was ist das?"), spoken when a kid taps the
@@ -45,8 +48,10 @@ const WORDS = [
 // just as well as single words, so these render and manifest the same way.
 const TITLES = [
   { word: "Was ist das?", slug: "title-was-ist-das" },
+  { word: "Welches Bild ist das?", slug: "title-welches-bild-ist-das" },
   { word: "Was bedeutet das?", slug: "title-was-bedeutet-das" },
   { word: "Wie sagt man das auf Deutsch?", slug: "title-wie-sagt-man-das-auf-deutsch" },
+  { word: "Welcher Artikel passt?", slug: "title-welcher-artikel-passt" },
   { word: "Baue das Wort", slug: "title-baue-das-wort" },
   { word: "Welcher Buchstabe fehlt?", slug: "title-welcher-buchstabe-fehlt" },
   { word: "Ordne die Buchstaben", slug: "title-ordne-die-buchstaben" },

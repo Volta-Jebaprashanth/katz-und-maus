@@ -48,16 +48,20 @@ export interface Strings {
   openInSafari: string;
   gotIt: string;
   pictureChallenge: string;
+  wordPictureChallenge: string;
   meaningCheck: string;
   translationChallenge: string;
+  articleChallenge: string;
   wordBuilder: string;
   missingLetter: string;
   unscramble: string;
   listeningChallenge: string;
   roundUp: string;
   chooseGermanWordForPicture: string;
+  chooseGermanPictureForWord: string;
   chooseMeaning: string;
   chooseGermanWord: string;
+  chooseCorrectArticle: string;
   tapLettersToSpell: (word: string) => string;
   pickLetterThatCompletes: string;
   arrangeLetters: string;
@@ -115,16 +119,20 @@ export const TRANSLATIONS: Record<MotherTongue, Strings> = {
     openInSafari: "Open in Safari",
     gotIt: "Got it",
     pictureChallenge: "Picture challenge",
+    wordPictureChallenge: "Word to picture",
     meaningCheck: "Meaning check",
     translationChallenge: "Translation",
+    articleChallenge: "Der, die, or das?",
     wordBuilder: "Word builder",
     missingLetter: "Missing letter",
     unscramble: "Unscramble",
     listeningChallenge: "Listening challenge",
     roundUp: "Round-up",
     chooseGermanWordForPicture: "Choose the German word for this picture.",
+    chooseGermanPictureForWord: "Choose the picture for this German word.",
     chooseMeaning: "Choose the meaning.",
     chooseGermanWord: "Choose the German word.",
+    chooseCorrectArticle: "Choose the correct article.",
     tapLettersToSpell: (word) => `Tap the letters to spell ${word}.`,
     pickLetterThatCompletes: "Pick the letter that completes the word.",
     arrangeLetters: "Arrange the letters to spell the word.",
@@ -180,16 +188,20 @@ export const TRANSLATIONS: Record<MotherTongue, Strings> = {
     openInSafari: "Safari-இல் திற",
     gotIt: "சரி, புரிந்தது",
     pictureChallenge: "படச் சவால்",
+    wordPictureChallenge: "சொல் - படச் சவால்",
     meaningCheck: "பொருள் சோதனை",
     translationChallenge: "மொழிபெயர்ப்பு",
+    articleChallenge: "der, die அல்லது das?",
     wordBuilder: "சொல் கட்டமைப்பான்",
     missingLetter: "விடுபட்ட எழுத்து",
     unscramble: "எழுத்துக்களை வரிசைப்படுத்து",
     listeningChallenge: "கேட்டல் சவால்",
     roundUp: "இறுதிச் சுற்று",
     chooseGermanWordForPicture: "இந்தப் படத்திற்கான ஜெர்மன் சொல்லைத் தேர்ந்தெடு.",
+    chooseGermanPictureForWord: "இந்த ஜெர்மன் சொல்லுக்கான படத்தைத் தேர்ந்தெடு.",
     chooseMeaning: "பொருளைத் தேர்ந்தெடு.",
     chooseGermanWord: "ஜெர்மன் சொல்லைத் தேர்ந்தெடு.",
+    chooseCorrectArticle: "சரியான பண்புச்சொல்லைத் தேர்ந்தெடு.",
     tapLettersToSpell: (word) => `${word} என்று எழுத எழுத்துக்களைத் தட்டவும்.`,
     pickLetterThatCompletes: "சொல்லை நிறைவு செய்யும் எழுத்தைத் தேர்ந்தெடு.",
     arrangeLetters: "சொல்லை உருவாக்க எழுத்துக்களை வரிசைப்படுத்து.",
@@ -245,16 +257,20 @@ export const TRANSLATIONS: Record<MotherTongue, Strings> = {
     openInSafari: "Safari හි විවෘත කරන්න",
     gotIt: "තේරුණා",
     pictureChallenge: "පින්තූර අභියෝගය",
+    wordPictureChallenge: "වචන-පින්තූර අභියෝගය",
     meaningCheck: "අර්ථය පරීක්ෂාව",
     translationChallenge: "පරිවර්තනය",
+    articleChallenge: "der, die නැතහොත් das?",
     wordBuilder: "වචන තැනීම",
     missingLetter: "අස්ථානගත අකුර",
     unscramble: "අකුරු පිළිවෙළට සකසන්න",
     listeningChallenge: "ශ්‍රවණ අභියෝගය",
     roundUp: "අවසාන වටය",
     chooseGermanWordForPicture: "මෙම පින්තූරයට ගැලපෙන ජර්මානු වචනය තෝරන්න.",
+    chooseGermanPictureForWord: "මෙම ජර්මානු වචනයට ගැලපෙන පින්තූරය තෝරන්න.",
     chooseMeaning: "අර්ථය තෝරන්න.",
     chooseGermanWord: "ජර්මානු වචනය තෝරන්න.",
+    chooseCorrectArticle: "නිවැරදි ලිපිය තෝරන්න.",
     tapLettersToSpell: (word) => `${word} යනුවෙන් ලිවීමට අකුරු ඔබන්න.`,
     pickLetterThatCompletes: "වචනය සම්පූර්ණ කරන අකුර තෝරන්න.",
     arrangeLetters: "වචනය සෑදීමට අකුරු පිළිවෙළට සකසන්න.",
