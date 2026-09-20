@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { ArrowLeft, Check, Flame, Heart, Lock, RotateCcw, Share, Smartphone, Sparkles, Star, Volume2, Zap } from "lucide-react";
+import { ArrowLeft, Check, ExternalLink, Flame, Heart, Lock, MoreVertical, RotateCcw, Share, Smartphone, SquarePlus, Sparkles, Star, Volume2, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
@@ -209,11 +209,40 @@ function Onboarding({ onSubmit }: { onSubmit: (profile: Profile) => void }) {
 }
 
 function InstallHelp({ onClose }: { onClose: () => void }) {
+  const ua = typeof navigator !== "undefined" ? navigator.userAgent : "";
+  const isIOS = /iPhone|iPad|iPod/i.test(ua) || (/Macintosh/i.test(ua) && typeof navigator !== "undefined" && navigator.maxTouchPoints > 1);
+  const isSafari = isIOS && !/CriOS|FxiOS|EdgiOS|OPiOS/i.test(ua);
+  const safariLink = typeof window !== "undefined" ? window.location.href.replace(/^https?:\/\//, (m) => `x-safari-${m}`) : "#";
+
+  const steps: { icon: React.ReactNode; text: React.ReactNode; href?: string }[] = isIOS
+    ? [
+        ...(!isSafari ? [{ icon: <ExternalLink />, text: <>Open this page in <strong>Safari</strong> — tap the button below.</>, href: safariLink }] : []),
+        { icon: <Share />, text: <>Tap the <strong>Share</strong> button (square with an arrow ⬆️) at the bottom of the screen.</> },
+        { icon: <SquarePlus />, text: <>Scroll down the menu and tap <strong>"Add to Home Screen"</strong>.</> },
+        { icon: <Check />, text: <>Tap <strong>"Add"</strong> in the top-right corner.</> },
+        { icon: <Smartphone />, text: <>Find the WortWunder icon on your Home Screen and tap it to play!</> },
+      ]
+    : [
+        { icon: <MoreVertical />, text: <>Tap the <strong>menu button</strong> (⋮) in your browser.</> },
+        { icon: <SquarePlus />, text: <>Tap <strong>"Add to Home screen"</strong> or <strong>"Install app"</strong>.</> },
+        { icon: <Check />, text: <>Tap <strong>"Add"</strong> or <strong>"Install"</strong> to confirm.</> },
+        { icon: <Smartphone />, text: <>Find the WortWunder icon on your Home Screen and tap it to play!</> },
+      ];
+
   return <div className="fixed inset-0 z-50 grid place-items-center bg-foreground/40 p-4 backdrop-blur-sm" onClick={onClose}>
-    <div onClick={(e) => e.stopPropagation()} className="animate-pop glass-panel w-full max-w-sm rounded-[28px] bg-card p-6 text-center sm:p-7">
-      <div className="mx-auto grid size-14 place-items-center rounded-3xl bg-mint/35"><Share className="size-7" /></div>
-      <h2 className="mt-4 font-display text-xl font-extrabold">Add to Home Screen</h2>
-      <p className="mt-2 font-bold text-ink-soft">Tap your browser's <span className="inline-flex items-center gap-1 align-middle"><Share className="size-4" /> Share</span> button, then choose "Add to Home Screen".</p>
+    <div onClick={(e) => e.stopPropagation()} className="animate-pop glass-panel w-full max-w-sm rounded-[28px] bg-card p-6 sm:p-7">
+      <div className="mx-auto grid size-14 place-items-center rounded-3xl bg-mint/35"><Smartphone className="size-7" /></div>
+      <h2 className="mt-4 text-center font-display text-xl font-extrabold">Add to Home Screen</h2>
+      <p className="mt-1 text-center font-bold text-ink-soft">Follow these steps with a grown-up!</p>
+      <ol className="mt-5 space-y-3">
+        {steps.map((step, index) => <li key={index} className="grid grid-cols-[2.5rem_minmax(0,1fr)] items-start gap-3">
+          <span className="grid size-10 place-items-center rounded-full bg-sun/40 font-display text-base font-extrabold ring-2 ring-border">{index + 1}</span>
+          <div className="rounded-2xl bg-glass p-3 ring-1 ring-border">
+            <p className="flex items-start gap-1.5 text-sm font-bold leading-snug"><span className="mt-0.5 shrink-0 text-ink-soft [&_svg]:size-4">{step.icon}</span><span>{step.text}</span></p>
+            {step.href && <a href={step.href} className="mt-2 inline-flex items-center gap-1.5 rounded-xl bg-primary px-3 py-1.5 font-display text-sm font-extrabold text-primary-foreground">Open in Safari <ExternalLink className="size-4" /></a>}
+          </div>
+        </li>)}
+      </ol>
       <Button variant="adventure" size="lesson" className="mt-6 w-full" onClick={onClose}>Got it</Button>
     </div>
   </div>;
