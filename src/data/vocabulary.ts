@@ -6,7 +6,7 @@ import type { MotherTongue } from "@/lib/i18n";
 // in the learner's chosen language can be read with `word[lang]`.
 export interface VocabWord {
   id: string;
-  emoji: string;
+  image: string;
   full: string;
   english: string;
   tamil: string;
@@ -14,10 +14,10 @@ export interface VocabWord {
 }
 
 export const TIERE_WORDS: VocabWord[] = [
-  { id: "hund", emoji: "🐶", full: "der Hund", english: "Dog", tamil: "நாய்", sinhala: "බල්ලා" },
-  { id: "katze", emoji: "🐱", full: "die Katze", english: "Cat", tamil: "பூனை", sinhala: "පූසා" },
-  { id: "vogel", emoji: "🐦", full: "der Vogel", english: "Bird", tamil: "பறவை", sinhala: "කුරුල්ලා" },
-  { id: "pferd", emoji: "🐴", full: "das Pferd", english: "Horse", tamil: "குதிரை", sinhala: "අශ්වයා" },
+  { id: "hund", image: "/images/animals/hund.png", full: "der Hund", english: "Dog", tamil: "நாய்", sinhala: "බල්ලා" },
+  { id: "katze", image: "/images/animals/katze.png", full: "die Katze", english: "Cat", tamil: "பூனை", sinhala: "පූසා" },
+  { id: "vogel", image: "/images/animals/vogel.png", full: "der Vogel", english: "Bird", tamil: "பறவை", sinhala: "කුරුල්ලා" },
+  { id: "pferd", image: "/images/animals/pferd.png", full: "das Pferd", english: "Horse", tamil: "குதிரை", sinhala: "අශ්වයා" },
 ];
 
 export function wordMeaning(word: VocabWord, lang: MotherTongue): string {

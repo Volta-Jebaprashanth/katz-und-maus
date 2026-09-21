@@ -54,7 +54,7 @@ function Index() {
   const vogel = useMemo(() => TIERE_WORDS.find((w) => w.id === "vogel")!, []);
   const meaningOptions = useMemo(() => TIERE_WORDS.map((w) => w[lang]), [lang]);
   const translateOptions = useMemo(() => TIERE_WORDS.map((w) => w.full), []);
-  const pictureOptions = useMemo(() => TIERE_WORDS.map((w) => ({ id: w.id, emoji: w.emoji, label: w[lang] })), [lang]);
+  const pictureOptions = useMemo(() => TIERE_WORDS.map((w) => ({ id: w.id, image: w.image, label: w[lang] })), [lang]);
 
   useEffect(() => {
     try {
@@ -170,7 +170,7 @@ function Index() {
         {screen === "home" && <Home t={t} onStart={startLesson} name={profile?.name} showInstall={!installed} onAddToHomeScreen={addToHomeScreen} />}
 
         {screen === "picture" && <LessonFrame t={t} eyebrow={t.pictureChallenge} title="Was ist das?" subtitle={t.chooseGermanWordForPicture}>
-          <Picture emoji="🐦" />
+          <Picture src={vogel.image} alt={vogel.full} />
           <AnswerGrid options={["der Hund", "der Vogel", "das Pferd", "die Katze"]} selected={answer} correct="der Vogel" revealed={checked} onSelect={setAnswer} />
           {!checked && <Continue t={t} disabled={!answer} onClick={() => checkAnswer(answer === "der Vogel")} />}
         </LessonFrame>}
@@ -194,7 +194,7 @@ function Index() {
         </LessonFrame>}
 
         {screen === "article" && <LessonFrame t={t} eyebrow={t.articleChallenge} title="Welcher Artikel passt?" subtitle={t.chooseCorrectArticle}>
-          <Picture emoji="🐦" />
+          <Picture src={vogel.image} alt={vogel.full} />
           <div className="my-5 flex items-center justify-center gap-2">
             <span className={cn("grid h-12 min-w-20 place-items-center rounded-xl px-3 font-display text-xl font-extrabold", "border-2 bg-glass", !checked && "border-dashed border-ring/50", checked && lastCorrect && "border-success text-success", checked && !lastCorrect && "border-destructive text-destructive")}>{checked ? (answer ?? "___") : "___"}</span>
             <span className="font-display text-xl font-extrabold">Vogel</span>
@@ -204,13 +204,13 @@ function Index() {
         </LessonFrame>}
 
         {screen === "build" && <LessonFrame t={t} eyebrow={t.wordBuilder} title="Baue das Wort" subtitle={t.tapLettersToSpell("Vogel")}>
-          <Picture emoji="🐦" />
+          <Picture src={vogel.image} alt={vogel.full} />
           <LetterBuilder t={t} answerLength={5} tiles={letterTiles} letters={letters} disabled={checked} onTapTile={(i, letter) => { playLetter(letter); setLetters((old) => [...old, i]); }} onReset={() => setLetters([])} />
           {!checked && <Continue t={t} disabled={letters.length !== 5} onClick={() => checkAnswer(letters.map((i) => letterTiles[i]).join("") === "VOGEL")} />}
         </LessonFrame>}
 
         {screen === "missing" && <LessonFrame t={t} eyebrow={t.missingLetter} title="Welcher Buchstabe fehlt?" subtitle={t.pickLetterThatCompletes}>
-          <Picture emoji="🐦" />
+          <Picture src={vogel.image} alt={vogel.full} />
           <div className="my-5 flex justify-center gap-2">
             {["V", checked ? (answer ?? "_") : "_", "G", "E", "L"].map((ch, i) => <span key={i} className={cn("grid size-12 place-items-center rounded-xl font-display text-xl font-extrabold", i === 1 ? cn("border-2 bg-glass", !checked && "border-dashed border-ring/50", checked && lastCorrect && "border-success text-success", checked && !lastCorrect && "border-destructive text-destructive") : "bg-card ring-1 ring-border")}>{ch}</span>)}
           </div>
@@ -219,7 +219,7 @@ function Index() {
         </LessonFrame>}
 
         {screen === "unscramble" && <LessonFrame t={t} eyebrow={t.unscramble} title="Ordne die Buchstaben" subtitle={t.arrangeLetters}>
-          <Picture emoji="🐦" />
+          <Picture src={vogel.image} alt={vogel.full} />
           <LetterBuilder t={t} answerLength={5} tiles={unscrambleTiles} letters={letters} disabled={checked} onTapTile={(i, letter) => { playLetter(letter); setLetters((old) => [...old, i]); }} onReset={() => setLetters([])} />
           {!checked && <Continue t={t} disabled={letters.length !== 5} onClick={() => checkAnswer(letters.map((i) => unscrambleTiles[i]).join("") === "VOGEL")} />}
         </LessonFrame>}
@@ -415,7 +415,7 @@ function LessonFrame({ t, eyebrow, title, subtitle, children }: { t: Strings; ey
     <div className="mt-6">{children}</div>
   </section>;
 }
-function Picture({ emoji }: { emoji: string }) { return <div className="mx-auto my-5 grid size-36 place-items-center rounded-[28px] bg-card text-7xl shadow-inner ring-1 ring-border sm:size-40">{emoji}</div>; }
+function Picture({ src, alt }: { src: string; alt: string }) { return <div className="mx-auto my-5 grid size-36 place-items-center rounded-[28px] bg-card p-4 shadow-inner ring-1 ring-border sm:size-40"><img src={src} alt={alt} className="size-full object-contain" /></div>; }
 function AnswerGrid({ options, selected, correct, revealed, onSelect, speak = true }: { options: string[]; selected: string | null; correct: string; revealed: boolean; onSelect: (answer: string) => void; speak?: boolean }) { return <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">{options.map((option) => <Button key={option} variant="answer" disabled={revealed} onClick={() => { if (speak) playWord(option); onSelect(option); }} className={cn(!revealed && selected === option && "border-primary bg-primary/10", revealed && selected === option && option === correct && "border-success bg-success-soft", revealed && selected === option && option !== correct && "border-destructive bg-danger-soft", revealed && option === correct && "border-success")}>{option}</Button>)}</div>; }
 function ArticleGrid({ options, selected, correct, revealed, onSelect }: { options: string[]; selected: string | null; correct: string; revealed: boolean; onSelect: (answer: string) => void }) { return <div className="grid grid-cols-3 gap-3">{options.map((option) => <Button key={option} variant="answer" disabled={revealed} onClick={() => { playWord(option); onSelect(option); }} className={cn(!revealed && selected === option && "border-primary bg-primary/10", revealed && selected === option && option === correct && "border-success bg-success-soft", revealed && selected === option && option !== correct && "border-destructive bg-danger-soft", revealed && option === correct && "border-success")}>{option}</Button>)}</div>; }
 function WordCard({ t, text, speak = false }: { t: Strings; text: string; speak?: boolean }) {
@@ -423,8 +423,8 @@ function WordCard({ t, text, speak = false }: { t: Strings; text: string; speak?
   return <button type="button" onClick={() => playWord(text)} aria-label={t.tapToHear(text)} className="mx-auto my-5 flex min-h-32 max-w-xs items-center justify-center gap-2 rounded-[28px] bg-card px-6 py-4 text-center font-display text-2xl font-extrabold shadow-inner ring-1 ring-border transition hover:bg-card/80 sm:min-h-36 sm:text-3xl">{text} <Volume2 className="size-6 shrink-0 text-ink-soft" /></button>;
 }
 function LetterOptions({ options, selected, correct, revealed, onSelect }: { options: string[]; selected: string | null; correct: string; revealed: boolean; onSelect: (letter: string) => void }) { return <div className="flex flex-wrap justify-center gap-3">{options.map((option) => <Button key={option} variant="tile" size="tile" disabled={revealed} onClick={() => { playLetter(option); onSelect(option); }} className={cn(!revealed && selected === option && "border-primary bg-primary/10", revealed && selected === option && option === correct && "border-success bg-success-soft", revealed && selected === option && option !== correct && "border-destructive bg-danger-soft", revealed && option === correct && "border-success")}>{option}</Button>)}</div>; }
-function PictureOptions({ options, selected, correct, revealed, onSelect }: { options: { id: string; emoji: string; label: string }[]; selected: string | null; correct: string; revealed: boolean; onSelect: (id: string) => void }) {
-  return <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">{options.map((option) => <button key={option.id} type="button" disabled={revealed} aria-label={option.label} onClick={() => onSelect(option.id)} className={cn("grid aspect-square place-items-center rounded-3xl bg-card text-5xl ring-2 ring-border transition", !revealed && selected === option.id && "ring-primary bg-primary/10", revealed && selected === option.id && option.id === correct && "ring-success bg-success-soft", revealed && selected === option.id && option.id !== correct && "ring-destructive bg-danger-soft", revealed && option.id === correct && "ring-success")}>{option.emoji}</button>)}</div>;
+function PictureOptions({ options, selected, correct, revealed, onSelect }: { options: { id: string; image: string; label: string }[]; selected: string | null; correct: string; revealed: boolean; onSelect: (id: string) => void }) {
+  return <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">{options.map((option) => <button key={option.id} type="button" disabled={revealed} aria-label={option.label} onClick={() => onSelect(option.id)} className={cn("grid aspect-square place-items-center rounded-3xl bg-card p-3 ring-2 ring-border transition", !revealed && selected === option.id && "ring-primary bg-primary/10", revealed && selected === option.id && option.id === correct && "ring-success bg-success-soft", revealed && selected === option.id && option.id !== correct && "ring-destructive bg-danger-soft", revealed && option.id === correct && "ring-success")}><img src={option.image} alt={option.label} className="size-full object-contain" /></button>)}</div>;
 }
 function LetterBuilder({ t, answerLength, tiles, letters, onTapTile, onReset, disabled }: { t: Strings; answerLength: number; tiles: string[]; letters: number[]; onTapTile: (index: number, letter: string) => void; onReset: () => void; disabled: boolean }) {
   return <>
@@ -455,7 +455,7 @@ function MatchPairs({ t, lang, words, onComplete }: { t: Strings; lang: MotherTo
 
   return <div>
     <div className="grid grid-cols-2 gap-3 sm:gap-4">
-      <div className="space-y-3">{words.map((w) => <button key={w.id} type="button" disabled={matched.includes(w.id)} onClick={() => selectLeft(w.id)} className={cn("flex w-full items-center gap-2 rounded-2xl bg-card p-3 text-left ring-2 ring-border transition sm:p-4", matched.includes(w.id) && "bg-success-soft ring-success opacity-70", selectedLeft === w.id && "ring-primary bg-primary/10", wrong?.left === w.id && "ring-destructive bg-danger-soft")}><span className="text-2xl">{w.emoji}</span><span className="font-display text-sm font-extrabold sm:text-base">{w.full}</span></button>)}</div>
+      <div className="space-y-3">{words.map((w) => <button key={w.id} type="button" disabled={matched.includes(w.id)} onClick={() => selectLeft(w.id)} className={cn("flex w-full items-center gap-2 rounded-2xl bg-card p-3 text-left ring-2 ring-border transition sm:p-4", matched.includes(w.id) && "bg-success-soft ring-success opacity-70", selectedLeft === w.id && "ring-primary bg-primary/10", wrong?.left === w.id && "ring-destructive bg-danger-soft")}><img src={w.image} alt={w.full} className="size-8 shrink-0 object-contain" /><span className="font-display text-sm font-extrabold sm:text-base">{w.full}</span></button>)}</div>
       <div className="space-y-3">{rightOrder.map((id) => { const w = byId[id]; if (!w) return null; return <button key={id} type="button" disabled={matched.includes(id)} onClick={() => selectRight(id)} className={cn("w-full rounded-2xl bg-card p-3 text-center ring-2 ring-border transition sm:p-4", matched.includes(id) && "bg-success-soft ring-success opacity-70", wrong?.right === id && "ring-destructive bg-danger-soft")}><span className="font-display text-sm font-extrabold sm:text-base">{w[lang]}</span></button>; })}</div>
     </div>
     {allMatched && <div className="animate-pop mt-6 rounded-3xl bg-sun/35 p-5 text-center ring-2 ring-sun">
