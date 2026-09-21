@@ -65,16 +65,25 @@ const TITLES = [
 // "pee") as a normal German word/syllable, so the TTS engine's ordinary
 // German pronunciation rules produce the right sound instead of relying on
 // its (often English-biased) bare-letter reading.
+//
+// Note on E and I specifically: their letter names are long vowels ("ay",
+// "ee"), but the obvious spellings "Eh" and "Ih" are also common German
+// interjections ("eh?", "ih!") that real speech-recognition-trained TTS
+// lexicons tend to read short/clipped, not as the long recitation vowel we
+// want. "Ee"/"Ie" use German's standard long-vowel digraph spelling instead
+// (as in "Idee", "wie") and aren't real standalone words, avoiding that
+// ambiguity. (This TTS API doesn't support SSML for finer control — plain
+// text is all it accepts.)
 const LETTERS = [
   { letter: "A", name: "Ah" },
   { letter: "B", name: "Beh" },
   { letter: "C", name: "Zeh" },
   { letter: "D", name: "Deh" },
-  { letter: "E", name: "Eh" },
+  { letter: "E", name: "Ee" },
   { letter: "F", name: "Ef" },
   { letter: "G", name: "Geh" },
   { letter: "H", name: "Hah" },
-  { letter: "I", name: "Ih" },
+  { letter: "I", name: "Ie" },
   { letter: "J", name: "Jott" },
   { letter: "K", name: "Kah" },
   { letter: "L", name: "El" },
