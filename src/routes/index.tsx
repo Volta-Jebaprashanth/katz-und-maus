@@ -145,7 +145,7 @@ function Index() {
     <div className="app-sky relative min-h-dvh overflow-hidden text-foreground [padding:env(safe-area-inset-top)_env(safe-area-inset-right)_env(safe-area-inset-bottom)_env(safe-area-inset-left)]">
       <header className="relative z-20 mx-auto grid max-w-5xl grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 py-4 sm:px-6">
         <div className="flex min-w-0 items-center gap-2">
-          <button onClick={() => setShowProfileMenu(true)} className="glass-panel grid size-11 shrink-0 place-items-center rounded-2xl text-2xl" aria-label={t.openProfileMenu}>🦉</button>
+          <button onClick={() => setShowProfileMenu(true)} className="glass-panel grid size-11 shrink-0 place-items-center overflow-hidden rounded-2xl" aria-label={t.openProfileMenu}><img src="/images/logo.png" alt="" className="size-full object-cover" /></button>
           <button onClick={() => go("home")} className="min-w-0 text-left" aria-label="Go to learning path">
             <span className="block truncate font-display text-xl font-extrabold leading-none">WortWunder</span>
             <span className="block text-[10px] font-bold uppercase tracking-[0.18em] text-ink-soft">{profile?.name || "Freund"}</span>
@@ -273,7 +273,7 @@ function Home({ t, onStart, name, showInstall, onAddToHomeScreen }: { t: Strings
   ];
   return <div className="grid gap-5 lg:grid-cols-[1fr_0.72fr]">
     <section className="glass-panel rounded-[28px] p-5 sm:p-7">
-      <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-4"><div className="min-w-0"><p className="text-sm font-extrabold text-ink-soft">Hallo, {name || "Freund"}!</p><h1 className="font-display text-3xl font-extrabold sm:text-4xl">Dein Lernweg</h1><p className="mt-1 font-bold text-ink-soft">{t.readyForAdventure}</p>{showInstall && <Button variant="outline" size="sm" className="mt-3 rounded-xl border-2 border-border bg-card font-display font-extrabold" onClick={onAddToHomeScreen}><Smartphone /> {t.addToHomeScreen}</Button>}</div><div className="animate-bob grid size-20 shrink-0 place-items-center rounded-3xl bg-sun/40 text-5xl ring-2 ring-border">🦉</div></div>
+      <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-4"><div className="min-w-0"><p className="text-sm font-extrabold text-ink-soft">Hallo, {name || "Freund"}!</p><h1 className="font-display text-3xl font-extrabold sm:text-4xl">Dein Lernweg</h1><p className="mt-1 font-bold text-ink-soft">{t.readyForAdventure}</p>{showInstall && <Button variant="outline" size="sm" className="mt-3 rounded-xl border-2 border-border bg-card font-display font-extrabold" onClick={onAddToHomeScreen}><Smartphone /> {t.addToHomeScreen}</Button>}</div><div className="animate-bob grid size-20 shrink-0 place-items-center overflow-hidden rounded-3xl ring-2 ring-border"><img src="/images/logo.png" alt="WortWunder mascot" className="size-full object-cover" /></div></div>
       <div className="relative mx-auto mt-7 max-w-lg space-y-4 before:absolute before:bottom-8 before:left-7 before:top-8 before:w-2 before:rounded-full before:bg-ice">
         {levels.map((level, index) => <button key={level.title} disabled={level.state === "locked"} onClick={level.state === "active" ? onStart : undefined} className={cn("relative grid w-full grid-cols-[3.5rem_minmax(0,1fr)] items-center gap-4 text-left", index % 2 === 1 && "sm:translate-x-10")}><span className={cn("z-10 grid size-14 place-items-center rounded-full border-4 border-frost text-2xl shadow-md [&_svg]:size-6", level.state === "done" && "bg-mint", level.state === "active" && "animate-bob bg-sun", level.state === "locked" && "bg-ice text-ink-soft")}>{level.state === "locked" ? <Lock className="size-5" /> : level.icon}</span><span className={cn("rounded-2xl p-4 ring-1 ring-border", level.state === "active" ? "bg-sun/30 ring-2 ring-sun" : "bg-card", level.state === "locked" && "opacity-65")}><span className="block font-display text-lg font-extrabold">{level.title}</span><span className="block text-xs font-bold text-ink-soft">{level.detail}</span></span></button>)}
       </div>
@@ -293,7 +293,7 @@ function Onboarding({ onSubmit }: { onSubmit: (profile: Profile) => void }) {
   const valid = name.trim().length > 0 && Number(age) > 0;
   return <div className="fixed inset-0 z-50 grid place-items-center bg-foreground/40 p-4 backdrop-blur-sm">
     <form onSubmit={(e) => { e.preventDefault(); if (valid) onSubmit({ name: name.trim(), age: age.trim(), motherTongue }); }} className="animate-pop glass-panel w-full max-w-sm rounded-[28px] bg-card p-6 sm:p-7">
-      <div className="mx-auto grid size-16 place-items-center rounded-3xl bg-sun/40 text-4xl ring-2 ring-border">🦉</div>
+      <div className="mx-auto grid size-16 place-items-center overflow-hidden rounded-3xl ring-2 ring-border"><img src="/images/logo.png" alt="WortWunder" className="size-full object-cover" /></div>
       <h2 className="mt-4 text-center font-display text-2xl font-extrabold">Wer bist du?</h2>
       <p className="mt-1 text-center font-bold text-ink-soft">{t.whoAreYouSubtitle}</p>
       <div className="mt-6 space-y-3">
@@ -330,7 +330,7 @@ function ProfileMenu({ profile, onClose, onSave, onRequestClear }: { profile: Pr
   return <div className="fixed inset-0 z-50 flex bg-foreground/40 backdrop-blur-sm" onClick={onClose}>
     <div onClick={(e) => e.stopPropagation()} className="animate-slide-in-left glass-panel flex h-full w-full max-w-xs flex-col rounded-r-[28px] bg-card p-6">
       <div className="flex items-center justify-between">
-        <div className="grid size-12 place-items-center rounded-2xl bg-sun/40 text-2xl ring-2 ring-border">🦉</div>
+        <div className="grid size-12 place-items-center overflow-hidden rounded-2xl ring-2 ring-border"><img src="/images/logo.png" alt="WortWunder" className="size-full object-cover" /></div>
         <Button variant="ghost" size="icon" onClick={onClose} aria-label={t.closeMenu}><X /></Button>
       </div>
       <h2 className="mt-4 font-display text-xl font-extrabold">{t.aboutMe}</h2>
