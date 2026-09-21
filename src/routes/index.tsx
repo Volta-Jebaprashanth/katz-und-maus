@@ -4,7 +4,7 @@ import { ArrowLeft, Check, ExternalLink, Flame, Heart, Lock, RotateCcw, Share, S
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { playLetter, playWord } from "@/lib/word-audio";
+import { playLetter, playWord, preloadLetters, preloadWords } from "@/lib/word-audio";
 import { playCorrectSound, playWrongSound } from "@/lib/feedback-sound";
 import { TIERE_WORDS, type VocabWord } from "@/data/vocabulary";
 import { MOTHER_TONGUES, TRANSLATIONS, type MotherTongue, type Strings } from "@/lib/i18n";
@@ -56,6 +56,50 @@ function Index() {
   const meaningOptions = useMemo(() => TIERE_WORDS.map((w) => w[lang]), [lang]);
   const translateOptions = useMemo(() => TIERE_WORDS.map((w) => w.full), []);
   const pictureOptions = useMemo(() => TIERE_WORDS.map((w) => ({ id: w.id, image: w.image, label: w[lang] })), [lang]);
+
+  // Fetch a screen's word/letter clips as soon as it mounts, so tapping a
+  // tile plays instantly instead of waiting on the network the first time.
+  useEffect(() => {
+    switch (screen) {
+      case "picture":
+      case "listen":
+        preloadWords(["der Hund", "der Vogel", "das Pferd", "die Katze"]);
+        break;
+      case "wordPicture":
+      case "listenPicture":
+        preloadWords(["der Vogel"]);
+        break;
+      case "translate":
+        preloadWords(translateOptions);
+        break;
+      case "article":
+        preloadWords(["der", "die", "das"]);
+        break;
+      case "build":
+        preloadLetters(letterTiles);
+        break;
+      case "missing":
+        preloadLetters(missingLetterOptions);
+        break;
+      case "unscramble":
+        preloadLetters(unscrambleTiles);
+        break;
+      case "listenBuild":
+        preloadWords(["der Vogel"]);
+        preloadLetters(listenBuildTiles);
+        break;
+      case "match":
+        preloadWords(TIERE_WORDS.map((w) => w.full));
+        break;
+    }
+  }, [
+    screen,
+    translateOptions,
+    letterTiles,
+    missingLetterOptions,
+    unscrambleTiles,
+    listenBuildTiles,
+  ]);
 
   useEffect(() => {
     try {

@@ -5,9 +5,25 @@ import { LETTER_AUDIO } from "@/data/letter-audio.generated";
 // letter by letter) pile up overlapping audio.
 let activeClip: HTMLAudioElement | null = null;
 
+// Reused across plays so a screen's clips can be fetched ahead of time (see
+// preloadWords/preloadLetters) instead of only starting the network request
+// at tap time, which is what made playback feel laggy on a fresh screen.
+const clipCache = new Map<string, HTMLAudioElement>();
+
+function getClip(src: string): HTMLAudioElement {
+  let audio = clipCache.get(src);
+  if (!audio) {
+    audio = new Audio(src);
+    audio.preload = "auto";
+    clipCache.set(src, audio);
+  }
+  return audio;
+}
+
 function playClip(src: string) {
   activeClip?.pause();
-  const audio = new Audio(src);
+  const audio = getClip(src);
+  audio.currentTime = 0;
   activeClip = audio;
   audio.play().catch(() => {
     /* autoplay/decoding blocked — user can just tap again */
@@ -39,4 +55,21 @@ export function playLetter(letter: string) {
   const src = LETTER_AUDIO[letter.toUpperCase()];
   if (src) playClip(src);
   else speak(letter);
+}
+
+// Fetches a word's/letter's clip into `clipCache` without playing it, so a
+// lesson screen can warm up every sound it might need as soon as it mounts
+// instead of only starting the download on the first tap.
+export function preloadWords(words: string[]) {
+  for (const word of words) {
+    const src = WORD_AUDIO[word];
+    if (src) getClip(src).load();
+  }
+}
+
+export function preloadLetters(letters: string[]) {
+  for (const letter of letters) {
+    const src = LETTER_AUDIO[letter.toUpperCase()];
+    if (src) getClip(src).load();
+  }
 }
