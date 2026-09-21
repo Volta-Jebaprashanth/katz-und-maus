@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { playLetter, playWord } from "@/lib/word-audio";
+import { playCorrectSound, playWrongSound } from "@/lib/feedback-sound";
 import { TIERE_WORDS, type VocabWord } from "@/data/vocabulary";
 import { MOTHER_TONGUES, TRANSLATIONS, type MotherTongue, type Strings } from "@/lib/i18n";
 
@@ -122,7 +123,7 @@ function Index() {
   const previousScreen = sequence[Math.max(0, step - 1)] ?? "home";
 
   const go = (next: Screen) => { setAnswer(null); setLetters([]); setHeard(false); setChecked(false); setAttempts(0); setScreen(next); };
-  const checkAnswer = (isCorrect: boolean) => { setChecked(true); setLastCorrect(isCorrect); if (!isCorrect) setAttempts((a) => a + 1); };
+  const checkAnswer = (isCorrect: boolean) => { setChecked(true); setLastCorrect(isCorrect); if (isCorrect) playCorrectSound(); else { playWrongSound(); setAttempts((a) => a + 1); } };
   const retry = () => { setChecked(false); setAnswer(null); setLetters([]); };
   const startLesson = () => {
     if (typeof document !== "undefined") {
@@ -449,8 +450,8 @@ function MatchPairs({ t, lang, words, onComplete }: { t: Strings; lang: MotherTo
   const selectLeft = (id: string) => { if (matched.includes(id)) return; const word = byId[id]; if (word) playWord(word.full); setSelectedLeft(id); setWrong(null); };
   const selectRight = (id: string) => {
     if (!selectedLeft || matched.includes(id)) return;
-    if (selectedLeft === id) { const word = byId[id]; if (word) playWord(word.full); setMatched((old) => [...old, id]); setSelectedLeft(null); }
-    else { setWrong({ left: selectedLeft, right: id }); setSelectedLeft(null); }
+    if (selectedLeft === id) { const word = byId[id]; if (word) playWord(word.full); playCorrectSound(); setMatched((old) => [...old, id]); setSelectedLeft(null); }
+    else { playWrongSound(); setWrong({ left: selectedLeft, right: id }); setSelectedLeft(null); }
   };
 
   return <div>

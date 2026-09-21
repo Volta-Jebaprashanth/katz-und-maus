@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "generate-audio": "node scripts/generate-audio.mjs"
+    "generate-audio": "node scripts/generate-audio.mjs",
+    "generate-feedback-sounds": "node scripts/generate-feedback-sounds.mjs"
   },
   "overrides": {
     "rolldown": "1.2.1"
