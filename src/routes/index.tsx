@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { ArrowLeft, Check, ExternalLink, Flame, Heart, Lock, RotateCcw, Share, Smartphone, SquarePlus, Sparkles, Star, Trash2, Volume2, X, Zap } from "lucide-react";
+import { ArrowLeft, Check, ChevronRight, ExternalLink, Flame, Heart, RotateCcw, Share, Smartphone, SquarePlus, Sparkles, Star, Trash2, Volume2, X, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
@@ -212,7 +212,7 @@ function Index() {
       )}
 
       <main className="relative z-10 mx-auto max-w-5xl px-4 pb-10 sm:px-6">
-        {screen === "home" && <Home t={t} onStart={startLesson} name={profile?.name} showInstall={!installed} onAddToHomeScreen={addToHomeScreen} />}
+        {screen === "home" && <Home t={t} lang={lang} onStart={startLesson} name={profile?.name} showInstall={!installed} onAddToHomeScreen={addToHomeScreen} />}
 
         {screen === "picture" && <LessonFrame t={t} eyebrow={t.pictureChallenge} title="Was ist das?" subtitle={t.chooseGermanWordForPicture}>
           <Picture src={vogel.image} alt={vogel.full} />
@@ -309,24 +309,81 @@ function Stat({ icon, value, label }: { icon: React.ReactNode; value: string; la
   return <span className="glass-panel flex items-center gap-1.5 rounded-full px-2.5 py-2 sm:px-3" aria-label={`${value} ${label}`}><span className="[&_svg]:size-4">{icon}</span><span className="font-display text-sm font-bold">{value}</span></span>;
 }
 
-function Home({ t, onStart, name, showInstall, onAddToHomeScreen }: { t: Strings; onStart: () => void; name?: string | undefined; showInstall: boolean; onAddToHomeScreen: () => void }) {
-  const levels = [
-    { icon: <Check />, title: "Hallo!", detail: t.lessonComplete(30), state: "done" },
-    { icon: "🐕", title: "Tiere", detail: t.wordsStartHere(8), state: "active" },
-    { icon: "🍎", title: "Essen", detail: t.wordsLocked(8), state: "locked" },
-    { icon: "📘", title: "Zu Hause", detail: t.wordsLocked(8), state: "locked" },
-  ];
+type PathNode = { id: string; title: string; icon: React.ReactNode; state: "done" | "active"; meaning: string; children?: PathNode[] };
+
+function collectContainerIds(nodes: PathNode[]): string[] {
+  return nodes.flatMap((node) => (node.children ? [node.id, ...collectContainerIds(node.children)] : []));
+}
+
+const PATH_MEANINGS = {
+  grundlagen: { english: "Basics", tamil: "அடிப்படைகள்", sinhala: "මූලික කරුණු" },
+  hallo: { english: "Hello!", tamil: "வணக்கம்!", sinhala: "ආයුබෝවන්!" },
+  wortschatz: { english: "Vocabulary", tamil: "சொல்வளம்", sinhala: "වචන මාලාව" },
+  tiere: { english: "Animals", tamil: "விலங்குகள்", sinhala: "සතුන්" },
+  klassenzimmer: { english: "Classroom", tamil: "வகுப்பறை", sinhala: "පන්ති කාமරය" },
+  essen: { english: "Food", tamil: "உணவு", sinhala: "ආහாර" },
+  zuhause: { english: "Home", tamil: "வீடு", sinhala: "නිවස" },
+} satisfies Record<string, Record<MotherTongue, string>>;
+
+function Home({ t, lang, onStart, name, showInstall, onAddToHomeScreen }: { t: Strings; lang: MotherTongue; onStart: () => void; name?: string | undefined; showInstall: boolean; onAddToHomeScreen: () => void }) {
+  const path = useMemo<PathNode[]>(() => [
+    {
+      id: "grundlagen", title: "Grundlagen", icon: "🔤", state: "active", meaning: PATH_MEANINGS.grundlagen[lang],
+      children: [
+        { id: "hallo", title: "Hallo!", icon: "👋", state: "done", meaning: PATH_MEANINGS.hallo[lang] },
+        {
+          id: "wortschatz", title: "Wortschatz", icon: "🗂️", state: "active", meaning: PATH_MEANINGS.wortschatz[lang],
+          children: [
+            { id: "tiere", title: "Tiere", icon: "🐕", state: "active", meaning: PATH_MEANINGS.tiere[lang] },
+            { id: "klassenzimmer", title: "Klassenzimmer", icon: "🎒", state: "active", meaning: PATH_MEANINGS.klassenzimmer[lang] },
+          ],
+        },
+      ],
+    },
+    { id: "essen", title: "Essen", icon: "🍎", state: "active", meaning: PATH_MEANINGS.essen[lang] },
+    { id: "zuhause", title: "Zu Hause", icon: "📘", state: "active", meaning: PATH_MEANINGS.zuhause[lang] },
+  ], [lang]);
+  const [expanded, setExpanded] = useState<Set<string>>(() => new Set(collectContainerIds(path)));
+  const toggleNode = (id: string) => setExpanded((prev) => { const next = new Set(prev); if (next.has(id)) next.delete(id); else next.add(id); return next; });
+  const handleCardClick = () => onStart();
+
   return <div className="grid gap-5 lg:grid-cols-[1fr_0.72fr]">
     <section className="glass-panel rounded-[28px] p-5 sm:p-7">
       <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-4"><div className="min-w-0"><p className="text-sm font-extrabold text-ink-soft">Hallo, {name || "Freund"}!</p><h1 className="font-display text-3xl font-extrabold sm:text-4xl">Dein Lernweg</h1><p className="mt-1 font-bold text-ink-soft">{t.readyForAdventure}</p>{showInstall && <Button variant="outline" size="sm" className="mt-3 rounded-xl border-2 border-border bg-card font-display font-extrabold" onClick={onAddToHomeScreen}><Smartphone /> {t.addToHomeScreen}</Button>}</div><div className="animate-bob grid size-20 shrink-0 place-items-center overflow-hidden rounded-3xl ring-2 ring-border"><img src="/images/logo.png" alt="WortWunder mascot" className="size-full object-cover" /></div></div>
-      <div className="relative mx-auto mt-7 max-w-lg space-y-4 before:absolute before:bottom-8 before:left-7 before:top-8 before:w-2 before:rounded-full before:bg-ice">
-        {levels.map((level, index) => <button key={level.title} disabled={level.state === "locked"} onClick={level.state === "active" ? onStart : undefined} className={cn("relative grid w-full grid-cols-[3.5rem_minmax(0,1fr)] items-center gap-4 text-left", index % 2 === 1 && "sm:translate-x-10")}><span className={cn("z-10 grid size-14 place-items-center rounded-full border-4 border-frost text-2xl shadow-md [&_svg]:size-6", level.state === "done" && "bg-mint", level.state === "active" && "animate-bob bg-sun", level.state === "locked" && "bg-ice text-ink-soft")}>{level.state === "locked" ? <Lock className="size-5" /> : level.icon}</span><span className={cn("rounded-2xl p-4 ring-1 ring-border", level.state === "active" ? "bg-sun/30 ring-2 ring-sun" : "bg-card", level.state === "locked" && "opacity-65")}><span className="block font-display text-lg font-extrabold">{level.title}</span><span className="block text-xs font-bold text-ink-soft">{level.detail}</span></span></button>)}
+      <div className="mx-auto mt-7 max-w-lg">
+        <PathTree t={t} nodes={path} depth={0} expanded={expanded} onToggle={toggleNode} onCardClick={handleCardClick} />
       </div>
     </section>
     <aside className="space-y-5">
       <section className="glass-panel rounded-[28px] p-5"><p className="text-sm font-extrabold text-ink-soft">{t.todaysGoal}</p><div className="mt-2 flex items-center gap-4"><div className="grid size-16 shrink-0 place-items-center rounded-2xl bg-mint/35"><Sparkles className="size-8" /></div><div className="min-w-0 flex-1"><p className="font-display text-xl font-extrabold">{t.xpProgress(10, 20)}</p><div className="mt-2 h-3 overflow-hidden rounded-full bg-ice"><div className="h-full w-1/2 rounded-full bg-mint" /></div></div></div></section>
       <Button variant="adventure" size="lesson" className="w-full" onClick={onStart}>{t.startLesson} <Zap /></Button>
     </aside>
+  </div>;
+}
+
+const CHEVRON_COLORS = ["bg-mint", "bg-sun", "bg-frost"];
+
+function PathTree({ t, nodes, depth, expanded, onToggle, onCardClick }: { t: Strings; nodes: PathNode[]; depth: number; expanded: Set<string>; onToggle: (id: string) => void; onCardClick: (node: PathNode) => void }) {
+  return <div className={cn("space-y-2", depth > 0 && "ml-6 mt-2 border-l-2 border-ice pl-4")}>
+    {nodes.map((node) => {
+      const hasChildren = !!node.children?.length;
+      const isExpanded = expanded.has(node.id);
+      const openCard = () => onCardClick(node);
+      return <div key={node.id}>
+        <div className={cn("flex items-center gap-3 rounded-2xl bg-card p-3 ring-1 ring-border transition", depth === 0 && "p-4")}>
+          <button type="button" onClick={openCard} aria-label={node.title} className={cn("relative z-10 grid shrink-0 place-items-center rounded-full border-4 border-frost shadow-md [&>svg]:size-5", depth === 0 ? "size-14 text-2xl" : "size-11 text-lg", node.state === "done" && "bg-mint", node.state === "active" && "animate-bob bg-frost")}>
+            {node.icon}
+            {node.state === "done" && <span className="absolute -bottom-1 -right-1 grid size-5 place-items-center rounded-full bg-success ring-2 ring-frost"><Check className="size-3 text-primary-foreground" /></span>}
+          </button>
+          <button type="button" onClick={openCard} className="min-w-0 flex-1 text-left">
+            <span className={cn("block font-display font-extrabold", depth === 0 ? "text-lg" : "text-base")}>{node.title}</span>
+            <span className="block text-xs font-bold text-ink-soft">{node.meaning}</span>
+          </button>
+          {hasChildren && <button type="button" onClick={() => onToggle(node.id)} aria-label={isExpanded ? t.collapseSection : t.expandSection} aria-expanded={isExpanded} className={cn("grid size-10 shrink-0 place-items-center rounded-full text-foreground shadow-[0_4px_0_rgba(0,0,0,0.18)] transition hover:brightness-105 active:translate-y-1 active:shadow-none", CHEVRON_COLORS[depth % CHEVRON_COLORS.length])}><ChevronRight className={cn("size-5 transition-transform", isExpanded && "rotate-90")} /></button>}
+        </div>
+        {hasChildren && isExpanded && <PathTree t={t} nodes={node.children!} depth={depth + 1} expanded={expanded} onToggle={onToggle} onCardClick={onCardClick} />}
+      </div>;
+    })}
   </div>;
 }
 

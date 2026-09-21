@@ -79,6 +79,8 @@ export interface Strings {
   hintBird: string;
   xpStreakContinues: string;
   backToPath: string;
+  expandSection: string;
+  collapseSection: string;
 }
 
 export const TRANSLATIONS: Record<MotherTongue, Strings> = {
@@ -150,6 +152,8 @@ export const TRANSLATIONS: Record<MotherTongue, Strings> = {
     hintBird: "Hint: this animal has feathers and loves to sing.",
     xpStreakContinues: "+25 XP · Your 5 day streak continues!",
     backToPath: "Back to my path",
+    expandSection: "Expand",
+    collapseSection: "Collapse",
   },
   tamil: {
     openProfileMenu: "சுயவிவரப் பட்டியலைத் திற",
@@ -219,6 +223,8 @@ export const TRANSLATIONS: Record<MotherTongue, Strings> = {
     hintBird: "குறிப்பு: இந்த விலங்கிற்கு இறகுகள் உண்டு, பாட விரும்பும்.",
     xpStreakContinues: "+25 XP · உங்கள் 5 நாள் தொடர் தொடர்கிறது!",
     backToPath: "என் பாதைக்குத் திரும்பு",
+    expandSection: "விரிவாக்கு",
+    collapseSection: "சுருக்கு",
   },
   sinhala: {
     openProfileMenu: "පැතිකඩ මෙනුව විවෘත කරන්න",
@@ -288,5 +294,7 @@ export const TRANSLATIONS: Record<MotherTongue, Strings> = {
     hintBird: "ඉඟිය: මෙම සතාට පිහාටු ඇති අතර ගායනා කිරීමට කැමතියි.",
     xpStreakContinues: "+25 XP · ඔබේ දින 5 දාමය දිගටම පවතී!",
     backToPath: "මගේ මාවතට ආපසු",
+    expandSection: "විස්තීරණය කරන්න",
+    collapseSection: "හකුළන්න",
   },
 };
