@@ -1,12 +1,14 @@
 import type { GreetingWord } from "@/data/greetings";
 
 // Generic quiz-queue builder: 10 words x 12 test types, grouped into three
-// difficulty tiers of 4 test types each. Each tier's items are generated and
-// shuffled independently, then the tiers are concatenated in a fixed
-// easy -> medium -> hard order (the "match" test type is grouped rather than
-// per-word — see buildGreetingsQueue below — so the hard tier lands at 32
-// items instead of 40, and the total at 112 instead of 120).
+// difficulty tiers of 4 test types each. Rounds are strictly tier-gated —
+// see buildRoundFromRows below — so nothing from the medium tier is ever
+// queued while any easy row is still outstanding, and likewise hard waits
+// on medium (the "match" test type is grouped rather than per-word, so a
+// tier lands at 10 items instead of 40 once it's match's turn).
 export type Tier = "easy" | "medium" | "hard";
+
+export const TIER_ORDER: Tier[] = ["easy", "medium", "hard"];
 
 export type TestType =
   | "picture"
@@ -27,6 +29,22 @@ export const TEST_TIERS: Record<Tier, TestType[]> = {
   medium: ["build", "situation", "missing", "listen"],
   hard: ["unscramble", "listenBuild", "listenPicture", "match"],
 };
+
+export const ALL_TEST_TYPES: TestType[] = [
+  ...TEST_TIERS.easy,
+  ...TEST_TIERS.medium,
+  ...TEST_TIERS.hard,
+];
+
+const TIER_BY_TYPE = Object.fromEntries(
+  (Object.keys(TEST_TIERS) as Tier[]).flatMap((tier) =>
+    TEST_TIERS[tier].map((type) => [type, tier] as const),
+  ),
+) as Record<TestType, Tier>;
+
+export function tierOfType(type: TestType): Tier {
+  return TIER_BY_TYPE[type];
+}
 
 export type SingleWordKind = Exclude<TestType, "match">;
 export interface SingleWordItem {
@@ -63,28 +81,51 @@ function pickDistractorIds(words: GreetingWord[], correct: GreetingWord, count: 
     .map((w) => w.id);
 }
 
-function buildTier(tier: Tier, types: TestType[], words: GreetingWord[]): QuizItem[] {
-  const perWordTypes = types.filter((type): type is SingleWordKind => type !== "match");
-  const items: QuizItem[] = perWordTypes.flatMap((kind) =>
-    words.map((word): SingleWordItem => ({
-      kind,
-      tier,
-      word,
-      optionIds: pickDistractorIds(words, word, 3),
-    })),
-  );
-  if (types.includes("match")) {
-    for (const group of chunk(shuffle(words), 5)) items.push({ kind: "match", tier, words: group });
-  }
-  return shuffle(items);
+export interface RowRef {
+  testType: TestType;
+  wordId: string;
 }
 
-export function buildGreetingsQueue(words: GreetingWord[]): QuizItem[] {
-  return [
-    ...buildTier("easy", TEST_TIERS.easy, words),
-    ...buildTier("medium", TEST_TIERS.medium, words),
-    ...buildTier("hard", TEST_TIERS.hard, words),
-  ];
+// Builds a round's queue from a set of still-outstanding rows (pending > 0
+// in progress-store.ts). Callers are expected to have already filtered
+// those rows down to a single tier — see getActiveTierRows — so this itself
+// doesn't know or care about tier order, it just turns whatever it's given
+// into a shuffled queue.
+export function buildRoundFromRows(rows: RowRef[], words: GreetingWord[]): QuizItem[] {
+  const byId = Object.fromEntries(words.map((w) => [w.id, w]));
+  const items: QuizItem[] = [];
+  const matchWordIds: string[] = [];
+
+  for (const row of rows) {
+    // Defensive against stale localStorage rows left over from a word or
+    // test type that's since been removed from the app — progress-store.ts
+    // prunes these on every entry, but skipping anything unrecognized here
+    // too means a leftover row can never build a queue item with no
+    // matching UI branch, which would otherwise strand the kid on a blank
+    // screen with no way to advance.
+    const word = byId[row.wordId];
+    if (!word) continue;
+    if (row.testType === "match") {
+      matchWordIds.push(row.wordId);
+      continue;
+    }
+    if (!(row.testType in TIER_BY_TYPE)) continue;
+    const kind = row.testType as SingleWordKind;
+    items.push({
+      kind,
+      tier: TIER_BY_TYPE[kind],
+      word,
+      optionIds: pickDistractorIds(words, word, 3),
+    });
+  }
+
+  const matchWords = shuffle(matchWordIds)
+    .map((id) => byId[id])
+    .filter((w): w is GreetingWord => Boolean(w));
+  for (const group of chunk(matchWords, 5))
+    items.push({ kind: "match", tier: "hard", words: group });
+
+  return shuffle(items);
 }
 
 // Strips everything but letters (spaces, apostrophes, "?", ...) and

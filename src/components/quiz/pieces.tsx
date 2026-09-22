@@ -380,6 +380,7 @@ export function MatchPairs<W extends MatchWord>({
   lang,
   words,
   onComplete,
+  onAttempt,
   title = "Lektion geschafft!",
   subtitle,
   actionLabel,
@@ -388,6 +389,7 @@ export function MatchPairs<W extends MatchWord>({
   lang: MotherTongue;
   words: W[];
   onComplete: () => void;
+  onAttempt?: (wordId: string, isCorrect: boolean) => void;
   title?: string;
   subtitle?: string;
   actionLabel?: string;
@@ -397,6 +399,9 @@ export function MatchPairs<W extends MatchWord>({
   const [selectedLeft, setSelectedLeft] = useState<string | null>(null);
   const [matched, setMatched] = useState<string[]>([]);
   const [wrong, setWrong] = useState<{ left: string; right: string } | null>(null);
+  // Only the first mismatch a word is involved in this round counts against
+  // it — repeated mismatches on an already-penalized word don't stack.
+  const [failedOnce, setFailedOnce] = useState<Set<string>>(new Set());
   const allMatched = matched.length === words.length;
 
   useEffect(() => {
@@ -420,9 +425,20 @@ export function MatchPairs<W extends MatchWord>({
       playCorrectSound();
       setMatched((old) => [...old, id]);
       setSelectedLeft(null);
+      onAttempt?.(id, true);
     } else {
       playWrongSound();
       setWrong({ left: selectedLeft, right: id });
+      setFailedOnce((prev) => {
+        const next = new Set(prev);
+        for (const missedId of [selectedLeft, id]) {
+          if (!next.has(missedId)) {
+            onAttempt?.(missedId, false);
+            next.add(missedId);
+          }
+        }
+        return next;
+      });
       setSelectedLeft(null);
     }
   };

@@ -31,6 +31,10 @@ import type { MotherTongue } from "@/lib/i18n";
 //   how-are-you      https://www.pexels.com/photo/two-women-talking-and-smiling-5542877/
 //   welcome          https://www.pexels.com/photo/smiling-woman-standing-in-doorway-11483619/
 // See CREDITS.md at the repo root for the full source list.
+// Matches the public/1.1 greetings/ asset folder and is the stable id this
+// test's progress is stored under (see src/lib/progress-store.ts).
+export const GREETINGS_TEST_ID = "1.1";
+
 export type Situation = "Begrüßung" | "Abschied" | "Morgens" | "Abends";
 
 export const SITUATIONS: Situation[] = ["Begrüßung", "Abschied", "Morgens", "Abends"];
