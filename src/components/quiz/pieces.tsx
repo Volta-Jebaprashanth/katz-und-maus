@@ -329,7 +329,7 @@ export function LetterBuilder({
     <>
       <div className="my-5 flex min-h-14 flex-wrap items-center justify-center gap-3">
         {groupRanges.map(({ start, len }, gi) => (
-          <div key={gi} className="flex gap-2">
+          <div key={gi} className="flex flex-wrap justify-center gap-2">
             {Array.from({ length: len }).map((_, i) => {
               const tileIndex = letters[start + i];
               return (

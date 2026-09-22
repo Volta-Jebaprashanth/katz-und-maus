@@ -2,9 +2,7 @@ import type { MotherTongue } from "@/lib/i18n";
 
 // Vocabulary for the "Hallo!" (greetings) lesson, test 1.1. Unlike
 // TIERE_WORDS these are phrases, not nouns, so they have no der/die/das
-// article. `situation` powers the "Wann sagt man das?" test type, which
-// stands in for the article test animals get (greetings have no
-// grammatical gender).
+// article.
 //
 // Per-test asset layout (see AGENTS.md for the full convention): this
 // test's own audio/images live under `public/1.1 greetings/`, split into
@@ -35,10 +33,6 @@ import type { MotherTongue } from "@/lib/i18n";
 // test's progress is stored under (see src/lib/progress-store.ts).
 export const GREETINGS_TEST_ID = "1.1";
 
-export type Situation = "Begrüßung" | "Abschied" | "Morgens" | "Abends";
-
-export const SITUATIONS: Situation[] = ["Begrüßung", "Abschied", "Morgens", "Abends"];
-
 export interface GreetingWord {
   id: string;
   image: string;
@@ -46,7 +40,6 @@ export interface GreetingWord {
   english: string;
   tamil: string;
   sinhala: string;
-  situation: Situation;
 }
 
 export const GREETINGS_WORDS: GreetingWord[] = [
@@ -57,7 +50,6 @@ export const GREETINGS_WORDS: GreetingWord[] = [
     english: "Hello",
     tamil: "வணக்கம்",
     sinhala: "ආයුබෝවන්",
-    situation: "Begrüßung",
   },
   {
     id: "guten-morgen",
@@ -66,7 +58,6 @@ export const GREETINGS_WORDS: GreetingWord[] = [
     english: "Good morning",
     tamil: "காலை வணக்கம்",
     sinhala: "සුභ උදෑසනක්",
-    situation: "Morgens",
   },
   {
     id: "guten-tag",
@@ -75,7 +66,6 @@ export const GREETINGS_WORDS: GreetingWord[] = [
     english: "Good day",
     tamil: "நல்ல பகல் வணக்கம்",
     sinhala: "සුභ දවසක්",
-    situation: "Begrüßung",
   },
   {
     id: "guten-abend",
@@ -84,7 +74,6 @@ export const GREETINGS_WORDS: GreetingWord[] = [
     english: "Good evening",
     tamil: "மாலை வணக்கம்",
     sinhala: "සුභ සන්ධ්‍යාවක්",
-    situation: "Abends",
   },
   {
     id: "gute-nacht",
@@ -93,7 +82,6 @@ export const GREETINGS_WORDS: GreetingWord[] = [
     english: "Good night",
     tamil: "இனிய இரவு",
     sinhala: "සුභ රාත්‍රියක්",
-    situation: "Abschied",
   },
   {
     id: "tschuess",
@@ -102,7 +90,6 @@ export const GREETINGS_WORDS: GreetingWord[] = [
     english: "Bye",
     tamil: "பை பை",
     sinhala: "බායි",
-    situation: "Abschied",
   },
   {
     id: "auf-wiedersehen",
@@ -111,7 +98,6 @@ export const GREETINGS_WORDS: GreetingWord[] = [
     english: "Goodbye",
     tamil: "மீண்டும் சந்திப்போம்",
     sinhala: "නැවත හමුවෙමු",
-    situation: "Abschied",
   },
   {
     id: "bis-bald",
@@ -120,7 +106,6 @@ export const GREETINGS_WORDS: GreetingWord[] = [
     english: "See you soon",
     tamil: "விரைவில் சந்திப்போம்",
     sinhala: "ඉක්මනින් හමුවෙමු",
-    situation: "Abschied",
   },
   {
     id: "wie-gehts",
@@ -129,7 +114,6 @@ export const GREETINGS_WORDS: GreetingWord[] = [
     english: "How are you?",
     tamil: "எப்படி இருக்கிறீர்கள்?",
     sinhala: "කොහොමද?",
-    situation: "Begrüßung",
   },
   {
     id: "willkommen",
@@ -138,7 +122,6 @@ export const GREETINGS_WORDS: GreetingWord[] = [
     english: "Welcome",
     tamil: "வரவேற்பு",
     sinhala: "සාදරයෙන් පිළිගනිමු",
-    situation: "Begrüßung",
   },
 ];
 

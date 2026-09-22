@@ -1,7 +1,7 @@
 import type { GreetingWord } from "@/data/greetings";
 
-// Generic quiz-queue builder: 10 words x 12 test types, grouped into three
-// difficulty tiers of 4 test types each. Rounds are strictly tier-gated —
+// Generic quiz-queue builder: 10 words x 11 test types, grouped into three
+// difficulty tiers (4 easy, 3 medium, 4 hard). Rounds are strictly tier-gated —
 // see buildRoundFromRows below — so nothing from the medium tier is ever
 // queued while any easy row is still outstanding, and likewise hard waits
 // on medium (the "match" test type is grouped rather than per-word, so a
@@ -16,7 +16,6 @@ export type TestType =
   | "meaning"
   | "translate"
   | "build"
-  | "situation"
   | "missing"
   | "listen"
   | "unscramble"
@@ -26,7 +25,7 @@ export type TestType =
 
 export const TEST_TIERS: Record<Tier, TestType[]> = {
   easy: ["picture", "wordPicture", "meaning", "listen"],
-  medium: ["situation", "missing", "listenPicture", "translate"],
+  medium: ["missing", "listenPicture", "translate"],
   hard: ["unscramble", "listenBuild", "build", "match"],
 };
 

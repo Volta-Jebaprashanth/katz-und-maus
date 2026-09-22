@@ -11,18 +11,12 @@ import {
   LetterBuilder,
   LetterOptions,
   MatchPairs,
-  OptionGrid,
   Picture,
   PictureOptions,
   ResultCard,
   WordCard,
 } from "@/components/quiz/pieces";
-import {
-  GREETINGS_TEST_ID,
-  GREETINGS_WORDS,
-  SITUATIONS,
-  type GreetingWord,
-} from "@/data/greetings";
+import { GREETINGS_TEST_ID, GREETINGS_WORDS, type GreetingWord } from "@/data/greetings";
 import {
   ALL_TEST_TYPES,
   answerLetters,
@@ -36,7 +30,7 @@ import {
 import { ensureTestEntered, getActiveTierRows, recordFail, recordPass } from "@/lib/progress-store";
 import type { MotherTongue, Strings } from "@/lib/i18n";
 
-// Data-driven quiz screen for the "Hallo!" (greetings) lesson: 10 words x 12
+// Data-driven quiz screen for the "Hallo!" (greetings) lesson: 10 words x 11
 // test types. Rounds are strictly tier-gated — every round's queue is built
 // from whatever (word, testType) rows are still pending (pendingAttempts >
 // 0 in progress-store.ts) in the EARLIEST tier that isn't fully cleared, so
@@ -318,32 +312,6 @@ export function GreetingsQuiz({
           </LessonFrame>
         )}
 
-        {item && item.kind === "situation" && derived && (
-          <LessonFrame
-            t={t}
-            eyebrow={t.situationChallenge}
-            title="Wann sagt man das?"
-            subtitle={t.chooseSituation}
-          >
-            <WordCard t={t} text={derived.word.full} speak />
-            <OptionGrid
-              options={SITUATIONS}
-              selected={answer}
-              correct={derived.word.situation}
-              revealed={checked}
-              onSelect={setAnswer}
-              columns={2}
-            />
-            {!checked && (
-              <Continue
-                t={t}
-                disabled={!answer}
-                onClick={() => checkAnswer(answer === derived.word.situation)}
-              />
-            )}
-          </LessonFrame>
-        )}
-
         {item && item.kind === "missing" && derived && derived.missing && (
           <LessonFrame
             t={t}
@@ -358,7 +326,7 @@ export function GreetingsQuiz({
             />
             <div className="my-5 flex flex-wrap items-center justify-center gap-3">
               {segmentRanges(derived.segments).map((range, gi) => (
-                <div key={gi} className="flex gap-2">
+                <div key={gi} className="flex flex-wrap justify-center gap-2">
                   {Array.from({ length: range.len }).map((_, i) => {
                     const pos = range.start + i;
                     const isBlank = pos === derived.missing!.blankIndex;
