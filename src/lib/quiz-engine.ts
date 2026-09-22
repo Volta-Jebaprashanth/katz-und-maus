@@ -25,9 +25,9 @@ export type TestType =
   | "match";
 
 export const TEST_TIERS: Record<Tier, TestType[]> = {
-  easy: ["picture", "wordPicture", "meaning", "translate"],
-  medium: ["build", "situation", "missing", "listen"],
-  hard: ["unscramble", "listenBuild", "listenPicture", "match"],
+  easy: ["picture", "wordPicture", "meaning", "listen"],
+  medium: ["situation", "missing", "listenPicture", "translate"],
+  hard: ["unscramble", "listenBuild", "build", "match"],
 };
 
 export const ALL_TEST_TYPES: TestType[] = [

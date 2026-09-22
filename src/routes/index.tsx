@@ -248,19 +248,25 @@ function Index() {
       /iPhone|iPad|iPod/i.test(ua) || (/Macintosh/i.test(ua) && navigator.maxTouchPoints > 1);
     if (isIOS) setShowInstallHelp(true);
   };
+  // Mirrors quiz-engine.ts's TEST_TIERS grouping (easy -> medium -> hard) so
+  // this hand-written walkthrough exercises the same difficulty order as
+  // the data-driven GreetingsQuiz. "match" stays last regardless of tier —
+  // MatchPairs always exits via its own onComplete straight to "home"
+  // rather than through this sequence, so anything placed after it here
+  // would be unreachable.
   const sequence: Screen[] = [
     "home",
     "picture",
     "wordPicture",
     "meaning",
-    "translate",
-    "article",
-    "build",
-    "missing",
-    "unscramble",
     "listen",
+    "article",
+    "missing",
     "listenPicture",
+    "translate",
+    "unscramble",
     "listenBuild",
+    "build",
     "match",
   ];
   const step = sequence.indexOf(screen);
