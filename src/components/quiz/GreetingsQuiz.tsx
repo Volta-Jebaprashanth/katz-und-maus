@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { ArrowLeft, Volume2 } from "lucide-react";
+import { Volume2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { playLetter, playWord, preloadLetters, preloadWords } from "@/lib/word-audio";
@@ -99,13 +99,6 @@ export function GreetingsQuiz({
     return { word, mcOptions, tiles, segments, answerLength, missing };
   }, [item, byId]);
 
-  const total = queue.length;
-  const step = Math.min(index, total);
-
-  const goBack = () => {
-    if (index === 0) onExit();
-    else setIndex((i) => i - 1);
-  };
   const goNext = () => setIndex((i) => i + 1);
   const checkAnswer = (isCorrect: boolean) => {
     setChecked(true);
@@ -133,20 +126,6 @@ export function GreetingsQuiz({
 
   return (
     <>
-      <div className="relative z-10 mx-auto flex max-w-3xl items-center gap-3 px-4 pb-3 sm:px-6">
-        <Button variant="ghost" size="icon" onClick={goBack} aria-label={t.previousScreen}>
-          <ArrowLeft />
-        </Button>
-        <div className="h-3 flex-1 overflow-hidden rounded-full bg-glass ring-1 ring-border">
-          <div
-            className="h-full rounded-full bg-mint transition-all duration-500"
-            style={{ width: `${(step / total) * 100}%` }}
-          />
-        </div>
-        <span className="font-display text-sm font-bold">
-          {step}/{total}
-        </span>
-      </div>
       <main className="relative z-10 mx-auto max-w-5xl px-4 pb-10 sm:px-6">
         {!item && (
           <LessonFrame t={t} eyebrow={t.roundUp} title="Geschafft!" subtitle={t.xpStreakContinues}>
