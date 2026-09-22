@@ -52,6 +52,7 @@ export interface Strings {
   meaningCheck: string;
   translationChallenge: string;
   articleChallenge: string;
+  situationChallenge: string;
   wordBuilder: string;
   missingLetter: string;
   unscramble: string;
@@ -62,6 +63,7 @@ export interface Strings {
   chooseMeaning: string;
   chooseGermanWord: string;
   chooseCorrectArticle: string;
+  chooseSituation: string;
   tapLettersToSpell: (word: string) => string;
   pickLetterThatCompletes: string;
   arrangeLetters: string;
@@ -77,6 +79,7 @@ export interface Strings {
   tapToHear: (text: string) => string;
   correctMeaning: (word: string, meaning: string) => string;
   hintBird: string;
+  hintGeneric: string;
   xpStreakContinues: string;
   backToPath: string;
   expandSection: string;
@@ -125,6 +128,7 @@ export const TRANSLATIONS: Record<MotherTongue, Strings> = {
     meaningCheck: "Meaning check",
     translationChallenge: "Translation",
     articleChallenge: "Der, die, or das?",
+    situationChallenge: "When do you say it?",
     wordBuilder: "Word builder",
     missingLetter: "Missing letter",
     unscramble: "Unscramble",
@@ -135,6 +139,7 @@ export const TRANSLATIONS: Record<MotherTongue, Strings> = {
     chooseMeaning: "Choose the meaning.",
     chooseGermanWord: "Choose the German word.",
     chooseCorrectArticle: "Choose the correct article.",
+    chooseSituation: "Choose when you'd use this greeting.",
     tapLettersToSpell: (word) => `Tap the letters to spell ${word}.`,
     pickLetterThatCompletes: "Pick the letter that completes the word.",
     arrangeLetters: "Arrange the letters to spell the word.",
@@ -150,6 +155,7 @@ export const TRANSLATIONS: Record<MotherTongue, Strings> = {
     tapToHear: (text) => `${text} — tap to hear`,
     correctMeaning: (word, meaning) => `${word} = ${meaning}!`,
     hintBird: "Hint: this animal has feathers and loves to sing.",
+    hintGeneric: "Hint: listen to the word again and think about the picture.",
     xpStreakContinues: "+25 XP · Your 5 day streak continues!",
     backToPath: "Back to my path",
     expandSection: "Expand",
@@ -180,7 +186,8 @@ export const TRANSLATIONS: Record<MotherTongue, Strings> = {
     save: "சேமி",
     clearAllData: "என் தரவு அனைத்தையும் அழி",
     deleteEverythingTitle: "அனைத்தையும் நீக்கவா?",
-    deleteEverythingBody: "இது உங்கள் பெயர், வயது மற்றும் முன்னேற்றத்தை அழிக்கும். இதை மீட்க முடியாது.",
+    deleteEverythingBody:
+      "இது உங்கள் பெயர், வயது மற்றும் முன்னேற்றத்தை அழிக்கும். இதை மீட்க முடியாது.",
     cancel: "ரத்து செய்",
     yesDelete: "ஆம், நீக்கு",
     followStepsGrownUp: "பெரியவர் ஒருவருடன் இந்த வழிமுறைகளைப் பின்பற்றுங்கள்!",
@@ -196,6 +203,7 @@ export const TRANSLATIONS: Record<MotherTongue, Strings> = {
     meaningCheck: "பொருள் சோதனை",
     translationChallenge: "மொழிபெயர்ப்பு",
     articleChallenge: "der, die அல்லது das?",
+    situationChallenge: "எப்போது சொல்வது?",
     wordBuilder: "சொல் கட்டமைப்பான்",
     missingLetter: "விடுபட்ட எழுத்து",
     unscramble: "எழுத்துக்களை வரிசைப்படுத்து",
@@ -206,6 +214,7 @@ export const TRANSLATIONS: Record<MotherTongue, Strings> = {
     chooseMeaning: "பொருளைத் தேர்ந்தெடு.",
     chooseGermanWord: "ஜெர்மன் சொல்லைத் தேர்ந்தெடு.",
     chooseCorrectArticle: "சரியான பண்புச்சொல்லைத் தேர்ந்தெடு.",
+    chooseSituation: "இந்த வாழ்த்தை எப்போது பயன்படுத்துவீர்கள் என்பதைத் தேர்ந்தெடு.",
     tapLettersToSpell: (word) => `${word} என்று எழுத எழுத்துக்களைத் தட்டவும்.`,
     pickLetterThatCompletes: "சொல்லை நிறைவு செய்யும் எழுத்தைத் தேர்ந்தெடு.",
     arrangeLetters: "சொல்லை உருவாக்க எழுத்துக்களை வரிசைப்படுத்து.",
@@ -221,6 +230,7 @@ export const TRANSLATIONS: Record<MotherTongue, Strings> = {
     tapToHear: (text) => `${text} — கேட்க தட்டவும்`,
     correctMeaning: (word, meaning) => `${word} = ${meaning}!`,
     hintBird: "குறிப்பு: இந்த விலங்கிற்கு இறகுகள் உண்டு, பாட விரும்பும்.",
+    hintGeneric: "குறிப்பு: சொல்லை மீண்டும் கேட்டு படத்தைப் பற்றி யோசி.",
     xpStreakContinues: "+25 XP · உங்கள் 5 நாள் தொடர் தொடர்கிறது!",
     backToPath: "என் பாதைக்குத் திரும்பு",
     expandSection: "விரிவாக்கு",
@@ -267,6 +277,7 @@ export const TRANSLATIONS: Record<MotherTongue, Strings> = {
     meaningCheck: "අර්ථය පරීක්ෂාව",
     translationChallenge: "පරිවර්තනය",
     articleChallenge: "der, die නැතහොත් das?",
+    situationChallenge: "කවදද කියන්නේ?",
     wordBuilder: "වචන තැනීම",
     missingLetter: "අස්ථානගත අකුර",
     unscramble: "අකුරු පිළිවෙළට සකසන්න",
@@ -277,6 +288,7 @@ export const TRANSLATIONS: Record<MotherTongue, Strings> = {
     chooseMeaning: "අර්ථය තෝරන්න.",
     chooseGermanWord: "ජර්මානු වචනය තෝරන්න.",
     chooseCorrectArticle: "නිවැරදි ලිපිය තෝරන්න.",
+    chooseSituation: "මෙම ආචාරය කවදා පාවිච්චි කරනවාද කියා තෝරන්න.",
     tapLettersToSpell: (word) => `${word} යනුවෙන් ලිවීමට අකුරු ඔබන්න.`,
     pickLetterThatCompletes: "වචනය සම්පූර්ණ කරන අකුර තෝරන්න.",
     arrangeLetters: "වචනය සෑදීමට අකුරු පිළිවෙළට සකසන්න.",
@@ -292,6 +304,7 @@ export const TRANSLATIONS: Record<MotherTongue, Strings> = {
     tapToHear: (text) => `${text} — ඇසීමට ඔබන්න`,
     correctMeaning: (word, meaning) => `${word} = ${meaning}!`,
     hintBird: "ඉඟිය: මෙම සතාට පිහාටු ඇති අතර ගායනා කිරීමට කැමතියි.",
+    hintGeneric: "ඉඟිය: වචනය නැවත අසා පින්තූරය ගැන සිතන්න.",
     xpStreakContinues: "+25 XP · ඔබේ දින 5 දාමය දිගටම පවතී!",
     backToPath: "මගේ මාවතට ආපසු",
     expandSection: "විස්තීරණය කරන්න",
