@@ -58,6 +58,20 @@ const WORDS = [
   { word: "Bis bald", slug: "bis-bald", dir: "1.1 greetings/audio" },
   { word: "Wie geht's?", slug: "wie-gehts", dir: "1.1 greetings/audio" },
   { word: "Willkommen", slug: "willkommen", dir: "1.1 greetings/audio" },
+  { word: "Bitte", slug: "bitte", dir: "1.1 greetings/audio" },
+  { word: "Danke", slug: "danke", dir: "1.1 greetings/audio" },
+  { word: "Vielen Dank", slug: "vielen-dank", dir: "1.1 greetings/audio" },
+  { word: "Gern geschehen", slug: "gern-geschehen", dir: "1.1 greetings/audio" },
+  { word: "Entschuldigung", slug: "entschuldigung", dir: "1.1 greetings/audio" },
+  { word: "Sorry", slug: "sorry", dir: "1.1 greetings/audio" },
+  { word: "Natürlich", slug: "natuerlich", dir: "1.1 greetings/audio" },
+  { word: "Richtig", slug: "richtig", dir: "1.1 greetings/audio" },
+  { word: "Kein Problem", slug: "kein-problem", dir: "1.1 greetings/audio" },
+  { word: "Alles klar", slug: "alles-klar", dir: "1.1 greetings/audio" },
+  { word: "Bis später", slug: "bis-spaeter", dir: "1.1 greetings/audio" },
+  { word: "Bis morgen", slug: "bis-morgen", dir: "1.1 greetings/audio" },
+  { word: "Viel Glück", slug: "viel-glueck", dir: "1.1 greetings/audio" },
+  { word: "Gute Reise", slug: "gute-reise", dir: "1.1 greetings/audio" },
 ];
 
 // Full lesson-screen titles (e.g. "Was ist das?"), spoken when a kid taps the

@@ -28,6 +28,20 @@ import type { MotherTongue } from "@/lib/i18n";
 //   see-you-soon     https://www.pexels.com/photo/person-waving-hand-at-window-of-old-train-7720563/
 //   how-are-you      https://www.pexels.com/photo/two-women-talking-and-smiling-5542877/
 //   welcome          https://www.pexels.com/photo/smiling-woman-standing-in-doorway-11483619/
+//   please           https://www.pexels.com/photo/monochrome-photograph-of-a-girl-with-her-hands-together-6311786/
+//   thank-you        https://www.pexels.com/photo/a-woman-in-black-shirt-with-her-hand-on-chest-9017012/
+//   many-thanks      https://www.pexels.com/photo/man-giving-flowers-to-a-woman-5331258/
+//   youre-welcome    https://www.pexels.com/photo/elderly-woman-receiving-a-paper-bag-of-groceries-7345431/
+//   excuse-me        https://www.pexels.com/photo/man-raising-hand-at-gathering-17043072/
+//   sorry            https://www.pexels.com/photo/black-man-apologizing-while-talking-with-girlfriend-5699848/
+//   of-course        https://www.pexels.com/photo/a-person-in-tie-dye-sweater-doing-thumbs-up-7202642/
+//   correct          https://www.pexels.com/photo/a-person-marking-a-test-paper-6684373/
+//   no-problem       https://www.pexels.com/photo/cheerful-young-man-in-sweater-shrugging-indoors-30672381/
+//   everything-okay  https://www.pexels.com/photo/confident-businessman-making-ok-gesture-outdoors-36712859/
+//   see-you-later    https://www.pexels.com/photo/happy-woman-waving-goodbye-5537576/
+//   see-you-tomorrow https://www.pexels.com/photo/silhouette-of-friends-walking-in-a-park-at-sunset-36763443/
+//   good-luck        https://www.pexels.com/photo/person-doing-fingers-crossed-9017426/
+//   have-a-good-trip https://www.pexels.com/photo/stylish-happy-traveler-with-suitcase-in-airport-hallway-4173229/
 // See CREDITS.md at the repo root for the full source list.
 // Matches the public/1.1 greetings/ asset folder and is the stable id this
 // test's progress is stored under (see src/lib/progress-store.ts).
@@ -122,6 +136,118 @@ export const GREETINGS_WORDS: GreetingWord[] = [
     english: "Welcome",
     tamil: "வரவேற்பு",
     sinhala: "සාදරයෙන් පිළිගනිමු",
+  },
+  {
+    id: "bitte",
+    image: "/1.1 greetings/images/please.jpg",
+    full: "Bitte",
+    english: "Please",
+    tamil: "தயவுசெய்து",
+    sinhala: "කරුණාකර",
+  },
+  {
+    id: "danke",
+    image: "/1.1 greetings/images/thank-you.jpg",
+    full: "Danke",
+    english: "Thank you",
+    tamil: "நன்றி",
+    sinhala: "ස්තූතියි",
+  },
+  {
+    id: "vielen-dank",
+    image: "/1.1 greetings/images/many-thanks.jpg",
+    full: "Vielen Dank",
+    english: "Many thanks",
+    tamil: "மிக்க நன்றி",
+    sinhala: "බොහොම ස්තූතියි",
+  },
+  {
+    id: "gern-geschehen",
+    image: "/1.1 greetings/images/youre-welcome.jpg",
+    full: "Gern geschehen",
+    english: "You're welcome",
+    tamil: "மகிழ்ச்சியுடன்",
+    sinhala: "සතුටින්",
+  },
+  {
+    id: "entschuldigung",
+    image: "/1.1 greetings/images/excuse-me.jpg",
+    full: "Entschuldigung",
+    english: "Excuse me",
+    tamil: "மன்னிக்கவும்",
+    sinhala: "සමාවෙන්න",
+  },
+  {
+    id: "sorry",
+    image: "/1.1 greetings/images/sorry.jpg",
+    full: "Sorry",
+    english: "Sorry",
+    tamil: "வருந்துகிறேன்",
+    sinhala: "කණගාටුයි",
+  },
+  {
+    id: "natuerlich",
+    image: "/1.1 greetings/images/of-course.jpg",
+    full: "Natürlich",
+    english: "Of course",
+    tamil: "நிச்சயமாக",
+    sinhala: "ඇත්තෙන්ම",
+  },
+  {
+    id: "richtig",
+    image: "/1.1 greetings/images/correct.jpg",
+    full: "Richtig",
+    english: "Correct",
+    tamil: "சரி",
+    sinhala: "නිවැරදියි",
+  },
+  {
+    id: "kein-problem",
+    image: "/1.1 greetings/images/no-problem.jpg",
+    full: "Kein Problem",
+    english: "No problem",
+    tamil: "பிரச்சனை இல்லை",
+    sinhala: "ප්‍රශ්නයක් නැහැ",
+  },
+  {
+    id: "alles-klar",
+    image: "/1.1 greetings/images/everything-okay.jpg",
+    full: "Alles klar",
+    english: "Everything okay",
+    tamil: "எல்லாம் சரி",
+    sinhala: "හැමදේම හරි",
+  },
+  {
+    id: "bis-spaeter",
+    image: "/1.1 greetings/images/see-you-later.jpg",
+    full: "Bis später",
+    english: "See you later",
+    tamil: "பிறகு சந்திப்போம்",
+    sinhala: "පසුව හමුවෙමු",
+  },
+  {
+    id: "bis-morgen",
+    image: "/1.1 greetings/images/see-you-tomorrow.jpg",
+    full: "Bis morgen",
+    english: "See you tomorrow",
+    tamil: "நாளை சந்திப்போம்",
+    sinhala: "හෙට හමුවෙමු",
+  },
+  {
+    id: "viel-glueck",
+    image: "/1.1 greetings/images/good-luck.jpg",
+    full: "Viel Glück",
+    english: "Good luck",
+    tamil: "நல்ல அதிர்ஷ்டம்",
+    sinhala: "ජය වේවා",
+  },
+  {
+    id: "gute-reise",
+    image: "/1.1 greetings/images/have-a-good-trip.jpg",
+    full: "Gute Reise",
+    english: "Have a good trip",
+    tamil: "இனிய பயணம்",
+    sinhala: "සුභ ගමනක්",
   },
 ];
 
