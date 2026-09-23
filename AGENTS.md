@@ -161,4 +161,10 @@ Vite 8 + Nitro.
       the picture, never text baked into the image file itself.
 
   `src/data/greetings.ts` and `public/1.1 greetings/` are the reference
-  example (test 1.1) — follow the same layout for every new test.
+  example (test 1.1) — follow the same layout for every new test. Tests
+  share one quiz screen, `VocabQuiz` (`src/components/quiz/VocabQuiz.tsx`),
+  which takes a `testId` and a `VocabWord[]`; a new test needs a data file
+  (see `src/data/family.ts`, test 1.2.1), a `Screen` value plus a `VocabQuiz`
+  branch and a path node in `src/routes/index.tsx`. Nouns keep their
+  der/die/das in `full` (shown and spoken); spelling screens drop it via
+  `spellingOf`.

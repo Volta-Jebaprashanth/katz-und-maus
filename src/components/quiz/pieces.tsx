@@ -10,7 +10,7 @@ import type { MotherTongue, Strings } from "@/lib/i18n";
 // Shared presentational building blocks for a lesson screen. Originally
 // written inline in routes/index.tsx for the (single, hardcoded) Vogel
 // lesson; extracted here so both that lesson and the data-driven Greetings
-// quiz (components/quiz/GreetingsQuiz.tsx) render from the same pieces
+// quiz (components/quiz/VocabQuiz.tsx) render from the same pieces
 // instead of forking the UI. Behavior for existing call sites is unchanged —
 // the only additions are optional props (icon fallbacks, tile grouping,
 // grid column count) that new call sites opt into.

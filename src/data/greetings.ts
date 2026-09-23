@@ -1,4 +1,5 @@
 import type { MotherTongue } from "@/lib/i18n";
+import type { VocabWord } from "@/data/vocabulary";
 
 // Vocabulary for the "Hallo!" (greetings) lesson, test 1.1. Unlike
 // TIERE_WORDS these are phrases, not nouns, so they have no der/die/das
@@ -15,7 +16,7 @@ import type { MotherTongue } from "@/lib/i18n";
 // 640x640 so a 1:1 display never has to cut off the subject. Photos alone
 // can't disambiguate near-identical gestures (a hello-wave and a bye-wave
 // look the same), so every screen that shows one of these images also
-// shows the word as a caption below it — see GreetingsQuiz.tsx. Sourced
+// shows the word as a caption below it — see VocabQuiz.tsx. Sourced
 // from Pexels (free to use, no attribution required); photo pages (id ->
 // source):
 //   hello            https://www.pexels.com/photo/man-with-eyeglasses-smiling-while-waving-a-hand-6937809/
@@ -47,16 +48,7 @@ import type { MotherTongue } from "@/lib/i18n";
 // test's progress is stored under (see src/lib/progress-store.ts).
 export const GREETINGS_TEST_ID = "1.1";
 
-export interface GreetingWord {
-  id: string;
-  image: string;
-  full: string;
-  english: string;
-  tamil: string;
-  sinhala: string;
-}
-
-export const GREETINGS_WORDS: GreetingWord[] = [
+export const GREETINGS_WORDS: VocabWord[] = [
   {
     id: "hallo",
     image: "/1.1 greetings/images/hello.jpg",
@@ -251,6 +243,6 @@ export const GREETINGS_WORDS: GreetingWord[] = [
   },
 ];
 
-export function greetingMeaning(word: GreetingWord, lang: MotherTongue): string {
+export function greetingMeaning(word: VocabWord, lang: MotherTongue): string {
   return word[lang];
 }

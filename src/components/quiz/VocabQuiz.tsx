@@ -24,7 +24,7 @@ import {
   ResultCard,
   WordCard,
 } from "@/components/quiz/pieces";
-import { GREETINGS_TEST_ID, GREETINGS_WORDS, type GreetingWord } from "@/data/greetings";
+import type { VocabWord } from "@/data/vocabulary";
 import {
   ALL_TEST_TYPES,
   answerLetters,
@@ -33,14 +33,15 @@ import {
   letterTilesFor,
   missingLetterQuestion,
   shuffle,
+  spellingOf,
   wordSegments,
   type QuizItem,
 } from "@/lib/quiz-engine";
 import { ensureTestEntered, getActiveTierRows, recordFail, recordPass } from "@/lib/progress-store";
 import type { MotherTongue, Strings } from "@/lib/i18n";
 
-// Data-driven quiz screen for the "Hallo!" (greetings) lesson: 10 words x 10
-// test types. Rounds are strictly tier-gated — every round's queue is built
+// Data-driven quiz screen for a vocabulary test (1.1 greetings, 1.2.1 family,
+// ...): every word x 10 test types. Rounds are strictly tier-gated — every round's queue is built
 // from whatever (word, testType) rows are still pending (pendingAttempts >
 // 0 in progress-store.ts) in the EARLIEST tier that isn't fully cleared, so
 // no medium-tier item ever appears while an easy row is outstanding, and
@@ -57,16 +58,20 @@ function segmentRanges(segments: number[]) {
   });
 }
 
-export function GreetingsQuiz({
+export function VocabQuiz({
+  testId,
+  words,
   t,
   lang,
   onExit,
 }: {
+  testId: string;
+  words: VocabWord[];
   t: Strings;
   lang: MotherTongue;
   onExit: () => void;
 }) {
-  const byId = useMemo(() => Object.fromEntries(GREETINGS_WORDS.map((w) => [w.id, w])), []);
+  const byId = useMemo(() => Object.fromEntries(words.map((w) => [w.id, w])), [words]);
   const [queue, setQueue] = useState<QuizItem[]>([]);
   const [ready, setReady] = useState(false);
   const [index, setIndex] = useState(0);
@@ -83,17 +88,17 @@ export function GreetingsQuiz({
     () => true,
   );
 
-  // First entry populates all 100 (word x testType) rows at pendingAttempts
+  // First entry populates every (word x testType) row at pendingAttempts
   // = 1 (or resets them on a post-completion replay, or leaves an
   // in-progress test untouched — see ensureTestEntered). Either way, the
   // round always comes from whichever tier is currently active.
   useEffect(() => {
     preloadFeedbackSounds();
-    const wordIds = GREETINGS_WORDS.map((w) => w.id);
-    ensureTestEntered(GREETINGS_TEST_ID, wordIds, ALL_TEST_TYPES);
-    setQueue(buildRoundFromRows(getActiveTierRows(GREETINGS_TEST_ID), GREETINGS_WORDS));
+    const wordIds = words.map((w) => w.id);
+    ensureTestEntered(testId, wordIds, ALL_TEST_TYPES);
+    setQueue(buildRoundFromRows(getActiveTierRows(testId), words));
     setReady(true);
-  }, []);
+  }, [testId, words]);
 
   useEffect(() => {
     setAnswer(null);
@@ -123,13 +128,13 @@ export function GreetingsQuiz({
     const word = item.word;
     const distractors = item.optionIds
       .map((id) => byId[id])
-      .filter((w): w is GreetingWord => Boolean(w));
+      .filter((w): w is VocabWord => Boolean(w));
     const mcOptions = shuffle([word, ...distractors]);
     const isSpelling = item.kind === "build" || item.kind === "listenBuild";
-    const tiles = isSpelling ? letterTilesFor(word.full, item.kind === "build") : [];
-    const segments = wordSegments(word.full);
+    const tiles = isSpelling ? letterTilesFor(spellingOf(word), item.kind === "build") : [];
+    const segments = wordSegments(spellingOf(word));
     const answerLength = segments.reduce((a, b) => a + b, 0);
-    const missing = item.kind === "missing" ? missingLetterQuestion(word.full) : null;
+    const missing = item.kind === "missing" ? missingLetterQuestion(spellingOf(word)) : null;
     return { word, mcOptions, tiles, segments, answerLength, missing };
   }, [item, byId]);
 
@@ -143,18 +148,18 @@ export function GreetingsQuiz({
       setIndex(nextIndex);
       return;
     }
-    const nextRows = getActiveTierRows(GREETINGS_TEST_ID);
-    setQueue(nextRows.length > 0 ? buildRoundFromRows(nextRows, GREETINGS_WORDS) : []);
+    const nextRows = getActiveTierRows(testId);
+    setQueue(nextRows.length > 0 ? buildRoundFromRows(nextRows, words) : []);
     setIndex(0);
   };
   const checkAnswer = (isCorrect: boolean) => {
     setChecked(true);
     setLastCorrect(isCorrect);
     if (item && item.kind !== "match" && derived) {
-      if (isCorrect) recordPass(GREETINGS_TEST_ID, item.kind, derived.word.id);
+      if (isCorrect) recordPass(testId, item.kind, derived.word.id);
       // Only the first wrong attempt on a queue appearance costs a penalty —
       // further in-place retries (see `retry` below) don't stack.
-      else if (attempts === 0) recordFail(GREETINGS_TEST_ID, item.kind, derived.word.id);
+      else if (attempts === 0) recordFail(testId, item.kind, derived.word.id);
     }
     if (isCorrect) playCorrectSound();
     else {
@@ -325,7 +330,7 @@ export function GreetingsQuiz({
                 onClick={() =>
                   checkAnswer(
                     letters.map((i) => derived.tiles[i]).join("") ===
-                      answerLetters(derived.word.full),
+                      answerLetters(spellingOf(derived.word)),
                   )
                 }
               />
@@ -471,7 +476,7 @@ export function GreetingsQuiz({
                 onClick={() =>
                   checkAnswer(
                     letters.map((i) => derived.tiles[i]).join("") ===
-                      answerLetters(derived.word.full),
+                      answerLetters(spellingOf(derived.word)),
                   )
                 }
               />
@@ -530,8 +535,8 @@ export function GreetingsQuiz({
               words={item.words}
               onComplete={goNext}
               onAttempt={(wordId, isCorrect) => {
-                if (isCorrect) recordPass(GREETINGS_TEST_ID, "match", wordId);
-                else recordFail(GREETINGS_TEST_ID, "match", wordId);
+                if (isCorrect) recordPass(testId, "match", wordId);
+                else recordFail(testId, "match", wordId);
               }}
               title="Super!"
               actionLabel="Weiter"

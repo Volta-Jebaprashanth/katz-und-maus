@@ -1,6 +1,6 @@
-import type { GreetingWord } from "@/data/greetings";
+import type { VocabWord } from "@/data/vocabulary";
 
-// Generic quiz-queue builder: 10 words x 10 test types, grouped into three
+// Generic quiz-queue builder: N words x 10 test types, grouped into three
 // difficulty tiers (4 easy, 3 medium, 3 hard). Rounds are strictly tier-gated —
 // see buildRoundFromRows below — so nothing from the medium tier is ever
 // queued while any easy row is still outstanding, and likewise hard waits
@@ -48,13 +48,13 @@ export type SingleWordKind = Exclude<TestType, "match">;
 export interface SingleWordItem {
   kind: SingleWordKind;
   tier: Tier;
-  word: GreetingWord;
+  word: VocabWord;
   optionIds: string[];
 }
 export interface MatchItem {
   kind: "match";
   tier: Tier;
-  words: GreetingWord[];
+  words: VocabWord[];
 }
 export type QuizItem = SingleWordItem | MatchItem;
 
@@ -73,7 +73,7 @@ function chunk<T>(arr: T[], size: number): T[][] {
   return out;
 }
 
-function pickDistractorIds(words: GreetingWord[], correct: GreetingWord, count: number): string[] {
+function pickDistractorIds(words: VocabWord[], correct: VocabWord, count: number): string[] {
   return shuffle(words.filter((w) => w.id !== correct.id))
     .slice(0, count)
     .map((w) => w.id);
@@ -89,7 +89,7 @@ export interface RowRef {
 // those rows down to a single tier — see getActiveTierRows — so this itself
 // doesn't know or care about tier order, it just turns whatever it's given
 // into a shuffled queue.
-export function buildRoundFromRows(rows: RowRef[], words: GreetingWord[]): QuizItem[] {
+export function buildRoundFromRows(rows: RowRef[], words: VocabWord[]): QuizItem[] {
   const byId = Object.fromEntries(words.map((w) => [w.id, w]));
   const items: QuizItem[] = [];
   const matchWordIds: string[] = [];
@@ -119,7 +119,7 @@ export function buildRoundFromRows(rows: RowRef[], words: GreetingWord[]): QuizI
 
   const matchWords = shuffle(matchWordIds)
     .map((id) => byId[id])
-    .filter((w): w is GreetingWord => Boolean(w));
+    .filter((w): w is VocabWord => Boolean(w));
   for (const group of chunk(matchWords, 5))
     items.push({ kind: "match", tier: "hard", words: group });
 
@@ -128,7 +128,7 @@ export function buildRoundFromRows(rows: RowRef[], words: GreetingWord[]): QuizI
 
 // Everything a question can play or show, so the audio/image loaders can
 // fetch it ahead of time (see setAudioWindow / setImageWindow). Mirrors what
-// each screen in GreetingsQuiz.tsx actually renders and speaks: the answer
+// each screen in VocabQuiz.tsx actually renders and speaks: the answer
 // options (word + its distractors) for the multiple-choice screens, the
 // letters for the spelling screens, the whole letter pool for "missing", and
 // the five words on a match board.
@@ -138,7 +138,7 @@ export interface ItemMedia {
   images: string[];
 }
 
-export function itemMedia(item: QuizItem, byId: Record<string, GreetingWord>): ItemMedia {
+export function itemMedia(item: QuizItem, byId: Record<string, VocabWord>): ItemMedia {
   if (item.kind === "match")
     return {
       words: item.words.map((w) => w.full),
@@ -146,7 +146,7 @@ export function itemMedia(item: QuizItem, byId: Record<string, GreetingWord>): I
       images: item.words.map((w) => w.image),
     };
   const options = [item.word, ...item.optionIds.map((id) => byId[id]).filter((w) => w != null)];
-  const spelled = answerLetters(item.word.full).split("");
+  const spelled = answerLetters(spellingOf(item.word)).split("");
   switch (item.kind) {
     case "picture":
       return { words: options.map((w) => w.full), letters: [], images: [item.word.image] };
@@ -172,19 +172,29 @@ export function itemMedia(item: QuizItem, byId: Record<string, GreetingWord>): I
   }
 }
 
+// The part of a word the learner spells out: its `full` text minus a leading
+// der/die/das, since the article is learned as part of the word (it's shown
+// and spoken) but isn't something to type letter by letter.
+export function spellingOf(word: VocabWord): string {
+  return word.full.replace(/^(der|die|das)\s+/i, "");
+}
+
 // Strips everything but letters (spaces, apostrophes, "?", ...) and
 // uppercases, so a multi-word phrase like "Wie geht's?" becomes "WIEGEHTS"
-// for spelling/comparison purposes.
+// for spelling/comparison purposes. "ß" becomes "SS" (what toUpperCase gives,
+// and the standard German capitalisation), so "Großvater" is spelled
+// "GROSSVATER" from the plain A-Z tiles.
 export function answerLetters(phrase: string): string {
   return phrase.toUpperCase().replace(/[^A-ZÄÖÜẞ]/g, "");
 }
 
 // Letter counts per space-separated word, so the letter-builder can render
-// blank tiles grouped the same way the phrase actually reads.
+// blank tiles grouped the same way the phrase actually reads. Counted from
+// answerLetters so it always agrees with the tile pool ("ß" counts as 2).
 export function wordSegments(phrase: string): number[] {
   return phrase
     .split(" ")
-    .map((word) => word.replace(/[^A-Za-zÄÖÜäöüß]/g, "").length)
+    .map((word) => answerLetters(word).length)
     .filter((n) => n > 0);
 }
 

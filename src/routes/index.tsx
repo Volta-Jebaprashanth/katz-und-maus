@@ -33,7 +33,9 @@ import {
   ResultCard,
   WordCard,
 } from "@/components/quiz/pieces";
-import { GreetingsQuiz } from "@/components/quiz/GreetingsQuiz";
+import { VocabQuiz } from "@/components/quiz/VocabQuiz";
+import { GREETINGS_TEST_ID, GREETINGS_WORDS } from "@/data/greetings";
+import { FAMILY_TEST_ID, FAMILY_WORDS } from "@/data/family";
 import { TIERE_WORDS, type VocabWord } from "@/data/vocabulary";
 import { MOTHER_TONGUES, TRANSLATIONS, type MotherTongue, type Strings } from "@/lib/i18n";
 
@@ -69,6 +71,7 @@ export const Route = createFileRoute("/")({
 type Screen =
   | "home"
   | "greetings"
+  | "family"
   | "picture"
   | "wordPicture"
   | "meaning"
@@ -250,7 +253,7 @@ function Index() {
   };
   // Mirrors quiz-engine.ts's TEST_TIERS grouping (easy -> medium -> hard) so
   // this hand-written walkthrough exercises the same difficulty order as
-  // the data-driven GreetingsQuiz. "match" stays last regardless of tier —
+  // the data-driven VocabQuiz. "match" stays last regardless of tier —
   // MatchPairs always exits via its own onComplete straight to "home"
   // rather than through this sequence, so anything placed after it here
   // would be unreachable.
@@ -311,7 +314,7 @@ function Index() {
         /* fullscreen unsupported (e.g. iOS Safari) — layout still fills the viewport */
       }
     }
-    go(nodeId === "hallo" ? "greetings" : "picture");
+    go(nodeId === "hallo" ? "greetings" : nodeId === "familie" ? "family" : "picture");
   };
   const speak = () => {
     setHeard(true);
@@ -351,9 +354,27 @@ function Index() {
         </div>
       </header>
 
-      {screen === "greetings" && <GreetingsQuiz t={t} lang={lang} onExit={() => go("home")} />}
+      {screen === "greetings" && (
+        <VocabQuiz
+          testId={GREETINGS_TEST_ID}
+          words={GREETINGS_WORDS}
+          t={t}
+          lang={lang}
+          onExit={() => go("home")}
+        />
+      )}
 
-      {screen !== "greetings" && (
+      {screen === "family" && (
+        <VocabQuiz
+          testId={FAMILY_TEST_ID}
+          words={FAMILY_WORDS}
+          t={t}
+          lang={lang}
+          onExit={() => go("home")}
+        />
+      )}
+
+      {screen !== "greetings" && screen !== "family" && (
         <main className="relative z-10 mx-auto max-w-5xl px-4 pb-10 sm:px-6">
           {screen === "home" && (
             <Home
@@ -795,6 +816,7 @@ function collectContainerIds(nodes: PathNode[]): string[] {
 const PATH_MEANINGS = {
   grundlagen: { english: "Basics", tamil: "அடிப்படைகள்", sinhala: "මූලික කරුණු" },
   hallo: { english: "Hello!", tamil: "வணக்கம்!", sinhala: "ආයුබෝවන්!" },
+  familie: { english: "Family", tamil: "குடும்பம்", sinhala: "පවුල" },
   wortschatz: { english: "Vocabulary", tamil: "சொல்வளம்", sinhala: "වචන මාලාව" },
   tiere: { english: "Animals", tamil: "விலங்குகள்", sinhala: "සතුන්" },
   klassenzimmer: { english: "Classroom", tamil: "வகுப்பறை", sinhala: "පන්ති කාமරය" },
@@ -840,6 +862,13 @@ function Home({
             state: "active",
             meaning: PATH_MEANINGS.wortschatz[lang],
             children: [
+              {
+                id: "familie",
+                title: "Familie",
+                icon: "👨‍👩‍👧",
+                state: "active",
+                meaning: PATH_MEANINGS.familie[lang],
+              },
               {
                 id: "tiere",
                 title: "Tiere",
@@ -1245,7 +1274,7 @@ function ProfileMenu({
             <Trash2 className="size-4" /> {t.clearAllData}
           </Button>
           <p className="mt-4 text-center text-[10px] leading-snug text-ink-soft">
-            Greetings images:{" "}
+            Lesson photos:{" "}
             <a
               href="https://www.pexels.com/license/"
               target="_blank"
