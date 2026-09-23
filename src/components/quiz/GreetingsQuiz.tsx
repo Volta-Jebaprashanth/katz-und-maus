@@ -1,9 +1,17 @@
-import { useEffect, useMemo, useState } from "react";
-import { Volume2 } from "lucide-react";
+import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
+import { Loader2, Volume2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { playLetter, playWord, preloadLetters, preloadWords } from "@/lib/word-audio";
-import { playCorrectSound, playWrongSound } from "@/lib/feedback-sound";
+import {
+  isWordReady,
+  lookaheadQuestions,
+  playLetter,
+  playWord,
+  setAudioWindow,
+  subscribeAudio,
+} from "@/lib/word-audio";
+import { setImageWindow } from "@/lib/image-preload";
+import { playCorrectSound, playWrongSound, preloadFeedbackSounds } from "@/lib/feedback-sound";
 import {
   AnswerGrid,
   Continue,
@@ -21,6 +29,7 @@ import {
   ALL_TEST_TYPES,
   answerLetters,
   buildRoundFromRows,
+  itemMedia,
   letterTilesFor,
   missingLetterQuestion,
   shuffle,
@@ -30,7 +39,7 @@ import {
 import { ensureTestEntered, getActiveTierRows, recordFail, recordPass } from "@/lib/progress-store";
 import type { MotherTongue, Strings } from "@/lib/i18n";
 
-// Data-driven quiz screen for the "Hallo!" (greetings) lesson: 10 words x 11
+// Data-driven quiz screen for the "Hallo!" (greetings) lesson: 10 words x 10
 // test types. Rounds are strictly tier-gated — every round's queue is built
 // from whatever (word, testType) rows are still pending (pendingAttempts >
 // 0 in progress-store.ts) in the EARLIEST tier that isn't fully cleared, so
@@ -63,17 +72,23 @@ export function GreetingsQuiz({
   const [index, setIndex] = useState(0);
   const [answer, setAnswer] = useState<string | null>(null);
   const [letters, setLetters] = useState<number[]>([]);
-  const [heard, setHeard] = useState(false);
   const [checked, setChecked] = useState(false);
   const [lastCorrect, setLastCorrect] = useState(false);
   const [attempts, setAttempts] = useState(0);
   const item: QuizItem | undefined = queue[index];
+  const spokenWord = item && item.kind !== "match" ? item.word.full : "";
+  const audioReady = useSyncExternalStore(
+    subscribeAudio,
+    () => isWordReady(spokenWord),
+    () => true,
+  );
 
-  // First entry populates all 120 (word x testType) rows at pendingAttempts
+  // First entry populates all 100 (word x testType) rows at pendingAttempts
   // = 1 (or resets them on a post-completion replay, or leaves an
   // in-progress test untouched — see ensureTestEntered). Either way, the
   // round always comes from whichever tier is currently active.
   useEffect(() => {
+    preloadFeedbackSounds();
     const wordIds = GREETINGS_WORDS.map((w) => w.id);
     ensureTestEntered(GREETINGS_TEST_ID, wordIds, ALL_TEST_TYPES);
     setQueue(buildRoundFromRows(getActiveTierRows(GREETINGS_TEST_ID), GREETINGS_WORDS));
@@ -83,21 +98,25 @@ export function GreetingsQuiz({
   useEffect(() => {
     setAnswer(null);
     setLetters([]);
-    setHeard(false);
     setChecked(false);
     setAttempts(0);
   }, [index]);
 
+  // Fetch only what this question and the next few need (audio and pictures),
+  // current question first — see word-audio.ts / image-preload.ts. The queue
+  // is fixed for the round, so what's coming up is known exactly.
   useEffect(() => {
     if (!item) return;
-    if (item.kind === "match") {
-      preloadWords(item.words.map((w) => w.full));
-      return;
-    }
-    preloadWords([item.word.full]);
-    if (item.kind === "build" || item.kind === "unscramble" || item.kind === "listenBuild")
-      preloadLetters(answerLetters(item.word.full).split(""));
-  }, [item]);
+    const current = itemMedia(item, byId);
+    const upcoming = queue
+      .slice(index + 1, index + 1 + lookaheadQuestions())
+      .map((next) => itemMedia(next, byId));
+    setAudioWindow(current, upcoming);
+    setImageWindow(
+      current.images,
+      upcoming.map((media) => media.images),
+    );
+  }, [queue, index, item, byId]);
 
   const derived = useMemo(() => {
     if (!item || item.kind === "match") return null;
@@ -106,8 +125,7 @@ export function GreetingsQuiz({
       .map((id) => byId[id])
       .filter((w): w is GreetingWord => Boolean(w));
     const mcOptions = shuffle([word, ...distractors]);
-    const isSpelling =
-      item.kind === "build" || item.kind === "unscramble" || item.kind === "listenBuild";
+    const isSpelling = item.kind === "build" || item.kind === "listenBuild";
     const tiles = isSpelling ? letterTilesFor(word.full, item.kind === "build") : [];
     const segments = wordSegments(word.full);
     const answerLength = segments.reduce((a, b) => a + b, 0);
@@ -151,13 +169,14 @@ export function GreetingsQuiz({
   };
   const speak = () => {
     if (!item || item.kind === "match") return;
-    setHeard(true);
     playWord(item.word.full);
   };
   const tapTile = (i: number, letter: string) => {
     playLetter(letter);
     setLetters((old) => [...old, i]);
   };
+  const removeLetter = (position: number) =>
+    setLetters((old) => old.filter((_, i) => i !== position));
 
   return (
     <>
@@ -295,6 +314,8 @@ export function GreetingsQuiz({
               letters={letters}
               disabled={checked}
               onTapTile={tapTile}
+              onRemove={removeLetter}
+              keyboard
               onReset={() => setLetters([])}
             />
             {!checked && (
@@ -387,12 +408,13 @@ export function GreetingsQuiz({
                 className="size-24 rounded-full bg-berry text-primary-foreground shadow-[0_8px_0_var(--primary-shadow)] hover:bg-berry/90 active:translate-y-1 active:shadow-none"
                 aria-label={t.playGermanWord}
               >
-                <Volume2 className="size-10" />
+                {audioReady ? (
+                  <Volume2 className="size-10" />
+                ) : (
+                  <Loader2 className="size-10 animate-spin" />
+                )}
               </Button>
             </div>
-            {heard && (
-              <p className="mb-4 text-center text-sm font-bold text-ink-soft">{t.listenAgain}</p>
-            )}
             <AnswerGrid
               options={derived.mcOptions.map((w) => w.full)}
               selected={answer}
@@ -405,43 +427,6 @@ export function GreetingsQuiz({
                 t={t}
                 disabled={!answer}
                 onClick={() => checkAnswer(answer === derived.word.full)}
-              />
-            )}
-          </LessonFrame>
-        )}
-
-        {item && item.kind === "unscramble" && derived && (
-          <LessonFrame
-            t={t}
-            eyebrow={t.unscramble}
-            title="Ordne die Buchstaben"
-            subtitle={t.arrangeLetters}
-          >
-            <Picture
-              src={derived.word.image}
-              alt={derived.word.full}
-              caption={derived.word[lang]}
-            />
-            <LetterBuilder
-              t={t}
-              answerLength={derived.answerLength}
-              segments={derived.segments}
-              tiles={derived.tiles}
-              letters={letters}
-              disabled={checked}
-              onTapTile={tapTile}
-              onReset={() => setLetters([])}
-            />
-            {!checked && (
-              <Continue
-                t={t}
-                disabled={letters.length !== derived.answerLength}
-                onClick={() =>
-                  checkAnswer(
-                    letters.map((i) => derived.tiles[i]).join("") ===
-                      answerLetters(derived.word.full),
-                  )
-                }
               />
             )}
           </LessonFrame>
@@ -460,12 +445,13 @@ export function GreetingsQuiz({
                 className="size-24 rounded-full bg-berry text-primary-foreground shadow-[0_8px_0_var(--primary-shadow)] hover:bg-berry/90 active:translate-y-1 active:shadow-none"
                 aria-label={t.playGermanWord}
               >
-                <Volume2 className="size-10" />
+                {audioReady ? (
+                  <Volume2 className="size-10" />
+                ) : (
+                  <Loader2 className="size-10 animate-spin" />
+                )}
               </Button>
             </div>
-            {heard && (
-              <p className="mb-4 text-center text-sm font-bold text-ink-soft">{t.listenAgain}</p>
-            )}
             <LetterBuilder
               t={t}
               answerLength={derived.answerLength}
@@ -474,6 +460,8 @@ export function GreetingsQuiz({
               letters={letters}
               disabled={checked}
               onTapTile={tapTile}
+              onRemove={removeLetter}
+              keyboard
               onReset={() => setLetters([])}
             />
             {!checked && (
@@ -504,12 +492,13 @@ export function GreetingsQuiz({
                 className="size-24 rounded-full bg-berry text-primary-foreground shadow-[0_8px_0_var(--primary-shadow)] hover:bg-berry/90 active:translate-y-1 active:shadow-none"
                 aria-label={t.playGermanWord}
               >
-                <Volume2 className="size-10" />
+                {audioReady ? (
+                  <Volume2 className="size-10" />
+                ) : (
+                  <Loader2 className="size-10 animate-spin" />
+                )}
               </Button>
             </div>
-            {heard && (
-              <p className="mb-4 text-center text-sm font-bold text-ink-soft">{t.listenAgain}</p>
-            )}
             <PictureOptions
               options={derived.mcOptions.map((w) => ({ id: w.id, image: w.image, label: w[lang] }))}
               selected={answer}
@@ -530,7 +519,7 @@ export function GreetingsQuiz({
         {item && item.kind === "match" && (
           <LessonFrame
             t={t}
-            eyebrow={t.roundUp}
+            eyebrow={t.matchChallenge}
             title="Finde die Paare"
             subtitle={t.matchWordsToMeaning}
           >
@@ -544,7 +533,7 @@ export function GreetingsQuiz({
                 if (isCorrect) recordPass(GREETINGS_TEST_ID, "match", wordId);
                 else recordFail(GREETINGS_TEST_ID, "match", wordId);
               }}
-              title="Runde geschafft!"
+              title="Super!"
               actionLabel="Weiter"
             />
           </LessonFrame>

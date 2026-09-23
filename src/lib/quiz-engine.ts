@@ -1,7 +1,7 @@
 import type { GreetingWord } from "@/data/greetings";
 
-// Generic quiz-queue builder: 10 words x 11 test types, grouped into three
-// difficulty tiers (4 easy, 3 medium, 4 hard). Rounds are strictly tier-gated —
+// Generic quiz-queue builder: 10 words x 10 test types, grouped into three
+// difficulty tiers (4 easy, 3 medium, 3 hard). Rounds are strictly tier-gated —
 // see buildRoundFromRows below — so nothing from the medium tier is ever
 // queued while any easy row is still outstanding, and likewise hard waits
 // on medium (the "match" test type is grouped rather than per-word, so a
@@ -18,7 +18,6 @@ export type TestType =
   | "build"
   | "missing"
   | "listen"
-  | "unscramble"
   | "listenBuild"
   | "listenPicture"
   | "match";
@@ -26,7 +25,7 @@ export type TestType =
 export const TEST_TIERS: Record<Tier, TestType[]> = {
   easy: ["picture", "wordPicture", "meaning", "listen"],
   medium: ["missing", "listenPicture", "translate"],
-  hard: ["unscramble", "listenBuild", "build", "match"],
+  hard: ["build", "listenBuild", "match"],
 };
 
 export const ALL_TEST_TYPES: TestType[] = [
@@ -127,6 +126,52 @@ export function buildRoundFromRows(rows: RowRef[], words: GreetingWord[]): QuizI
   return shuffle(items);
 }
 
+// Everything a question can play or show, so the audio/image loaders can
+// fetch it ahead of time (see setAudioWindow / setImageWindow). Mirrors what
+// each screen in GreetingsQuiz.tsx actually renders and speaks: the answer
+// options (word + its distractors) for the multiple-choice screens, the
+// letters for the spelling screens, the whole letter pool for "missing", and
+// the five words on a match board.
+export interface ItemMedia {
+  words: string[];
+  letters: string[];
+  images: string[];
+}
+
+export function itemMedia(item: QuizItem, byId: Record<string, GreetingWord>): ItemMedia {
+  if (item.kind === "match")
+    return {
+      words: item.words.map((w) => w.full),
+      letters: [],
+      images: item.words.map((w) => w.image),
+    };
+  const options = [item.word, ...item.optionIds.map((id) => byId[id]).filter((w) => w != null)];
+  const spelled = answerLetters(item.word.full).split("");
+  switch (item.kind) {
+    case "picture":
+      return { words: options.map((w) => w.full), letters: [], images: [item.word.image] };
+    case "wordPicture":
+      return { words: [item.word.full], letters: [], images: options.map((w) => w.image) };
+    case "meaning":
+      return { words: [item.word.full], letters: [], images: [] };
+    case "translate":
+    case "listen":
+      return { words: options.map((w) => w.full), letters: [], images: [] };
+    case "listenPicture":
+      return { words: [item.word.full], letters: [], images: options.map((w) => w.image) };
+    case "build":
+      return { words: [], letters: spelled, images: [item.word.image] };
+    case "listenBuild":
+      return { words: [item.word.full], letters: spelled, images: [] };
+    case "missing":
+      return {
+        words: [],
+        letters: [...spelled, ...MISSING_LETTER_POOL],
+        images: [item.word.image],
+      };
+  }
+}
+
 // Strips everything but letters (spaces, apostrophes, "?", ...) and
 // uppercases, so a multi-word phrase like "Wie geht's?" becomes "WIEGEHTS"
 // for spelling/comparison purposes.
@@ -145,7 +190,7 @@ export function wordSegments(phrase: string): number[] {
 
 // `withDistractor` adds one duplicated letter into the tile pool (mirrors
 // the original hand-built "build" screen, which had 6 tiles for a 5-letter
-// word); unscramble/listenBuild use the exact letters with no decoy.
+// word); listenBuild uses the exact letters with no decoy.
 export function letterTilesFor(phrase: string, withDistractor = false): string[] {
   const letters = answerLetters(phrase).split("");
   const tiles = withDistractor
@@ -154,7 +199,22 @@ export function letterTilesFor(phrase: string, withDistractor = false): string[]
   return shuffle(tiles);
 }
 
-const MISSING_LETTER_POOL = ["A", "E", "I", "O", "U", "N", "R", "T", "S", "M", "G", "B", "H", "L"];
+export const MISSING_LETTER_POOL = [
+  "A",
+  "E",
+  "I",
+  "O",
+  "U",
+  "N",
+  "R",
+  "T",
+  "S",
+  "M",
+  "G",
+  "B",
+  "H",
+  "L",
+];
 
 export interface MissingLetterQuestion {
   letters: string[];

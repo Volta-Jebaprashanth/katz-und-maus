@@ -1,7 +1,7 @@
 import { TIER_ORDER, tierOfType, type TestType } from "@/lib/quiz-engine";
 
 // Local-only mastery tracking. Each test (e.g. "1.1" for greetings) gets one
-// row per (testType, word) combination — 120 rows for a 10-word/12-type test
+// row per (testType, word) combination — 100 rows for a 10-word/10-type test
 // — holding a `pendingAttempts` counter instead of a pass/fail log:
 //   - a test is first entered           -> every row starts at 1
 //   - the FIRST wrong attempt on a row  -> pending = min(pending + 2, 4)

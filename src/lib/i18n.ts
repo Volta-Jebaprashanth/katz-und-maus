@@ -69,10 +69,12 @@ export interface Strings {
   listenThenTapPicture: string;
   listenThenSpell: string;
   matchWordsToMeaning: string;
+  matchChallenge: string;
   listenAgain: string;
   check: string;
   tryAgain: string;
   resetLetters: string;
+  openKeyboard: string;
   playGermanWord: string;
   tapToHear: (text: string) => string;
   correctMeaning: (word: string, meaning: string) => string;
@@ -143,10 +145,12 @@ export const TRANSLATIONS: Record<MotherTongue, Strings> = {
     listenThenTapPicture: "Listen, then tap the matching picture.",
     listenThenSpell: "Listen, then spell the word you hear.",
     matchWordsToMeaning: "Match each German word to its meaning.",
+    matchChallenge: "Matching game",
     listenAgain: "Listen again as many times as you like.",
     check: "Check",
     tryAgain: "Try again",
     resetLetters: "Reset letters",
+    openKeyboard: "Type with the keyboard",
     playGermanWord: "Play German word",
     tapToHear: (text) => `${text} — tap to hear`,
     correctMeaning: (word, meaning) => `${word} = ${meaning}!`,
@@ -216,10 +220,12 @@ export const TRANSLATIONS: Record<MotherTongue, Strings> = {
     listenThenTapPicture: "கேளுங்கள், பிறகு பொருந்தும் படத்தைத் தட்டவும்.",
     listenThenSpell: "கேளுங்கள், பிறகு நீங்கள் கேட்ட சொல்லை எழுதுங்கள்.",
     matchWordsToMeaning: "ஒவ்வொரு ஜெர்மன் சொல்லையும் அதன் பொருளுடன் இணைக்கவும்.",
+    matchChallenge: "பொருத்தும் விளையாட்டு",
     listenAgain: "நீங்கள் விரும்பும் அளவுக்கு மீண்டும் கேளுங்கள்.",
     check: "சரிபார்",
     tryAgain: "மீண்டும் முயற்சி செய்",
     resetLetters: "எழுத்துக்களை மீட்டமை",
+    openKeyboard: "விசைப்பலகையில் தட்டச்சு செய்",
     playGermanWord: "ஜெர்மன் சொல்லைக் கேள்",
     tapToHear: (text) => `${text} — கேட்க தட்டவும்`,
     correctMeaning: (word, meaning) => `${word} = ${meaning}!`,
@@ -288,10 +294,12 @@ export const TRANSLATIONS: Record<MotherTongue, Strings> = {
     listenThenTapPicture: "අහන්න, පසුව ගැලපෙන පින්තූරය ඔබන්න.",
     listenThenSpell: "අහන්න, පසුව ඔබ ඇසූ වචනය ලියන්න.",
     matchWordsToMeaning: "සෑම ජර්මානු වචනයක්ම එහි අර්ථයට ගළපන්න.",
+    matchChallenge: "ගැලපීමේ ක්‍රීඩාව",
     listenAgain: "ඔබට කැමති තරම් නැවත අහන්න.",
     check: "පරීක්ෂා කරන්න",
     tryAgain: "නැවත උත්සාහ කරන්න",
     resetLetters: "අකුරු යළි සකසන්න",
+    openKeyboard: "යතුරුපුවරුවෙන් ටයිප් කරන්න",
     playGermanWord: "ජර්මානු වචනය ඇසෙන්න",
     tapToHear: (text) => `${text} — ඇසීමට ඔබන්න`,
     correctMeaning: (word, meaning) => `${word} = ${meaning}!`,

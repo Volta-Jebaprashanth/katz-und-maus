@@ -4,28 +4,44 @@
 // a live AudioContext gets auto-suspended by the browser after a stretch of
 // silence — exactly what happens between quiz questions — which silently
 // dropped every chime after the first one. Static files play through a
-// plain <audio> element instead, same as the word pronunciation clips.
+// plain <audio> element instead.
 //
-// Kept on their own elements rather than word-audio.ts's shared `activeClip`
-// so a chime doesn't cut off a word pronunciation playing at the same
-// moment (e.g. the matching game speaks the word and plays the chime back
-// to back).
-let correctClip: HTMLAudioElement | null = null;
-let wrongClip: HTMLAudioElement | null = null;
+// Each chime keeps one preloaded element that's rewound and replayed, so a
+// chime never waits on a fresh request. They're kept off word-audio.ts's
+// shared "one clip at a time" playback so a chime doesn't cut off a word
+// pronunciation playing at the same moment (e.g. the matching game speaks
+// the word and plays the chime back to back).
+const CORRECT_SRC = "/audio/sfx-correct.wav";
+const WRONG_SRC = "/audio/sfx-wrong.wav";
+const chimes = new Map<string, HTMLAudioElement>();
 
-function playChime(existing: HTMLAudioElement | null, src: string): HTMLAudioElement {
-  existing?.pause();
-  const audio = new Audio(src);
-  audio.play().catch(() => {
-    /* autoplay/decoding blocked — user still sees the visual feedback */
-  });
+function chime(src: string): HTMLAudioElement {
+  let audio = chimes.get(src);
+  if (!audio) {
+    audio = new Audio(src);
+    audio.preload = "auto";
+    chimes.set(src, audio);
+  }
   return audio;
 }
 
+function playChime(src: string) {
+  const audio = chime(src);
+  audio.currentTime = 0;
+  audio.play().catch(() => {
+    /* autoplay/decoding blocked — user still sees the visual feedback */
+  });
+}
+
+export function preloadFeedbackSounds() {
+  chime(CORRECT_SRC).load();
+  chime(WRONG_SRC).load();
+}
+
 export function playCorrectSound() {
-  correctClip = playChime(correctClip, "/audio/sfx-correct.wav");
+  playChime(CORRECT_SRC);
 }
 
 export function playWrongSound() {
-  wrongClip = playChime(wrongClip, "/audio/sfx-wrong.wav");
+  playChime(WRONG_SRC);
 }

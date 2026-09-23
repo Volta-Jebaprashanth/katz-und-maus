@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
-import { Check, RotateCcw, Star, Volume2, X } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Check, Keyboard, RotateCcw, Star, Volume2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { playLetter, playWord } from "@/lib/word-audio";
@@ -305,19 +305,50 @@ export function LetterBuilder({
   tiles,
   letters,
   onTapTile,
+  onRemove,
   onReset,
   disabled,
   segments,
+  keyboard = false,
 }: {
   t: Strings;
   answerLength: number;
   tiles: string[];
   letters: number[];
   onTapTile: (index: number, letter: string) => void;
+  onRemove?: ((position: number) => void) | undefined;
   onReset: () => void;
   disabled: boolean;
   segments?: number[];
+  keyboard?: boolean;
 }) {
+  // With `keyboard`, a button next to reset opens the phone keyboard (via an
+  // invisible input that has to be focused straight from the tap so mobile
+  // browsers allow it). Each typed letter that's still available in the tray
+  // is placed exactly like tapping its tile — which also disables that tile;
+  // a letter that isn't (wrong, or every copy already used) flashes red in the
+  // next empty slot instead.
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [wrongFlash, setWrongFlash] = useState<{ letter: string } | null>(null);
+  useEffect(() => {
+    if (!wrongFlash) return;
+    const timer = setTimeout(() => setWrongFlash(null), 700);
+    return () => clearTimeout(timer);
+  }, [wrongFlash]);
+  const handleTyped = (typed: string) => {
+    const taken = [...letters];
+    for (const ch of typed.toUpperCase()) {
+      if (!/\p{L}/u.test(ch) || taken.length >= answerLength) continue;
+      const index = tiles.findIndex((tile, i) => tile === ch && !taken.includes(i));
+      if (index >= 0) {
+        taken.push(index);
+        setWrongFlash(null);
+        onTapTile(index, ch);
+      } else {
+        setWrongFlash({ letter: ch });
+      }
+    }
+  };
   const groups = segments && segments.length > 0 ? segments : [answerLength];
   let offset = 0;
   const groupRanges = groups.map((len) => {
@@ -331,20 +362,47 @@ export function LetterBuilder({
         {groupRanges.map(({ start, len }, gi) => (
           <div key={gi} className="flex flex-wrap justify-center gap-2">
             {Array.from({ length: len }).map((_, i) => {
-              const tileIndex = letters[start + i];
+              const position = start + i;
+              const tileIndex = letters[position];
+              const slotClass =
+                "grid size-12 place-items-center rounded-xl border-2 border-dashed border-ring/50 bg-glass font-display text-xl font-extrabold";
+              if (tileIndex === undefined)
+                return wrongFlash && position === letters.length ? (
+                  <span
+                    key={i}
+                    className={cn(
+                      slotClass,
+                      "border-solid border-destructive bg-danger-soft text-destructive",
+                    )}
+                  >
+                    {wrongFlash.letter}
+                  </span>
+                ) : (
+                  <span key={i} className={slotClass} />
+                );
+              if (!onRemove)
+                return (
+                  <span key={i} className={slotClass}>
+                    {tiles[tileIndex]}
+                  </span>
+                );
               return (
-                <span
+                <button
                   key={i}
-                  className="grid size-12 place-items-center rounded-xl border-2 border-dashed border-ring/50 bg-glass font-display text-xl font-extrabold"
+                  type="button"
+                  disabled={disabled}
+                  onClick={() => onRemove(position)}
+                  aria-label={tiles[tileIndex]}
+                  className={cn(slotClass, "border-solid bg-card ring-1 ring-border transition")}
                 >
-                  {tileIndex !== undefined ? tiles[tileIndex] : ""}
-                </span>
+                  {tiles[tileIndex]}
+                </button>
               );
             })}
           </div>
         ))}
       </div>
-      <div className="flex flex-wrap justify-center gap-2">
+      <div className="relative flex flex-wrap justify-center gap-2">
         {tiles.map((letter, i) => (
           <Button
             key={`${letter}-${i}`}
@@ -362,9 +420,46 @@ export function LetterBuilder({
           disabled={disabled}
           onClick={onReset}
           aria-label={t.resetLetters}
+          className={cn(keyboard && "bg-sun shadow-[0_4px_0_oklch(0.72_0.14_91)]")}
         >
           <RotateCcw />
         </Button>
+        {keyboard && (
+          <>
+            <Button
+              variant="adventure"
+              size="tile"
+              disabled={disabled}
+              onClick={() => inputRef.current?.focus()}
+              aria-label={t.openKeyboard}
+              className={cn(
+                "h-12 w-24",
+                wrongFlash && "bg-destructive shadow-[0_6px_0_oklch(0.5_0.2_25)]",
+              )}
+            >
+              <Keyboard />
+            </Button>
+            <input
+              ref={inputRef}
+              type="text"
+              value=""
+              disabled={disabled}
+              onChange={(e) => handleTyped(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Backspace" && onRemove && letters.length > 0)
+                  onRemove(letters.length - 1);
+              }}
+              aria-hidden
+              tabIndex={-1}
+              autoCapitalize="characters"
+              autoCorrect="off"
+              autoComplete="off"
+              spellCheck={false}
+              className="pointer-events-none absolute size-px opacity-0"
+              style={{ fontSize: 16 }}
+            />
+          </>
+        )}
       </div>
     </>
   );
