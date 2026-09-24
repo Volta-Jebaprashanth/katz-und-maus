@@ -1,6 +1,6 @@
 # Image credits
 
-The 24 photos under `public/1.1 greetings/images/` (test 1.1, "Hallo!") are
+The 24 photos under `public/1.1 greetings/images/` (lesson 1.1, "Hallo!") are
 real photos of the actual greeting action/scene, downloaded from
 [Pexels](https://www.pexels.com), cropped to a square 640x640, and covered
 by the [Pexels License](https://www.pexels.com/license/) (free to use, no
@@ -33,9 +33,9 @@ attribution required).
 | good-luck.jpg     | Viel Glück       | https://www.pexels.com/photo/person-doing-fingers-crossed-9017426/ |
 | have-a-good-trip.jpg | Gute Reise       | https://www.pexels.com/photo/stylish-happy-traveler-with-suitcase-in-airport-hallway-4173229/ |
 
-## Test 1.2.1 — Familie
+## Lesson 1.2 — Familie
 
-The 37 photos under `public/1.2.1 family/images/` are real photos from
+The 37 photos under `public/1.2 family/images/` are real photos from
 [Pexels](https://www.pexels.com), cropped to a square 640x640, under the same
 [Pexels License](https://www.pexels.com/license/) (free to use, no attribution
 required).
@@ -80,9 +80,9 @@ required).
 | together.jpg | zusammen | https://www.pexels.com/photo/friends-sitting-on-a-blanket-in-the-forest-5506091/ |
 | alone.jpg | allein | https://www.pexels.com/photo/a-woman-sitting-on-the-bench-7155948/ |
 
-## Test 1.2.2 — Essen & Trinken
+## Lesson 1.3 — Essen & Trinken
 
-The 55 photos under `public/1.2.2 food/images/` are real photos from
+The 55 photos under `public/1.3 food/images/` are real photos from
 [Pexels](https://www.pexels.com), cropped to a square 640x640, under the same
 [Pexels License](https://www.pexels.com/license/) (free to use, no attribution
 required).
@@ -145,9 +145,9 @@ required).
 | pay.jpg | bezahlen | https://www.pexels.com/photo/man-sitting-at-the-table-paying-by-card-and-smiling-at-a-woman-holding-the-payment-terminal-5332487/ |
 | taste.jpg | schmecken | https://www.pexels.com/photo/woman-holding-spoon-trying-to-eat-white-food-733851/ |
 
-## Test 1.2.3 — Haus & Zimmer
+## Lesson 1.4 — Haus & Zimmer
 
-The 46 photos under `public/1.2.3 home/images/` are real photos from
+The 46 photos under `public/1.4 home/images/` are real photos from
 [Pexels](https://www.pexels.com), cropped to a square 640x640, under the same
 [Pexels License](https://www.pexels.com/license/) (free to use, no attribution
 required).

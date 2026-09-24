@@ -1,6 +1,6 @@
 import type { VocabWord } from "@/data/vocabulary";
 
-// Vocabulary for the "Essen & Trinken" (food & drinks) lesson, test 1.2.2:
+// Vocabulary for the "Essen & Trinken" (food & drinks) lesson, 1.3:
 // meals, foods, drinks, eating out, and a handful of describing words and
 // verbs. Nouns carry their der/die/das article in `full` (shown and spoken,
 // but not spelled — see spellingOf in quiz-engine.ts); the adjectives and
@@ -8,21 +8,21 @@ import type { VocabWord } from "@/data/vocabulary";
 // words, so the verb's id is "essen-verb".
 //
 // Per-test asset layout (see AGENTS.md): this test's own audio/images live
-// under `public/1.2.2 food/`, split into `audio/` (German filenames) and
+// under `public/1.3 food/`, split into `audio/` (German filenames) and
 // `images/` (English filenames, independent of the German word). Images are
 // real Pexels photos (free to use, no attribution required) cropped to
 // 640x640; sources per file are in CREDITS.md. Words like "heiß" or "der
 // Hunger" are hard to pin down in a photo, so every screen also captions the
 // picture in the learner's mother tongue — see VocabQuiz.tsx.
 //
-// Matches the public/1.2.2 food/ asset folder and is the stable id this
-// test's progress is stored under (see src/lib/progress-store.ts).
-export const FOOD_TEST_ID = "1.2.2";
+// Matches the public/1.3 food/ asset folder. The word list is split into
+// 10-15 word tests numbered under this id (see src/data/lessons.ts).
+export const FOOD_LESSON_ID = "1.3";
 
 export const FOOD_WORDS: VocabWord[] = [
   {
     id: "essen",
-    image: "/1.2.2 food/images/food.jpg",
+    image: "/1.3 food/images/food.jpg",
     full: "das Essen",
     english: "Food / meal",
     tamil: "உணவு",
@@ -30,7 +30,7 @@ export const FOOD_WORDS: VocabWord[] = [
   },
   {
     id: "fruehstueck",
-    image: "/1.2.2 food/images/breakfast.jpg",
+    image: "/1.3 food/images/breakfast.jpg",
     full: "das Frühstück",
     english: "Breakfast",
     tamil: "காலை உணவு",
@@ -38,7 +38,7 @@ export const FOOD_WORDS: VocabWord[] = [
   },
   {
     id: "mittagessen",
-    image: "/1.2.2 food/images/lunch.jpg",
+    image: "/1.3 food/images/lunch.jpg",
     full: "das Mittagessen",
     english: "Lunch",
     tamil: "மதிய உணவு",
@@ -46,7 +46,7 @@ export const FOOD_WORDS: VocabWord[] = [
   },
   {
     id: "abendessen",
-    image: "/1.2.2 food/images/dinner.jpg",
+    image: "/1.3 food/images/dinner.jpg",
     full: "das Abendessen",
     english: "Dinner",
     tamil: "இரவு உணவு",
@@ -54,7 +54,7 @@ export const FOOD_WORDS: VocabWord[] = [
   },
   {
     id: "brot",
-    image: "/1.2.2 food/images/bread.jpg",
+    image: "/1.3 food/images/bread.jpg",
     full: "das Brot",
     english: "Bread",
     tamil: "ரொட்டி",
@@ -62,7 +62,7 @@ export const FOOD_WORDS: VocabWord[] = [
   },
   {
     id: "broetchen",
-    image: "/1.2.2 food/images/bread-roll.jpg",
+    image: "/1.3 food/images/bread-roll.jpg",
     full: "das Brötchen",
     english: "Bread roll",
     tamil: "பன்",
@@ -70,7 +70,7 @@ export const FOOD_WORDS: VocabWord[] = [
   },
   {
     id: "reis",
-    image: "/1.2.2 food/images/rice.jpg",
+    image: "/1.3 food/images/rice.jpg",
     full: "der Reis",
     english: "Rice",
     tamil: "சோறு",
@@ -78,7 +78,7 @@ export const FOOD_WORDS: VocabWord[] = [
   },
   {
     id: "nudeln",
-    image: "/1.2.2 food/images/noodles.jpg",
+    image: "/1.3 food/images/noodles.jpg",
     full: "die Nudeln",
     english: "Noodles / pasta",
     tamil: "நூடுல்ஸ்",
@@ -86,7 +86,7 @@ export const FOOD_WORDS: VocabWord[] = [
   },
   {
     id: "kartoffel",
-    image: "/1.2.2 food/images/potato.jpg",
+    image: "/1.3 food/images/potato.jpg",
     full: "die Kartoffel",
     english: "Potato",
     tamil: "உருளைக்கிழங்கு",
@@ -94,7 +94,7 @@ export const FOOD_WORDS: VocabWord[] = [
   },
   {
     id: "fleisch",
-    image: "/1.2.2 food/images/meat.jpg",
+    image: "/1.3 food/images/meat.jpg",
     full: "das Fleisch",
     english: "Meat",
     tamil: "இறைச்சி",
@@ -102,7 +102,7 @@ export const FOOD_WORDS: VocabWord[] = [
   },
   {
     id: "haehnchen",
-    image: "/1.2.2 food/images/chicken.jpg",
+    image: "/1.3 food/images/chicken.jpg",
     full: "das Hähnchen",
     english: "Chicken",
     tamil: "கோழி இறைச்சி",
@@ -110,7 +110,7 @@ export const FOOD_WORDS: VocabWord[] = [
   },
   {
     id: "fisch",
-    image: "/1.2.2 food/images/fish.jpg",
+    image: "/1.3 food/images/fish.jpg",
     full: "der Fisch",
     english: "Fish",
     tamil: "மீன்",
@@ -118,7 +118,7 @@ export const FOOD_WORDS: VocabWord[] = [
   },
   {
     id: "ei",
-    image: "/1.2.2 food/images/egg.jpg",
+    image: "/1.3 food/images/egg.jpg",
     full: "das Ei",
     english: "Egg",
     tamil: "முட்டை",
@@ -126,7 +126,7 @@ export const FOOD_WORDS: VocabWord[] = [
   },
   {
     id: "wurst",
-    image: "/1.2.2 food/images/sausage.jpg",
+    image: "/1.3 food/images/sausage.jpg",
     full: "die Wurst",
     english: "Sausage",
     tamil: "சாசேஜ்",
@@ -134,7 +134,7 @@ export const FOOD_WORDS: VocabWord[] = [
   },
   {
     id: "kaese",
-    image: "/1.2.2 food/images/cheese.jpg",
+    image: "/1.3 food/images/cheese.jpg",
     full: "der Käse",
     english: "Cheese",
     tamil: "பாலாடைக்கட்டி",
@@ -142,7 +142,7 @@ export const FOOD_WORDS: VocabWord[] = [
   },
   {
     id: "suppe",
-    image: "/1.2.2 food/images/soup.jpg",
+    image: "/1.3 food/images/soup.jpg",
     full: "die Suppe",
     english: "Soup",
     tamil: "சூப்",
@@ -150,7 +150,7 @@ export const FOOD_WORDS: VocabWord[] = [
   },
   {
     id: "salat",
-    image: "/1.2.2 food/images/salad.jpg",
+    image: "/1.3 food/images/salad.jpg",
     full: "der Salat",
     english: "Salad",
     tamil: "சாலட்",
@@ -158,7 +158,7 @@ export const FOOD_WORDS: VocabWord[] = [
   },
   {
     id: "gemuese",
-    image: "/1.2.2 food/images/vegetables.jpg",
+    image: "/1.3 food/images/vegetables.jpg",
     full: "das Gemüse",
     english: "Vegetables",
     tamil: "காய்கறிகள்",
@@ -166,7 +166,7 @@ export const FOOD_WORDS: VocabWord[] = [
   },
   {
     id: "obst",
-    image: "/1.2.2 food/images/fruit.jpg",
+    image: "/1.3 food/images/fruit.jpg",
     full: "das Obst",
     english: "Fruit",
     tamil: "பழங்கள்",
@@ -174,7 +174,7 @@ export const FOOD_WORDS: VocabWord[] = [
   },
   {
     id: "apfel",
-    image: "/1.2.2 food/images/apple.jpg",
+    image: "/1.3 food/images/apple.jpg",
     full: "der Apfel",
     english: "Apple",
     tamil: "ஆப்பிள்",
@@ -182,7 +182,7 @@ export const FOOD_WORDS: VocabWord[] = [
   },
   {
     id: "banane",
-    image: "/1.2.2 food/images/banana.jpg",
+    image: "/1.3 food/images/banana.jpg",
     full: "die Banane",
     english: "Banana",
     tamil: "வாழைப்பழம்",
@@ -190,7 +190,7 @@ export const FOOD_WORDS: VocabWord[] = [
   },
   {
     id: "orange",
-    image: "/1.2.2 food/images/orange.jpg",
+    image: "/1.3 food/images/orange.jpg",
     full: "die Orange",
     english: "Orange",
     tamil: "ஆரஞ்சு",
@@ -198,7 +198,7 @@ export const FOOD_WORDS: VocabWord[] = [
   },
   {
     id: "tomate",
-    image: "/1.2.2 food/images/tomato.jpg",
+    image: "/1.3 food/images/tomato.jpg",
     full: "die Tomate",
     english: "Tomato",
     tamil: "தக்காளி",
@@ -206,7 +206,7 @@ export const FOOD_WORDS: VocabWord[] = [
   },
   {
     id: "zwiebel",
-    image: "/1.2.2 food/images/onion.jpg",
+    image: "/1.3 food/images/onion.jpg",
     full: "die Zwiebel",
     english: "Onion",
     tamil: "வெங்காயம்",
@@ -214,7 +214,7 @@ export const FOOD_WORDS: VocabWord[] = [
   },
   {
     id: "karotte",
-    image: "/1.2.2 food/images/carrot.jpg",
+    image: "/1.3 food/images/carrot.jpg",
     full: "die Karotte",
     english: "Carrot",
     tamil: "கேரட்",
@@ -222,7 +222,7 @@ export const FOOD_WORDS: VocabWord[] = [
   },
   {
     id: "milch",
-    image: "/1.2.2 food/images/milk.jpg",
+    image: "/1.3 food/images/milk.jpg",
     full: "die Milch",
     english: "Milk",
     tamil: "பால்",
@@ -230,7 +230,7 @@ export const FOOD_WORDS: VocabWord[] = [
   },
   {
     id: "wasser",
-    image: "/1.2.2 food/images/water.jpg",
+    image: "/1.3 food/images/water.jpg",
     full: "das Wasser",
     english: "Water",
     tamil: "தண்ணீர்",
@@ -238,7 +238,7 @@ export const FOOD_WORDS: VocabWord[] = [
   },
   {
     id: "kaffee",
-    image: "/1.2.2 food/images/coffee.jpg",
+    image: "/1.3 food/images/coffee.jpg",
     full: "der Kaffee",
     english: "Coffee",
     tamil: "காபி",
@@ -246,7 +246,7 @@ export const FOOD_WORDS: VocabWord[] = [
   },
   {
     id: "tee",
-    image: "/1.2.2 food/images/tea.jpg",
+    image: "/1.3 food/images/tea.jpg",
     full: "der Tee",
     english: "Tea",
     tamil: "தேநீர்",
@@ -254,7 +254,7 @@ export const FOOD_WORDS: VocabWord[] = [
   },
   {
     id: "saft",
-    image: "/1.2.2 food/images/juice.jpg",
+    image: "/1.3 food/images/juice.jpg",
     full: "der Saft",
     english: "Juice",
     tamil: "பழச்சாறு",
@@ -262,7 +262,7 @@ export const FOOD_WORDS: VocabWord[] = [
   },
   {
     id: "bier",
-    image: "/1.2.2 food/images/beer.jpg",
+    image: "/1.3 food/images/beer.jpg",
     full: "das Bier",
     english: "Beer",
     tamil: "பீர்",
@@ -270,7 +270,7 @@ export const FOOD_WORDS: VocabWord[] = [
   },
   {
     id: "wein",
-    image: "/1.2.2 food/images/wine.jpg",
+    image: "/1.3 food/images/wine.jpg",
     full: "der Wein",
     english: "Wine",
     tamil: "ஒயின்",
@@ -278,7 +278,7 @@ export const FOOD_WORDS: VocabWord[] = [
   },
   {
     id: "zucker",
-    image: "/1.2.2 food/images/sugar.jpg",
+    image: "/1.3 food/images/sugar.jpg",
     full: "der Zucker",
     english: "Sugar",
     tamil: "சர்க்கரை",
@@ -286,7 +286,7 @@ export const FOOD_WORDS: VocabWord[] = [
   },
   {
     id: "salz",
-    image: "/1.2.2 food/images/salt.jpg",
+    image: "/1.3 food/images/salt.jpg",
     full: "das Salz",
     english: "Salt",
     tamil: "உப்பு",
@@ -294,7 +294,7 @@ export const FOOD_WORDS: VocabWord[] = [
   },
   {
     id: "pfeffer",
-    image: "/1.2.2 food/images/pepper.jpg",
+    image: "/1.3 food/images/pepper.jpg",
     full: "der Pfeffer",
     english: "Pepper",
     tamil: "மிளகு",
@@ -302,7 +302,7 @@ export const FOOD_WORDS: VocabWord[] = [
   },
   {
     id: "kuchen",
-    image: "/1.2.2 food/images/cake.jpg",
+    image: "/1.3 food/images/cake.jpg",
     full: "der Kuchen",
     english: "Cake",
     tamil: "கேக்",
@@ -310,7 +310,7 @@ export const FOOD_WORDS: VocabWord[] = [
   },
   {
     id: "eis",
-    image: "/1.2.2 food/images/ice-cream.jpg",
+    image: "/1.3 food/images/ice-cream.jpg",
     full: "das Eis",
     english: "Ice cream",
     tamil: "ஐஸ்கிரீம்",
@@ -318,7 +318,7 @@ export const FOOD_WORDS: VocabWord[] = [
   },
   {
     id: "schokolade",
-    image: "/1.2.2 food/images/chocolate.jpg",
+    image: "/1.3 food/images/chocolate.jpg",
     full: "die Schokolade",
     english: "Chocolate",
     tamil: "சாக்லேட்",
@@ -326,7 +326,7 @@ export const FOOD_WORDS: VocabWord[] = [
   },
   {
     id: "restaurant",
-    image: "/1.2.2 food/images/restaurant.jpg",
+    image: "/1.3 food/images/restaurant.jpg",
     full: "das Restaurant",
     english: "Restaurant",
     tamil: "உணவகம்",
@@ -334,7 +334,7 @@ export const FOOD_WORDS: VocabWord[] = [
   },
   {
     id: "cafe",
-    image: "/1.2.2 food/images/cafe.jpg",
+    image: "/1.3 food/images/cafe.jpg",
     full: "das Café",
     english: "Caf\u00e9",
     tamil: "காபி கடை",
@@ -342,7 +342,7 @@ export const FOOD_WORDS: VocabWord[] = [
   },
   {
     id: "speisekarte",
-    image: "/1.2.2 food/images/menu.jpg",
+    image: "/1.3 food/images/menu.jpg",
     full: "die Speisekarte",
     english: "Menu",
     tamil: "உணவுப் பட்டியல்",
@@ -350,7 +350,7 @@ export const FOOD_WORDS: VocabWord[] = [
   },
   {
     id: "rechnung",
-    image: "/1.2.2 food/images/bill.jpg",
+    image: "/1.3 food/images/bill.jpg",
     full: "die Rechnung",
     english: "Bill",
     tamil: "பில்",
@@ -358,7 +358,7 @@ export const FOOD_WORDS: VocabWord[] = [
   },
   {
     id: "hunger",
-    image: "/1.2.2 food/images/hunger.jpg",
+    image: "/1.3 food/images/hunger.jpg",
     full: "der Hunger",
     english: "Hunger",
     tamil: "பசி",
@@ -366,7 +366,7 @@ export const FOOD_WORDS: VocabWord[] = [
   },
   {
     id: "durst",
-    image: "/1.2.2 food/images/thirst.jpg",
+    image: "/1.3 food/images/thirst.jpg",
     full: "der Durst",
     english: "Thirst",
     tamil: "தாகம்",
@@ -374,7 +374,7 @@ export const FOOD_WORDS: VocabWord[] = [
   },
   {
     id: "lecker",
-    image: "/1.2.2 food/images/delicious.jpg",
+    image: "/1.3 food/images/delicious.jpg",
     full: "lecker",
     english: "Delicious",
     tamil: "சுவையான",
@@ -382,7 +382,7 @@ export const FOOD_WORDS: VocabWord[] = [
   },
   {
     id: "gut",
-    image: "/1.2.2 food/images/good.jpg",
+    image: "/1.3 food/images/good.jpg",
     full: "gut",
     english: "Good",
     tamil: "நல்ல",
@@ -390,7 +390,7 @@ export const FOOD_WORDS: VocabWord[] = [
   },
   {
     id: "schlecht",
-    image: "/1.2.2 food/images/bad.jpg",
+    image: "/1.3 food/images/bad.jpg",
     full: "schlecht",
     english: "Bad",
     tamil: "மோசமான",
@@ -398,7 +398,7 @@ export const FOOD_WORDS: VocabWord[] = [
   },
   {
     id: "heiss",
-    image: "/1.2.2 food/images/hot.jpg",
+    image: "/1.3 food/images/hot.jpg",
     full: "heiß",
     english: "Hot",
     tamil: "சூடான",
@@ -406,7 +406,7 @@ export const FOOD_WORDS: VocabWord[] = [
   },
   {
     id: "kalt",
-    image: "/1.2.2 food/images/cold.jpg",
+    image: "/1.3 food/images/cold.jpg",
     full: "kalt",
     english: "Cold",
     tamil: "குளிர்ந்த",
@@ -414,7 +414,7 @@ export const FOOD_WORDS: VocabWord[] = [
   },
   {
     id: "essen-verb",
-    image: "/1.2.2 food/images/eat.jpg",
+    image: "/1.3 food/images/eat.jpg",
     full: "essen",
     english: "To eat",
     tamil: "சாப்பிடுதல்",
@@ -422,7 +422,7 @@ export const FOOD_WORDS: VocabWord[] = [
   },
   {
     id: "trinken",
-    image: "/1.2.2 food/images/drink.jpg",
+    image: "/1.3 food/images/drink.jpg",
     full: "trinken",
     english: "To drink",
     tamil: "குடித்தல்",
@@ -430,7 +430,7 @@ export const FOOD_WORDS: VocabWord[] = [
   },
   {
     id: "kochen",
-    image: "/1.2.2 food/images/cook.jpg",
+    image: "/1.3 food/images/cook.jpg",
     full: "kochen",
     english: "To cook",
     tamil: "சமைத்தல்",
@@ -438,7 +438,7 @@ export const FOOD_WORDS: VocabWord[] = [
   },
   {
     id: "bestellen",
-    image: "/1.2.2 food/images/order.jpg",
+    image: "/1.3 food/images/order.jpg",
     full: "bestellen",
     english: "To order",
     tamil: "ஆர்டர் செய்தல்",
@@ -446,7 +446,7 @@ export const FOOD_WORDS: VocabWord[] = [
   },
   {
     id: "bezahlen",
-    image: "/1.2.2 food/images/pay.jpg",
+    image: "/1.3 food/images/pay.jpg",
     full: "bezahlen",
     english: "To pay",
     tamil: "பணம் செலுத்துதல்",
@@ -454,7 +454,7 @@ export const FOOD_WORDS: VocabWord[] = [
   },
   {
     id: "schmecken",
-    image: "/1.2.2 food/images/taste.jpg",
+    image: "/1.3 food/images/taste.jpg",
     full: "schmecken",
     english: "To taste",
     tamil: "சுவைத்தல்",

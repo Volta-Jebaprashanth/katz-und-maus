@@ -100,15 +100,16 @@ Vite 8 + Nitro.
   then run `bun run generate-audio`). `src/lib/word-audio.ts`'s `playWord(word)`
   plays the matching file, falling back to `speechSynthesis` for any word that
   doesn't have one yet.
-- **Per-test asset folders**: each vocabulary test gets its own folder under
-  `public/`, named `<lesson>.<test> <english-name>` (e.g.
-  `public/1.1 greetings/`), numbered in build order. Inside, split assets
+- **Per-lesson asset folders**: each vocabulary lesson gets its own folder
+  under `public/`, named `<section>.<lesson> <english-name>` (e.g.
+  `public/1.1 greetings/`, `public/1.2 family/`), numbered in build order.
+  The lesson's tests (see "Lessons and tests" below) share it. Inside, split assets
   into `audio/` and `images/` subfolders:
   - `audio/` — one mp3 per word, filenames in **German**, matching what's
     spoken (e.g. `hallo.mp3`, `guten-morgen.mp3`). Generated the same way as
     all other pronunciation audio (see "Word pronunciation audio" above):
     add the word to `scripts/generate-audio.mjs`'s `WORDS` array with a
-    `dir: "<n.n test-name>/audio"` field, then run `bun run generate-audio`
+    `dir: "<n.n lesson-name>/audio"` field, then run `bun run generate-audio`
     (skips files that already exist unless `--force` is passed). Audio
     shared across multiple tests (letters, UI titles, der/die/das articles,
     sfx) stays flat under `public/audio/` — only give a `WORDS` entry a
@@ -170,10 +171,21 @@ Vite 8 + Nitro.
       the picture, never text baked into the image file itself.
 
   `src/data/greetings.ts` and `public/1.1 greetings/` are the reference
-  example (test 1.1) — follow the same layout for every new test. Tests
-  share one quiz screen, `VocabQuiz` (`src/components/quiz/VocabQuiz.tsx`),
-  which takes a `testId` and a `VocabWord[]`; a new test needs a data file
-  (see `src/data/family.ts`, test 1.2.1), a `Screen` value plus a `VocabQuiz`
-  branch and a path node in `src/routes/index.tsx`. Nouns keep their
+  example (lesson 1.1) — follow the same layout for every new lesson.
+- **Lessons and tests**: a lesson (e.g. 1.2 Familie) is one word list; it is
+  split into tests of **10–15 words each**, as evenly as possible, by
+  `splitIntoTests` in `src/data/lessons.ts` — lesson 1.2's 37 words become
+  tests 1.2.1 (13), 1.2.2 (12), 1.2.3 (12), shown on the path as "Familie 1",
+  "Familie 2", ... under an expandable "Familie" node. The test id is the
+  key its progress is stored under, so changing a lesson's word count
+  re-splits it and resets that lesson's progress. Tests share one quiz
+  screen, `VocabQuiz` (`src/components/quiz/VocabQuiz.tsx`), which takes a
+  `testId` and a `VocabWord[]`; a new lesson only needs a data file (see
+  `src/data/family.ts`) plus an entry in `VOCAB_LESSONS` in
+  `src/data/lessons.ts` — the path nodes and quiz routing in
+  `src/routes/index.tsx` are generated from it. Nouns keep their
   der/die/das in `full` (shown and spoken); spelling screens drop it via
   `spellingOf`.
+- **Path layout**: 1 Grundlagen (the vocabulary lessons), 2 ÖSD
+  (placeholder, nothing to open yet), 3 Testing (the hand-written "Tiere" /
+  der Vogel walkthrough screens in `index.tsx`).

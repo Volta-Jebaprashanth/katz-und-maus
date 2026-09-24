@@ -1,26 +1,26 @@
 import type { VocabWord } from "@/data/vocabulary";
 
-// Vocabulary for the "Familie" (family) lesson, test 1.2.1: family members,
+// Vocabulary for the "Familie" (family) lesson, 1.2: family members,
 // people words, and a handful of describing words. Nouns carry their
 // der/die/das article in `full` (shown and spoken, but not spelled — see
 // spellingOf in quiz-engine.ts); the adjectives/adverbs have none.
 //
 // Per-test asset layout (see AGENTS.md): this test's own audio/images live
-// under `public/1.2.1 family/`, split into `audio/` (German filenames) and
+// under `public/1.2 family/`, split into `audio/` (German filenames) and
 // `images/` (English filenames, independent of the German word). Images are
 // real Pexels photos (free to use, no attribution required) cropped to
 // 640x640; sources per file are in CREDITS.md. Words like "der Vater" and
 // "der Ehemann" can look alike in a photo, so every screen also captions the
 // picture in the learner's mother tongue — see VocabQuiz.tsx.
 //
-// Matches the public/1.2.1 family/ asset folder and is the stable id this
-// test's progress is stored under (see src/lib/progress-store.ts).
-export const FAMILY_TEST_ID = "1.2.1";
+// Matches the public/1.2 family/ asset folder. The word list is split into
+// 10-15 word tests numbered under this id (see src/data/lessons.ts).
+export const FAMILY_LESSON_ID = "1.2";
 
 export const FAMILY_WORDS: VocabWord[] = [
   {
     id: "familie",
-    image: "/1.2.1 family/images/family.jpg",
+    image: "/1.2 family/images/family.jpg",
     full: "die Familie",
     english: "Family",
     tamil: "குடும்பம்",
@@ -28,7 +28,7 @@ export const FAMILY_WORDS: VocabWord[] = [
   },
   {
     id: "eltern",
-    image: "/1.2.1 family/images/parents.jpg",
+    image: "/1.2 family/images/parents.jpg",
     full: "die Eltern",
     english: "Parents",
     tamil: "பெற்றோர்",
@@ -36,7 +36,7 @@ export const FAMILY_WORDS: VocabWord[] = [
   },
   {
     id: "vater",
-    image: "/1.2.1 family/images/father.jpg",
+    image: "/1.2 family/images/father.jpg",
     full: "der Vater",
     english: "Father",
     tamil: "தந்தை",
@@ -44,7 +44,7 @@ export const FAMILY_WORDS: VocabWord[] = [
   },
   {
     id: "mutter",
-    image: "/1.2.1 family/images/mother.jpg",
+    image: "/1.2 family/images/mother.jpg",
     full: "die Mutter",
     english: "Mother",
     tamil: "தாய்",
@@ -52,7 +52,7 @@ export const FAMILY_WORDS: VocabWord[] = [
   },
   {
     id: "sohn",
-    image: "/1.2.1 family/images/son.jpg",
+    image: "/1.2 family/images/son.jpg",
     full: "der Sohn",
     english: "Son",
     tamil: "மகன்",
@@ -60,7 +60,7 @@ export const FAMILY_WORDS: VocabWord[] = [
   },
   {
     id: "tochter",
-    image: "/1.2.1 family/images/daughter.jpg",
+    image: "/1.2 family/images/daughter.jpg",
     full: "die Tochter",
     english: "Daughter",
     tamil: "மகள்",
@@ -68,7 +68,7 @@ export const FAMILY_WORDS: VocabWord[] = [
   },
   {
     id: "bruder",
-    image: "/1.2.1 family/images/brother.jpg",
+    image: "/1.2 family/images/brother.jpg",
     full: "der Bruder",
     english: "Brother",
     tamil: "சகோதரன்",
@@ -76,7 +76,7 @@ export const FAMILY_WORDS: VocabWord[] = [
   },
   {
     id: "schwester",
-    image: "/1.2.1 family/images/sister.jpg",
+    image: "/1.2 family/images/sister.jpg",
     full: "die Schwester",
     english: "Sister",
     tamil: "சகோதரி",
@@ -84,7 +84,7 @@ export const FAMILY_WORDS: VocabWord[] = [
   },
   {
     id: "grossvater",
-    image: "/1.2.1 family/images/grandfather.jpg",
+    image: "/1.2 family/images/grandfather.jpg",
     full: "der Großvater",
     english: "Grandfather",
     tamil: "தாத்தா",
@@ -92,7 +92,7 @@ export const FAMILY_WORDS: VocabWord[] = [
   },
   {
     id: "grossmutter",
-    image: "/1.2.1 family/images/grandmother.jpg",
+    image: "/1.2 family/images/grandmother.jpg",
     full: "die Großmutter",
     english: "Grandmother",
     tamil: "பாட்டி",
@@ -100,7 +100,7 @@ export const FAMILY_WORDS: VocabWord[] = [
   },
   {
     id: "grosseltern",
-    image: "/1.2.1 family/images/grandparents.jpg",
+    image: "/1.2 family/images/grandparents.jpg",
     full: "die Großeltern",
     english: "Grandparents",
     tamil: "தாத்தா பாட்டி",
@@ -108,7 +108,7 @@ export const FAMILY_WORDS: VocabWord[] = [
   },
   {
     id: "onkel",
-    image: "/1.2.1 family/images/uncle.jpg",
+    image: "/1.2 family/images/uncle.jpg",
     full: "der Onkel",
     english: "Uncle",
     tamil: "மாமா",
@@ -116,7 +116,7 @@ export const FAMILY_WORDS: VocabWord[] = [
   },
   {
     id: "tante",
-    image: "/1.2.1 family/images/aunt.jpg",
+    image: "/1.2 family/images/aunt.jpg",
     full: "die Tante",
     english: "Aunt",
     tamil: "அத்தை",
@@ -124,7 +124,7 @@ export const FAMILY_WORDS: VocabWord[] = [
   },
   {
     id: "cousin",
-    image: "/1.2.1 family/images/cousin-male.jpg",
+    image: "/1.2 family/images/cousin-male.jpg",
     full: "der Cousin",
     english: "Male cousin",
     tamil: "ஒன்றுவிட்ட சகோதரன்",
@@ -132,7 +132,7 @@ export const FAMILY_WORDS: VocabWord[] = [
   },
   {
     id: "cousine",
-    image: "/1.2.1 family/images/cousin-female.jpg",
+    image: "/1.2 family/images/cousin-female.jpg",
     full: "die Cousine",
     english: "Female cousin",
     tamil: "ஒன்றுவிட்ட சகோதரி",
@@ -140,7 +140,7 @@ export const FAMILY_WORDS: VocabWord[] = [
   },
   {
     id: "ehemann",
-    image: "/1.2.1 family/images/husband.jpg",
+    image: "/1.2 family/images/husband.jpg",
     full: "der Ehemann",
     english: "Husband",
     tamil: "கணவன்",
@@ -148,7 +148,7 @@ export const FAMILY_WORDS: VocabWord[] = [
   },
   {
     id: "ehefrau",
-    image: "/1.2.1 family/images/wife.jpg",
+    image: "/1.2 family/images/wife.jpg",
     full: "die Ehefrau",
     english: "Wife",
     tamil: "மனைவி",
@@ -156,7 +156,7 @@ export const FAMILY_WORDS: VocabWord[] = [
   },
   {
     id: "freund",
-    image: "/1.2.1 family/images/friend-male.jpg",
+    image: "/1.2 family/images/friend-male.jpg",
     full: "der Freund",
     english: "Male friend",
     tamil: "நண்பன்",
@@ -164,7 +164,7 @@ export const FAMILY_WORDS: VocabWord[] = [
   },
   {
     id: "freundin",
-    image: "/1.2.1 family/images/friend-female.jpg",
+    image: "/1.2 family/images/friend-female.jpg",
     full: "die Freundin",
     english: "Female friend",
     tamil: "தோழி",
@@ -172,7 +172,7 @@ export const FAMILY_WORDS: VocabWord[] = [
   },
   {
     id: "baby",
-    image: "/1.2.1 family/images/baby.jpg",
+    image: "/1.2 family/images/baby.jpg",
     full: "das Baby",
     english: "Baby",
     tamil: "கைக்குழந்தை",
@@ -180,7 +180,7 @@ export const FAMILY_WORDS: VocabWord[] = [
   },
   {
     id: "kinder",
-    image: "/1.2.1 family/images/children.jpg",
+    image: "/1.2 family/images/children.jpg",
     full: "die Kinder",
     english: "Children",
     tamil: "பிள்ளைகள்",
@@ -188,7 +188,7 @@ export const FAMILY_WORDS: VocabWord[] = [
   },
   {
     id: "nachbar",
-    image: "/1.2.1 family/images/neighbor-male.jpg",
+    image: "/1.2 family/images/neighbor-male.jpg",
     full: "der Nachbar",
     english: "Male neighbor",
     tamil: "அண்டை வீட்டுக்காரர்",
@@ -196,7 +196,7 @@ export const FAMILY_WORDS: VocabWord[] = [
   },
   {
     id: "nachbarin",
-    image: "/1.2.1 family/images/neighbor-female.jpg",
+    image: "/1.2 family/images/neighbor-female.jpg",
     full: "die Nachbarin",
     english: "Female neighbor",
     tamil: "அண்டை வீட்டுக்காரி",
@@ -204,7 +204,7 @@ export const FAMILY_WORDS: VocabWord[] = [
   },
   {
     id: "mensch",
-    image: "/1.2.1 family/images/person.jpg",
+    image: "/1.2 family/images/person.jpg",
     full: "der Mensch",
     english: "Person",
     tamil: "மனிதன்",
@@ -212,7 +212,7 @@ export const FAMILY_WORDS: VocabWord[] = [
   },
   {
     id: "leute",
-    image: "/1.2.1 family/images/people.jpg",
+    image: "/1.2 family/images/people.jpg",
     full: "die Leute",
     english: "People",
     tamil: "மக்கள்",
@@ -220,7 +220,7 @@ export const FAMILY_WORDS: VocabWord[] = [
   },
   {
     id: "erwachsene",
-    image: "/1.2.1 family/images/adult.jpg",
+    image: "/1.2 family/images/adult.jpg",
     full: "der Erwachsene",
     english: "Adult",
     tamil: "பெரியவர்",
@@ -228,7 +228,7 @@ export const FAMILY_WORDS: VocabWord[] = [
   },
   {
     id: "name",
-    image: "/1.2.1 family/images/name.jpg",
+    image: "/1.2 family/images/name.jpg",
     full: "der Name",
     english: "Name",
     tamil: "பெயர்",
@@ -236,7 +236,7 @@ export const FAMILY_WORDS: VocabWord[] = [
   },
   {
     id: "alt",
-    image: "/1.2.1 family/images/old.jpg",
+    image: "/1.2 family/images/old.jpg",
     full: "alt",
     english: "Old",
     tamil: "வயதான",
@@ -244,7 +244,7 @@ export const FAMILY_WORDS: VocabWord[] = [
   },
   {
     id: "jung",
-    image: "/1.2.1 family/images/young.jpg",
+    image: "/1.2 family/images/young.jpg",
     full: "jung",
     english: "Young",
     tamil: "இளமையான",
@@ -252,7 +252,7 @@ export const FAMILY_WORDS: VocabWord[] = [
   },
   {
     id: "gross",
-    image: "/1.2.1 family/images/big.jpg",
+    image: "/1.2 family/images/big.jpg",
     full: "groß",
     english: "Tall / big",
     tamil: "உயரமான / பெரிய",
@@ -260,7 +260,7 @@ export const FAMILY_WORDS: VocabWord[] = [
   },
   {
     id: "klein",
-    image: "/1.2.1 family/images/small.jpg",
+    image: "/1.2 family/images/small.jpg",
     full: "klein",
     english: "Small / short",
     tamil: "சிறிய / குட்டையான",
@@ -268,7 +268,7 @@ export const FAMILY_WORDS: VocabWord[] = [
   },
   {
     id: "nett",
-    image: "/1.2.1 family/images/nice.jpg",
+    image: "/1.2 family/images/nice.jpg",
     full: "nett",
     english: "Nice",
     tamil: "இனிமையான",
@@ -276,7 +276,7 @@ export const FAMILY_WORDS: VocabWord[] = [
   },
   {
     id: "freundlich",
-    image: "/1.2.1 family/images/friendly.jpg",
+    image: "/1.2 family/images/friendly.jpg",
     full: "freundlich",
     english: "Friendly",
     tamil: "நட்பான",
@@ -284,7 +284,7 @@ export const FAMILY_WORDS: VocabWord[] = [
   },
   {
     id: "verheiratet",
-    image: "/1.2.1 family/images/married.jpg",
+    image: "/1.2 family/images/married.jpg",
     full: "verheiratet",
     english: "Married",
     tamil: "திருமணமான",
@@ -292,7 +292,7 @@ export const FAMILY_WORDS: VocabWord[] = [
   },
   {
     id: "ledig",
-    image: "/1.2.1 family/images/single.jpg",
+    image: "/1.2 family/images/single.jpg",
     full: "ledig",
     english: "Single",
     tamil: "திருமணமாகாத",
@@ -300,7 +300,7 @@ export const FAMILY_WORDS: VocabWord[] = [
   },
   {
     id: "zusammen",
-    image: "/1.2.1 family/images/together.jpg",
+    image: "/1.2 family/images/together.jpg",
     full: "zusammen",
     english: "Together",
     tamil: "ஒன்றாக",
@@ -308,7 +308,7 @@ export const FAMILY_WORDS: VocabWord[] = [
   },
   {
     id: "allein",
-    image: "/1.2.1 family/images/alone.jpg",
+    image: "/1.2 family/images/alone.jpg",
     full: "allein",
     english: "Alone",
     tamil: "தனியாக",

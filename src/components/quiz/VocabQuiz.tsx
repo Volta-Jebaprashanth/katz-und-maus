@@ -42,8 +42,8 @@ import { ensureTestEntered, getActiveTierRows, recordFail, recordPass } from "@/
 import { recordCorrectAnswer } from "@/lib/stats-store";
 import type { MotherTongue, Strings } from "@/lib/i18n";
 
-// Data-driven quiz screen for a vocabulary test (1.1 greetings, 1.2.1 family,
-// 1.2.2 food, 1.2.3 home, ...): every word x 10 test types. Rounds are strictly tier-gated — every round's queue is built
+// Data-driven quiz screen for a vocabulary test (1.1.1 Hallo 1, 1.2.3
+// Familie 3, ... — see src/data/lessons.ts): every word x 10 test types. Rounds are strictly tier-gated — every round's queue is built
 // from whatever (word, testType) rows are still pending (pendingAttempts >
 // 0 in progress-store.ts) in the EARLIEST tier that isn't fully cleared, so
 // no easy-tier item ever appears while a basic row is outstanding, and

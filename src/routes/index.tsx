@@ -46,10 +46,7 @@ import {
   subscribeStats,
 } from "@/lib/stats-store";
 import type { Tier } from "@/lib/quiz-engine";
-import { GREETINGS_TEST_ID, GREETINGS_WORDS } from "@/data/greetings";
-import { FAMILY_TEST_ID, FAMILY_WORDS } from "@/data/family";
-import { FOOD_TEST_ID, FOOD_WORDS } from "@/data/food";
-import { HOME_TEST_ID, HOME_WORDS } from "@/data/home";
+import { findVocabTest, VOCAB_LESSONS, type VocabTest } from "@/data/lessons";
 import { TIERE_WORDS, type VocabWord } from "@/data/vocabulary";
 import { MOTHER_TONGUES, TRANSLATIONS, type MotherTongue, type Strings } from "@/lib/i18n";
 
@@ -84,10 +81,7 @@ export const Route = createFileRoute("/")({
 
 type Screen =
   | "home"
-  | "greetings"
-  | "family"
-  | "food"
-  | "house"
+  | "quiz"
   | "picture"
   | "wordPicture"
   | "meaning"
@@ -103,6 +97,7 @@ type Screen =
 
 function Index() {
   const [screen, setScreen] = useState<Screen>("home");
+  const [activeTest, setActiveTest] = useState<VocabTest | null>(null);
   const [answer, setAnswer] = useState<string | null>(null);
   const [letters, setLetters] = useState<number[]>([]);
   const [heard, setHeard] = useState(false);
@@ -338,17 +333,13 @@ function Index() {
         /* fullscreen unsupported (e.g. iOS Safari) — layout still fills the viewport */
       }
     }
-    go(
-      nodeId === "hallo"
-        ? "greetings"
-        : nodeId === "familie"
-          ? "family"
-          : nodeId === "essenTrinken"
-            ? "food"
-            : nodeId === "hausZimmer"
-              ? "house"
-              : "picture",
-    );
+    const test = findVocabTest(nodeId);
+    if (test) {
+      setActiveTest(test);
+      go("quiz");
+    } else {
+      go("picture");
+    }
   };
   const speak = () => {
     setHeard(true);
@@ -385,47 +376,18 @@ function Index() {
         </div>
       </header>
 
-      {screen === "greetings" && (
+      {screen === "quiz" && activeTest && (
         <VocabQuiz
-          testId={GREETINGS_TEST_ID}
-          words={GREETINGS_WORDS}
+          key={activeTest.testId}
+          testId={activeTest.testId}
+          words={activeTest.words}
           t={t}
           lang={lang}
           onExit={() => go("home")}
         />
       )}
 
-      {screen === "family" && (
-        <VocabQuiz
-          testId={FAMILY_TEST_ID}
-          words={FAMILY_WORDS}
-          t={t}
-          lang={lang}
-          onExit={() => go("home")}
-        />
-      )}
-
-      {screen === "food" && (
-        <VocabQuiz
-          testId={FOOD_TEST_ID}
-          words={FOOD_WORDS}
-          t={t}
-          lang={lang}
-          onExit={() => go("home")}
-        />
-      )}
-
-      {screen === "house" && (
-        <VocabQuiz
-          testId={HOME_TEST_ID}
-          words={HOME_WORDS}
-          t={t}
-          lang={lang}
-          onExit={() => go("home")}
-        />
-      )}
-
-      {screen !== "greetings" && screen !== "family" && screen !== "food" && screen !== "house" && (
+      {screen !== "quiz" && (
         <main className="relative z-10 mx-auto max-w-5xl px-4 pb-10 sm:px-6">
           {screen === "home" && (
             <Home
@@ -885,31 +847,11 @@ function collectTestIds(nodes: PathNode[]): string[] {
   ]);
 }
 
-function collectContainerIds(nodes: PathNode[]): string[] {
-  return nodes.flatMap((node) =>
-    node.children ? [node.id, ...collectContainerIds(node.children)] : [],
-  );
-}
-
 const PATH_MEANINGS = {
   grundlagen: { english: "Basics", tamil: "அடிப்படைகள்", sinhala: "මූලික කරුණු" },
-  hallo: { english: "Hello!", tamil: "வணக்கம்!", sinhala: "ආයුබෝවන්!" },
-  familie: { english: "Family", tamil: "குடும்பம்", sinhala: "පවුල" },
-  essenTrinken: {
-    english: "Food & Drinks",
-    tamil: "உணவு & பானங்கள்",
-    sinhala: "කෑම බීම",
-  },
-  hausZimmer: {
-    english: "Home & Rooms",
-    tamil: "வீடு & அறைகள்",
-    sinhala: "ගෙදර සහ කාමර",
-  },
-  wortschatz: { english: "Vocabulary", tamil: "சொல்வளம்", sinhala: "වචන මාලාව" },
+  oesd: { english: "ÖSD exam", tamil: "ÖSD தேர்வு", sinhala: "ÖSD විභාගය" },
+  testing: { english: "Testing", tamil: "சோதனை", sinhala: "පරීක්ෂණ" },
   tiere: { english: "Animals", tamil: "விலங்குகள்", sinhala: "සතුන්" },
-  klassenzimmer: { english: "Classroom", tamil: "வகுப்பறை", sinhala: "පන්ති කාமරය" },
-  essen: { english: "Food", tamil: "உணவு", sinhala: "ආහாර" },
-  zuhause: { english: "Home", tamil: "வீடு", sinhala: "නිවස" },
 } satisfies Record<string, Record<MotherTongue, string>>;
 
 function Home({
@@ -938,82 +880,53 @@ function Home({
         icon: "🔤",
         state: "active",
         meaning: PATH_MEANINGS.grundlagen[lang],
-        children: [
-          {
-            id: "hallo",
-            title: "Hallo!",
-            icon: "👋",
+        children: VOCAB_LESSONS.map((lesson) => ({
+          id: lesson.id,
+          title: lesson.title,
+          icon: lesson.icon,
+          state: "active",
+          meaning: lesson.meaning[lang],
+          children: lesson.tests.map((test) => ({
+            id: test.testId,
+            title: `${lesson.title} ${test.part}`,
+            icon: lesson.icon,
             state: "active",
-            meaning: PATH_MEANINGS.hallo[lang],
-            testId: GREETINGS_TEST_ID,
-          },
-          {
-            id: "wortschatz",
-            title: "Wortschatz",
-            icon: "🗂️",
-            state: "active",
-            meaning: PATH_MEANINGS.wortschatz[lang],
-            children: [
-              {
-                id: "familie",
-                title: "Familie",
-                icon: "👨‍👩‍👧",
-                state: "active",
-                meaning: PATH_MEANINGS.familie[lang],
-                testId: FAMILY_TEST_ID,
-              },
-              {
-                id: "essenTrinken",
-                title: "Essen & Trinken",
-                icon: "🍽️",
-                state: "active",
-                meaning: PATH_MEANINGS.essenTrinken[lang],
-                testId: FOOD_TEST_ID,
-              },
-              {
-                id: "hausZimmer",
-                title: "Haus & Zimmer",
-                icon: "🏠",
-                state: "active",
-                meaning: PATH_MEANINGS.hausZimmer[lang],
-                testId: HOME_TEST_ID,
-              },
-              {
-                id: "tiere",
-                title: "Tiere",
-                icon: "🐕",
-                state: "active",
-                meaning: PATH_MEANINGS.tiere[lang],
-              },
-              {
-                id: "klassenzimmer",
-                title: "Klassenzimmer",
-                icon: "🎒",
-                state: "active",
-                meaning: PATH_MEANINGS.klassenzimmer[lang],
-              },
-            ],
-          },
-        ],
+            meaning: `${lesson.meaning[lang]} ${test.part}`,
+            testId: test.testId,
+          })),
+        })),
       },
       {
-        id: "essen",
-        title: "Essen",
-        icon: "🍎",
-        state: "active",
-        meaning: PATH_MEANINGS.essen[lang],
-      },
-      {
-        id: "zuhause",
-        title: "Zu Hause",
+        id: "oesd",
+        title: "ÖSD",
         icon: "📘",
         state: "active",
-        meaning: PATH_MEANINGS.zuhause[lang],
+        meaning: PATH_MEANINGS.oesd[lang],
+      },
+      {
+        id: "testing",
+        title: "Testing",
+        icon: "🧪",
+        state: "active",
+        meaning: PATH_MEANINGS.testing[lang],
+        children: [
+          {
+            id: "tiere",
+            title: "Tiere",
+            icon: "🐕",
+            state: "active",
+            meaning: PATH_MEANINGS.tiere[lang],
+          },
+        ],
       },
     ],
     [lang],
   );
-  const [expanded, setExpanded] = useState<Set<string>>(() => new Set(collectContainerIds(path)));
+  // Only the top-level sections start open; each lesson (Hallo, Familie, ...)
+  // expands to its numbered tests on tap.
+  const [expanded, setExpanded] = useState<Set<string>>(
+    () => new Set(path.filter((node) => node.children).map((node) => node.id)),
+  );
   const toggleNode = (id: string) =>
     setExpanded((prev) => {
       const next = new Set(prev);
@@ -1021,7 +934,12 @@ function Home({
       else next.add(id);
       return next;
     });
-  const handleCardClick = (node: PathNode) => onStart(node.id);
+  // Sections/lessons toggle open; only playable nodes (a vocab test or the
+  // Tiere demo) start a lesson. ÖSD is a placeholder with nothing to open yet.
+  const handleCardClick = (node: PathNode) => {
+    if (node.children?.length) toggleNode(node.id);
+    else if (node.testId || node.id === "tiere") onStart(node.id);
+  };
   // Read after mount rather than during render: progress lives in
   // localStorage, which the server render can't see.
   const [statuses, setStatuses] = useState<Record<string, TestStatus>>({});
@@ -1131,7 +1049,10 @@ function PathTree({
         const isExpanded = expanded.has(node.id);
         const openCard = () => onCardClick(node);
         const status = node.testId ? statuses[node.testId] : undefined;
-        const state = status?.kind === "completed" ? "done" : node.state;
+        const childTestIds = node.children ? collectTestIds(node.children) : [];
+        const allChildrenDone =
+          childTestIds.length > 0 && childTestIds.every((id) => statuses[id]?.kind === "completed");
+        const state = status?.kind === "completed" || allChildrenDone ? "done" : node.state;
         const currentTier = status?.kind === "inProgress" ? status.tier : undefined;
         return (
           <div key={node.id}>

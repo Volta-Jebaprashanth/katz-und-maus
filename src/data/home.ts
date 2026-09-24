@@ -1,28 +1,28 @@
 import type { VocabWord } from "@/data/vocabulary";
 
-// Vocabulary for the "Haus & Zimmer" (home & rooms) lesson, test 1.2.3:
+// Vocabulary for the "Haus & Zimmer" (home & rooms) lesson, 1.4:
 // the home and its rooms, furniture, appliances, a few everyday things, and
 // a handful of describing words and verbs. Nouns carry their der/die/das
 // article in `full` (shown and spoken, but not spelled — see spellingOf in
 // quiz-engine.ts); the adjectives and verbs have none. "groß" and "klein"
-// also appear in 1.2.1 family, so their audio is shared under public/audio/.
+// also appear in 1.2 family, so their audio is shared under public/audio/.
 //
 // Per-test asset layout (see AGENTS.md): this test's own audio/images live
-// under `public/1.2.3 home/`, split into `audio/` (German filenames) and
+// under `public/1.4 home/`, split into `audio/` (German filenames) and
 // `images/` (English filenames, independent of the German word). Images are
 // real Pexels photos (free to use, no attribution required) cropped to
 // 640x640; sources per file are in CREDITS.md. Words like "sauber" or
 // "wohnen" are hard to pin down in a photo, so every screen also captions the
 // picture in the learner's mother tongue — see VocabQuiz.tsx.
 //
-// Matches the public/1.2.3 home/ asset folder and is the stable id this
-// test's progress is stored under (see src/lib/progress-store.ts).
-export const HOME_TEST_ID = "1.2.3";
+// Matches the public/1.4 home/ asset folder. The word list is split into
+// 10-15 word tests numbered under this id (see src/data/lessons.ts).
+export const HOME_LESSON_ID = "1.4";
 
 export const HOME_WORDS: VocabWord[] = [
   {
     id: "haus",
-    image: "/1.2.3 home/images/house.jpg",
+    image: "/1.4 home/images/house.jpg",
     full: "das Haus",
     english: "House",
     tamil: "வீடு",
@@ -30,7 +30,7 @@ export const HOME_WORDS: VocabWord[] = [
   },
   {
     id: "wohnung",
-    image: "/1.2.3 home/images/apartment.jpg",
+    image: "/1.4 home/images/apartment.jpg",
     full: "die Wohnung",
     english: "Apartment",
     tamil: "அடுக்குமாடி வீடு",
@@ -38,7 +38,7 @@ export const HOME_WORDS: VocabWord[] = [
   },
   {
     id: "zimmer",
-    image: "/1.2.3 home/images/room.jpg",
+    image: "/1.4 home/images/room.jpg",
     full: "das Zimmer",
     english: "Room",
     tamil: "அறை",
@@ -46,7 +46,7 @@ export const HOME_WORDS: VocabWord[] = [
   },
   {
     id: "schlafzimmer",
-    image: "/1.2.3 home/images/bedroom.jpg",
+    image: "/1.4 home/images/bedroom.jpg",
     full: "das Schlafzimmer",
     english: "Bedroom",
     tamil: "படுக்கை அறை",
@@ -54,7 +54,7 @@ export const HOME_WORDS: VocabWord[] = [
   },
   {
     id: "wohnzimmer",
-    image: "/1.2.3 home/images/living-room.jpg",
+    image: "/1.4 home/images/living-room.jpg",
     full: "das Wohnzimmer",
     english: "Living room",
     tamil: "வரவேற்பறை",
@@ -62,7 +62,7 @@ export const HOME_WORDS: VocabWord[] = [
   },
   {
     id: "badezimmer",
-    image: "/1.2.3 home/images/bathroom.jpg",
+    image: "/1.4 home/images/bathroom.jpg",
     full: "das Badezimmer",
     english: "Bathroom",
     tamil: "குளியலறை",
@@ -70,7 +70,7 @@ export const HOME_WORDS: VocabWord[] = [
   },
   {
     id: "kueche",
-    image: "/1.2.3 home/images/kitchen.jpg",
+    image: "/1.4 home/images/kitchen.jpg",
     full: "die Küche",
     english: "Kitchen",
     tamil: "சமையலறை",
@@ -78,7 +78,7 @@ export const HOME_WORDS: VocabWord[] = [
   },
   {
     id: "flur",
-    image: "/1.2.3 home/images/hallway.jpg",
+    image: "/1.4 home/images/hallway.jpg",
     full: "der Flur",
     english: "Hallway",
     tamil: "நடைக்கூடம்",
@@ -86,7 +86,7 @@ export const HOME_WORDS: VocabWord[] = [
   },
   {
     id: "balkon",
-    image: "/1.2.3 home/images/balcony.jpg",
+    image: "/1.4 home/images/balcony.jpg",
     full: "der Balkon",
     english: "Balcony",
     tamil: "பால்கனி",
@@ -94,7 +94,7 @@ export const HOME_WORDS: VocabWord[] = [
   },
   {
     id: "garten",
-    image: "/1.2.3 home/images/garden.jpg",
+    image: "/1.4 home/images/garden.jpg",
     full: "der Garten",
     english: "Garden",
     tamil: "தோட்டம்",
@@ -102,7 +102,7 @@ export const HOME_WORDS: VocabWord[] = [
   },
   {
     id: "tuer",
-    image: "/1.2.3 home/images/door.jpg",
+    image: "/1.4 home/images/door.jpg",
     full: "die Tür",
     english: "Door",
     tamil: "கதவு",
@@ -110,7 +110,7 @@ export const HOME_WORDS: VocabWord[] = [
   },
   {
     id: "fenster",
-    image: "/1.2.3 home/images/window.jpg",
+    image: "/1.4 home/images/window.jpg",
     full: "das Fenster",
     english: "Window",
     tamil: "ஜன்னல்",
@@ -118,7 +118,7 @@ export const HOME_WORDS: VocabWord[] = [
   },
   {
     id: "wand",
-    image: "/1.2.3 home/images/wall.jpg",
+    image: "/1.4 home/images/wall.jpg",
     full: "die Wand",
     english: "Wall",
     tamil: "சுவர்",
@@ -126,7 +126,7 @@ export const HOME_WORDS: VocabWord[] = [
   },
   {
     id: "boden",
-    image: "/1.2.3 home/images/floor.jpg",
+    image: "/1.4 home/images/floor.jpg",
     full: "der Boden",
     english: "Floor",
     tamil: "தரை",
@@ -134,7 +134,7 @@ export const HOME_WORDS: VocabWord[] = [
   },
   {
     id: "treppe",
-    image: "/1.2.3 home/images/stairs.jpg",
+    image: "/1.4 home/images/stairs.jpg",
     full: "die Treppe",
     english: "Stairs",
     tamil: "படிக்கட்டு",
@@ -142,7 +142,7 @@ export const HOME_WORDS: VocabWord[] = [
   },
   {
     id: "tisch",
-    image: "/1.2.3 home/images/table.jpg",
+    image: "/1.4 home/images/table.jpg",
     full: "der Tisch",
     english: "Table",
     tamil: "மேசை",
@@ -150,7 +150,7 @@ export const HOME_WORDS: VocabWord[] = [
   },
   {
     id: "stuhl",
-    image: "/1.2.3 home/images/chair.jpg",
+    image: "/1.4 home/images/chair.jpg",
     full: "der Stuhl",
     english: "Chair",
     tamil: "நாற்காலி",
@@ -158,7 +158,7 @@ export const HOME_WORDS: VocabWord[] = [
   },
   {
     id: "bett",
-    image: "/1.2.3 home/images/bed.jpg",
+    image: "/1.4 home/images/bed.jpg",
     full: "das Bett",
     english: "Bed",
     tamil: "கட்டில்",
@@ -166,7 +166,7 @@ export const HOME_WORDS: VocabWord[] = [
   },
   {
     id: "sofa",
-    image: "/1.2.3 home/images/sofa.jpg",
+    image: "/1.4 home/images/sofa.jpg",
     full: "das Sofa",
     english: "Sofa",
     tamil: "சோபா",
@@ -174,7 +174,7 @@ export const HOME_WORDS: VocabWord[] = [
   },
   {
     id: "schrank",
-    image: "/1.2.3 home/images/wardrobe.jpg",
+    image: "/1.4 home/images/wardrobe.jpg",
     full: "der Schrank",
     english: "Cupboard / wardrobe",
     tamil: "அலமாரி",
@@ -182,7 +182,7 @@ export const HOME_WORDS: VocabWord[] = [
   },
   {
     id: "regal",
-    image: "/1.2.3 home/images/shelf.jpg",
+    image: "/1.4 home/images/shelf.jpg",
     full: "das Regal",
     english: "Shelf",
     tamil: "அடுக்குத் தட்டு",
@@ -190,7 +190,7 @@ export const HOME_WORDS: VocabWord[] = [
   },
   {
     id: "lampe",
-    image: "/1.2.3 home/images/lamp.jpg",
+    image: "/1.4 home/images/lamp.jpg",
     full: "die Lampe",
     english: "Lamp",
     tamil: "விளக்கு",
@@ -198,7 +198,7 @@ export const HOME_WORDS: VocabWord[] = [
   },
   {
     id: "fernseher",
-    image: "/1.2.3 home/images/television.jpg",
+    image: "/1.4 home/images/television.jpg",
     full: "der Fernseher",
     english: "Television",
     tamil: "தொலைக்காட்சி",
@@ -206,7 +206,7 @@ export const HOME_WORDS: VocabWord[] = [
   },
   {
     id: "kuehlschrank",
-    image: "/1.2.3 home/images/refrigerator.jpg",
+    image: "/1.4 home/images/refrigerator.jpg",
     full: "der Kühlschrank",
     english: "Refrigerator",
     tamil: "குளிர்சாதனப் பெட்டி",
@@ -214,7 +214,7 @@ export const HOME_WORDS: VocabWord[] = [
   },
   {
     id: "herd",
-    image: "/1.2.3 home/images/stove.jpg",
+    image: "/1.4 home/images/stove.jpg",
     full: "der Herd",
     english: "Stove",
     tamil: "அடுப்பு",
@@ -222,7 +222,7 @@ export const HOME_WORDS: VocabWord[] = [
   },
   {
     id: "ofen",
-    image: "/1.2.3 home/images/oven.jpg",
+    image: "/1.4 home/images/oven.jpg",
     full: "der Ofen",
     english: "Oven",
     tamil: "ஓவன்",
@@ -230,7 +230,7 @@ export const HOME_WORDS: VocabWord[] = [
   },
   {
     id: "waschmaschine",
-    image: "/1.2.3 home/images/washing-machine.jpg",
+    image: "/1.4 home/images/washing-machine.jpg",
     full: "die Waschmaschine",
     english: "Washing machine",
     tamil: "சலவை இயந்திரம்",
@@ -238,7 +238,7 @@ export const HOME_WORDS: VocabWord[] = [
   },
   {
     id: "dusche",
-    image: "/1.2.3 home/images/shower.jpg",
+    image: "/1.4 home/images/shower.jpg",
     full: "die Dusche",
     english: "Shower",
     tamil: "ஷவர்",
@@ -246,7 +246,7 @@ export const HOME_WORDS: VocabWord[] = [
   },
   {
     id: "badewanne",
-    image: "/1.2.3 home/images/bathtub.jpg",
+    image: "/1.4 home/images/bathtub.jpg",
     full: "die Badewanne",
     english: "Bathtub",
     tamil: "குளியல் தொட்டி",
@@ -254,7 +254,7 @@ export const HOME_WORDS: VocabWord[] = [
   },
   {
     id: "toilette",
-    image: "/1.2.3 home/images/toilet.jpg",
+    image: "/1.4 home/images/toilet.jpg",
     full: "die Toilette",
     english: "Toilet",
     tamil: "கழிப்பறை",
@@ -262,7 +262,7 @@ export const HOME_WORDS: VocabWord[] = [
   },
   {
     id: "spiegel",
-    image: "/1.2.3 home/images/mirror.jpg",
+    image: "/1.4 home/images/mirror.jpg",
     full: "der Spiegel",
     english: "Mirror",
     tamil: "கண்ணாடி",
@@ -270,7 +270,7 @@ export const HOME_WORDS: VocabWord[] = [
   },
   {
     id: "schluessel",
-    image: "/1.2.3 home/images/key.jpg",
+    image: "/1.4 home/images/key.jpg",
     full: "der Schlüssel",
     english: "Key",
     tamil: "சாவி",
@@ -278,7 +278,7 @@ export const HOME_WORDS: VocabWord[] = [
   },
   {
     id: "tasche",
-    image: "/1.2.3 home/images/bag.jpg",
+    image: "/1.4 home/images/bag.jpg",
     full: "die Tasche",
     english: "Bag",
     tamil: "பை",
@@ -286,7 +286,7 @@ export const HOME_WORDS: VocabWord[] = [
   },
   {
     id: "handy",
-    image: "/1.2.3 home/images/mobile-phone.jpg",
+    image: "/1.4 home/images/mobile-phone.jpg",
     full: "das Handy",
     english: "Mobile phone",
     tamil: "கைபேசி",
@@ -294,7 +294,7 @@ export const HOME_WORDS: VocabWord[] = [
   },
   {
     id: "computer",
-    image: "/1.2.3 home/images/computer.jpg",
+    image: "/1.4 home/images/computer.jpg",
     full: "der Computer",
     english: "Computer",
     tamil: "கணினி",
@@ -302,7 +302,7 @@ export const HOME_WORDS: VocabWord[] = [
   },
   {
     id: "sauber",
-    image: "/1.2.3 home/images/clean.jpg",
+    image: "/1.4 home/images/clean.jpg",
     full: "sauber",
     english: "Clean",
     tamil: "சுத்தமான",
@@ -310,7 +310,7 @@ export const HOME_WORDS: VocabWord[] = [
   },
   {
     id: "schmutzig",
-    image: "/1.2.3 home/images/dirty.jpg",
+    image: "/1.4 home/images/dirty.jpg",
     full: "schmutzig",
     english: "Dirty",
     tamil: "அழுக்கான",
@@ -318,7 +318,7 @@ export const HOME_WORDS: VocabWord[] = [
   },
   {
     id: "gross",
-    image: "/1.2.3 home/images/big.jpg",
+    image: "/1.4 home/images/big.jpg",
     full: "groß",
     english: "Big",
     tamil: "பெரிய",
@@ -326,7 +326,7 @@ export const HOME_WORDS: VocabWord[] = [
   },
   {
     id: "klein",
-    image: "/1.2.3 home/images/small.jpg",
+    image: "/1.4 home/images/small.jpg",
     full: "klein",
     english: "Small",
     tamil: "சிறிய",
@@ -334,7 +334,7 @@ export const HOME_WORDS: VocabWord[] = [
   },
   {
     id: "schoen",
-    image: "/1.2.3 home/images/beautiful.jpg",
+    image: "/1.4 home/images/beautiful.jpg",
     full: "schön",
     english: "Beautiful / nice",
     tamil: "அழகான",
@@ -342,7 +342,7 @@ export const HOME_WORDS: VocabWord[] = [
   },
   {
     id: "bequem",
-    image: "/1.2.3 home/images/comfortable.jpg",
+    image: "/1.4 home/images/comfortable.jpg",
     full: "bequem",
     english: "Comfortable",
     tamil: "வசதியான",
@@ -350,7 +350,7 @@ export const HOME_WORDS: VocabWord[] = [
   },
   {
     id: "wohnen",
-    image: "/1.2.3 home/images/live.jpg",
+    image: "/1.4 home/images/live.jpg",
     full: "wohnen",
     english: "To live (in a home)",
     tamil: "வசித்தல்",
@@ -358,7 +358,7 @@ export const HOME_WORDS: VocabWord[] = [
   },
   {
     id: "oeffnen",
-    image: "/1.2.3 home/images/open.jpg",
+    image: "/1.4 home/images/open.jpg",
     full: "öffnen",
     english: "To open",
     tamil: "திறத்தல்",
@@ -366,7 +366,7 @@ export const HOME_WORDS: VocabWord[] = [
   },
   {
     id: "schliessen",
-    image: "/1.2.3 home/images/close.jpg",
+    image: "/1.4 home/images/close.jpg",
     full: "schließen",
     english: "To close",
     tamil: "மூடுதல்",
@@ -374,7 +374,7 @@ export const HOME_WORDS: VocabWord[] = [
   },
   {
     id: "putzen",
-    image: "/1.2.3 home/images/cleaning.jpg",
+    image: "/1.4 home/images/cleaning.jpg",
     full: "putzen",
     english: "To clean",
     tamil: "சுத்தம் செய்தல்",
@@ -382,7 +382,7 @@ export const HOME_WORDS: VocabWord[] = [
   },
   {
     id: "schlafen",
-    image: "/1.2.3 home/images/sleep.jpg",
+    image: "/1.4 home/images/sleep.jpg",
     full: "schlafen",
     english: "To sleep",
     tamil: "தூங்குதல்",

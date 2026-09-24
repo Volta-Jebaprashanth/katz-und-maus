@@ -1,7 +1,7 @@
 import type { MotherTongue } from "@/lib/i18n";
 import type { VocabWord } from "@/data/vocabulary";
 
-// Vocabulary for the "Hallo!" (greetings) lesson, test 1.1. Unlike
+// Vocabulary for the "Hallo!" (greetings) lesson, 1.1. Unlike
 // TIERE_WORDS these are phrases, not nouns, so they have no der/die/das
 // article.
 //
@@ -44,9 +44,9 @@ import type { VocabWord } from "@/data/vocabulary";
 //   good-luck        https://www.pexels.com/photo/person-doing-fingers-crossed-9017426/
 //   have-a-good-trip https://www.pexels.com/photo/stylish-happy-traveler-with-suitcase-in-airport-hallway-4173229/
 // See CREDITS.md at the repo root for the full source list.
-// Matches the public/1.1 greetings/ asset folder and is the stable id this
-// test's progress is stored under (see src/lib/progress-store.ts).
-export const GREETINGS_TEST_ID = "1.1";
+// Matches the public/1.1 greetings/ asset folder. The word list is split into
+// 10-15 word tests numbered under this id (see src/data/lessons.ts).
+export const GREETINGS_LESSON_ID = "1.1";
 
 export const GREETINGS_WORDS: VocabWord[] = [
   {
