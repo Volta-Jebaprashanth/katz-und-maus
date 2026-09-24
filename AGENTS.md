@@ -170,6 +170,19 @@ Vite 8 + Nitro.
       direction, but the prop supports it). The caption is a label under
       the picture, never text baked into the image file itself.
 
+  - `icons/` — the small round pictures on the learning path: `lesson.jpg`
+    for the lesson node and `test-<part>.jpg` for each numbered test
+    (`test-1.jpg`, `test-2.jpg`, ...), every one different. Each is a tight
+    160x160 close-up crop with a single clear subject (busy scenes are
+    unreadable at 44px) that still says the lesson's topic at a glance —
+    a waving child or a handshake for Hallo, grandparents for Familie, a
+    sofa for Haus. A lesson's own `images/` photo is fine when it fits;
+    otherwise source a new Pexels photo just for the icon and list it in
+    `CREDITS.md`. Set the lesson's
+    `assetDir` in `VOCAB_LESSONS`; a missing icon falls back to the
+    lesson's emoji. Re-splitting a lesson into more tests needs new
+    `test-<part>.jpg` files.
+
   `src/data/greetings.ts` and `public/1.1 greetings/` are the reference
   example (lesson 1.1) — follow the same layout for every new lesson.
 - **Lessons and tests**: a lesson (e.g. 1.2 Familie) is one word list; it is

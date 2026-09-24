@@ -22,7 +22,13 @@ export interface VocabTest {
 export interface VocabLesson {
   id: string;
   title: string;
+  // Emoji fallback, shown if the path picture below fails to load.
   icon: string;
+  // The lesson's public/ asset folder, e.g. "1.1 greetings". Its icons/
+  // subfolder holds the small round path pictures: lesson.jpg for the lesson
+  // node and test-<part>.jpg for each numbered test (see lessonPicture /
+  // testPicture).
+  assetDir: string;
   meaning: Record<MotherTongue, string>;
   tests: VocabTest[];
 }
@@ -48,6 +54,7 @@ export function splitIntoTests(lessonId: string, words: VocabWord[]): VocabTest[
 export const VOCAB_LESSONS: VocabLesson[] = [
   {
     id: GREETINGS_LESSON_ID,
+    assetDir: "1.1 greetings",
     title: "Hallo",
     icon: "👋",
     meaning: { english: "Hello", tamil: "வணக்கம்", sinhala: "ආයුබෝවන්" },
@@ -55,6 +62,7 @@ export const VOCAB_LESSONS: VocabLesson[] = [
   },
   {
     id: FAMILY_LESSON_ID,
+    assetDir: "1.2 family",
     title: "Familie",
     icon: "👨‍👩‍👧",
     meaning: { english: "Family", tamil: "குடும்பம்", sinhala: "පවුල" },
@@ -62,6 +70,7 @@ export const VOCAB_LESSONS: VocabLesson[] = [
   },
   {
     id: FOOD_LESSON_ID,
+    assetDir: "1.3 food",
     title: "Essen & Trinken",
     icon: "🍽️",
     meaning: { english: "Food & Drinks", tamil: "உணவு & பானங்கள்", sinhala: "කෑම බීම" },
@@ -69,12 +78,21 @@ export const VOCAB_LESSONS: VocabLesson[] = [
   },
   {
     id: HOME_LESSON_ID,
+    assetDir: "1.4 home",
     title: "Haus & Zimmer",
     icon: "🏠",
     meaning: { english: "Home & Rooms", tamil: "வீடு & அறைகள்", sinhala: "ගෙදර සහ කාමර" },
     tests: splitIntoTests(HOME_LESSON_ID, HOME_WORDS),
   },
 ];
+
+export function lessonPicture(lesson: VocabLesson): string {
+  return `/${lesson.assetDir}/icons/lesson.jpg`;
+}
+
+export function testPicture(lesson: VocabLesson, test: VocabTest): string {
+  return `/${lesson.assetDir}/icons/test-${test.part}.jpg`;
+}
 
 export function findVocabTest(testId: string): VocabTest | undefined {
   for (const lesson of VOCAB_LESSONS) {

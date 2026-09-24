@@ -200,3 +200,17 @@ required).
 | close.jpg | schließen | https://www.pexels.com/photo/man-closing-the-door-8107168/ |
 | cleaning.jpg | putzen | https://www.pexels.com/photo/a-person-wiping-a-table-6684752/ |
 | sleep.jpg | schlafen | https://www.pexels.com/photo/child-sleeping-in-bed-10608041/ |
+
+## Path icons (`public/<lesson>/icons/`)
+
+The small round pictures on the learning path are 160x160 close-up crops.
+Most are cropped from that lesson's own `images/` photos (credited above):
+`lesson.jpg` and the `test-<part>.jpg` files not listed here. These were
+downloaded just for an icon, also under the [Pexels License](https://www.pexels.com/license/):
+
+| File | Path node | Source |
+| --- | --- | --- |
+| 1.1 greetings/icons/test-1.jpg | Hallo 1 | https://www.pexels.com/photo/smiling-child-waving-with-joyful-expression-28673482/ |
+| 1.1 greetings/icons/test-2.jpg | Hallo 2 | https://www.pexels.com/photo/close-up-shot-of-two-people-shaking-hands-8441809/ |
+| 1.2 family/icons/test-3.jpg | Familie 3 | https://www.pexels.com/photo/close-up-shot-of-a-happy-elderly-couple-with-their-grandchild-hugging-while-looking-at-camera-8317710/ |
+| 1.4 home/icons/test-2.jpg | Haus & Zimmer 2 | https://www.pexels.com/photo/a-cozy-living-room-with-green-couch-12474787/ |

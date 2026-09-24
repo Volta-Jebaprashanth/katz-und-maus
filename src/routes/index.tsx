@@ -46,7 +46,13 @@ import {
   subscribeStats,
 } from "@/lib/stats-store";
 import type { Tier } from "@/lib/quiz-engine";
-import { findVocabTest, VOCAB_LESSONS, type VocabTest } from "@/data/lessons";
+import {
+  findVocabTest,
+  lessonPicture,
+  testPicture,
+  VOCAB_LESSONS,
+  type VocabTest,
+} from "@/data/lessons";
 import { TIERE_WORDS, type VocabWord } from "@/data/vocabulary";
 import { MOTHER_TONGUES, TRANSLATIONS, type MotherTongue, type Strings } from "@/lib/i18n";
 
@@ -842,6 +848,23 @@ type PathNode = {
   children?: PathNode[];
 };
 
+// A lesson/test photo filling its round path badge. Falls back to the
+// lesson's emoji if the picture is missing (e.g. a lesson re-split into more
+// tests than it has icons/test-<part>.jpg files for).
+function PathPicture({ src, fallback }: { src: string; fallback: string }) {
+  const [failed, setFailed] = useState(false);
+  if (failed) return <>{fallback}</>;
+  return (
+    <img
+      src={src}
+      alt=""
+      draggable={false}
+      onError={() => setFailed(true)}
+      className="size-full rounded-full object-cover"
+    />
+  );
+}
+
 function collectTestIds(nodes: PathNode[]): string[] {
   return nodes.flatMap((node) => [
     ...(node.testId ? [node.testId] : []),
@@ -885,13 +908,13 @@ function Home({
         children: VOCAB_LESSONS.map((lesson) => ({
           id: lesson.id,
           title: lesson.title,
-          icon: lesson.icon,
+          icon: <PathPicture src={lessonPicture(lesson)} fallback={lesson.icon} />,
           state: "active",
           meaning: lesson.meaning[lang],
           children: lesson.tests.map((test) => ({
             id: test.testId,
             title: `${lesson.title} ${test.part}`,
-            icon: lesson.icon,
+            icon: <PathPicture src={testPicture(lesson, test)} fallback={lesson.icon} />,
             part: test.part,
             state: "active",
             meaning: `${lesson.meaning[lang]} ${test.part}`,
