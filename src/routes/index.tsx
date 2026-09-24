@@ -1,11 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import {
   Check,
   ChevronRight,
   ExternalLink,
-  Flame,
-  Heart,
+  Gem,
   Share,
   Smartphone,
   SquarePlus,
@@ -36,6 +35,16 @@ import {
 import { VocabQuiz } from "@/components/quiz/VocabQuiz";
 import { TierSteps } from "@/components/quiz/TierSteps";
 import { getTestStatus, type TestStatus } from "@/lib/progress-store";
+import {
+  DAILY_GOAL_SECONDS,
+  getGems,
+  getSparks,
+  getTodayMinutes,
+  notifyStats,
+  recordCorrectAnswer,
+  startActiveTimeTracking,
+  subscribeStats,
+} from "@/lib/stats-store";
 import type { Tier } from "@/lib/quiz-engine";
 import { GREETINGS_TEST_ID, GREETINGS_WORDS } from "@/data/greetings";
 import { FAMILY_TEST_ID, FAMILY_WORDS } from "@/data/family";
@@ -116,6 +125,11 @@ function Index() {
     () => TIERE_WORDS.map((w) => ({ id: w.id, image: w.image, label: w[lang] })),
     [lang],
   );
+  // Server snapshot is 0 (icon only) — localStorage isn't visible there.
+  const gems = useSyncExternalStore(subscribeStats, getGems, () => 0);
+  const sparks = useSyncExternalStore(subscribeStats, getSparks, () => 0);
+
+  useEffect(() => startActiveTimeTracking(), []);
 
   // Fetch a screen's word/letter clips as soon as it mounts, so tapping a
   // tile plays instantly instead of waiting on the network the first time.
@@ -235,6 +249,7 @@ function Index() {
     } catch {
       /* localStorage unavailable — nothing to clear */
     }
+    notifyStats();
     setProfile(null);
     setShowClearConfirm(false);
     setShowProfileMenu(false);
@@ -288,8 +303,10 @@ function Index() {
   const checkAnswer = (isCorrect: boolean) => {
     setChecked(true);
     setLastCorrect(isCorrect);
-    if (isCorrect) playCorrectSound();
-    else {
+    if (isCorrect) {
+      recordCorrectAnswer();
+      playCorrectSound();
+    } else {
       playWrongSound();
       setAttempts((a) => a + 1);
     }
@@ -349,11 +366,8 @@ function Index() {
           </button>
         </div>
         <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
-          <Stat icon={<Flame />} value="5" label={t.dayStreak} />
-          <Stat icon={<Zap />} value="240" label={t.experiencePoints} />
-          <span className="hidden sm:block">
-            <Stat icon={<Heart />} value="3" label={t.hearts} />
-          </span>
+          <Stat icon={<Gem />} value={gems} label={t.gems} />
+          <Stat icon={<Zap />} value={sparks} label={t.sparks} />
         </div>
       </header>
 
@@ -789,14 +803,31 @@ function Index() {
   );
 }
 
-function Stat({ icon, value, label }: { icon: React.ReactNode; value: string; label: string }) {
+// "45 min", "1 h", "1 h 30 min" — h/min read the same in every UI language.
+function formatMinutes(minutes: number): string {
+  const h = Math.floor(minutes / 60);
+  const m = minutes % 60;
+  if (h === 0) return `${m} min`;
+  return m === 0 ? `${h} h` : `${h} h ${m} min`;
+}
+
+// A zero count shows just the icon — the number only appears once it's > 0.
+function Stat({
+  icon,
+  value,
+  label,
+}: {
+  icon: React.ReactNode;
+  value: number | string;
+  label: string;
+}) {
   return (
     <span
       className="glass-panel flex items-center gap-1.5 rounded-full px-2.5 py-2 sm:px-3"
       aria-label={`${value} ${label}`}
     >
       <span className="[&_svg]:size-4">{icon}</span>
-      <span className="font-display text-sm font-bold">{value}</span>
+      {value !== 0 && <span className="font-display text-sm font-bold">{value}</span>}
     </span>
   );
 }
@@ -852,6 +883,9 @@ function Home({
   showInstall: boolean;
   onAddToHomeScreen: () => void;
 }) {
+  const todayMinutes = useSyncExternalStore(subscribeStats, getTodayMinutes, () => 0);
+  const goalMinutes = DAILY_GOAL_SECONDS / 60;
+  const goalReached = todayMinutes >= goalMinutes;
   const path = useMemo<PathNode[]>(
     () => [
       {
@@ -984,9 +1018,16 @@ function Home({
               <Sparkles className="size-8" />
             </div>
             <div className="min-w-0 flex-1">
-              <p className="font-display text-xl font-extrabold">{t.xpProgress(10, 20)}</p>
+              <p className="font-display text-xl font-extrabold">
+                {goalReached
+                  ? t.dailyGoalReached
+                  : t.dailyTimeProgress(formatMinutes(todayMinutes), formatMinutes(goalMinutes))}
+              </p>
               <div className="mt-2 h-3 overflow-hidden rounded-full bg-ice">
-                <div className="h-full w-1/2 rounded-full bg-mint" />
+                <div
+                  className="h-full rounded-full bg-mint transition-[width]"
+                  style={{ width: `${Math.min(todayMinutes / goalMinutes, 1) * 100}%` }}
+                />
               </div>
             </div>
           </div>

@@ -39,6 +39,7 @@ import {
   type QuizItem,
 } from "@/lib/quiz-engine";
 import { ensureTestEntered, getActiveTierRows, recordFail, recordPass } from "@/lib/progress-store";
+import { recordCorrectAnswer } from "@/lib/stats-store";
 import type { MotherTongue, Strings } from "@/lib/i18n";
 
 // Data-driven quiz screen for a vocabulary test (1.1 greetings, 1.2.1 family,
@@ -164,8 +165,10 @@ export function VocabQuiz({
       // further in-place retries (see `retry` below) don't stack.
       else if (attempts === 0) recordFail(testId, item.kind, derived.word.id);
     }
-    if (isCorrect) playCorrectSound();
-    else {
+    if (isCorrect) {
+      recordCorrectAnswer();
+      playCorrectSound();
+    } else {
       playWrongSound();
       setAttempts((a) => a + 1);
     }
@@ -190,7 +193,7 @@ export function VocabQuiz({
     <>
       <main className="relative z-10 mx-auto max-w-5xl px-4 pb-10 sm:px-6">
         {ready && !item && (
-          <LessonFrame t={t} eyebrow={t.roundUp} title="Geschafft!" subtitle={t.xpStreakContinues}>
+          <LessonFrame t={t} eyebrow={t.roundUp} title="Geschafft!" subtitle={t.roundSuccess}>
             <Button variant="adventure" size="lesson" className="w-full" onClick={onExit}>
               {t.backToPath}
             </Button>
@@ -548,8 +551,10 @@ export function VocabQuiz({
               words={item.words}
               onComplete={goNext}
               onAttempt={(wordId, isCorrect) => {
-                if (isCorrect) recordPass(testId, "match", wordId);
-                else recordFail(testId, "match", wordId);
+                if (isCorrect) {
+                  recordPass(testId, "match", wordId);
+                  recordCorrectAnswer();
+                } else recordFail(testId, "match", wordId);
               }}
               title="Super!"
               actionLabel="Weiter"

@@ -15,9 +15,8 @@ export interface Strings {
   openProfileMenu: string;
   closeMenu: string;
   previousScreen: string;
-  dayStreak: string;
-  experiencePoints: string;
-  hearts: string;
+  gems: string;
+  sparks: string;
   addToHomeScreen: string;
   readyForAdventure: string;
   todaysGoal: string;
@@ -25,7 +24,8 @@ export interface Strings {
   lessonComplete: (xp: number) => string;
   wordsStartHere: (count: number) => string;
   wordsLocked: (count: number) => string;
-  xpProgress: (done: number, total: number) => string;
+  dailyTimeProgress: (done: string, total: string) => string;
+  dailyGoalReached: string;
   whoAreYouSubtitle: string;
   nameLabel: string;
   ageLabel: string;
@@ -80,7 +80,7 @@ export interface Strings {
   correctMeaning: (word: string, meaning: string) => string;
   hintBird: string;
   hintGeneric: string;
-  xpStreakContinues: string;
+  roundSuccess: string;
   backToPath: string;
   expandSection: string;
   collapseSection: string;
@@ -91,9 +91,8 @@ export const TRANSLATIONS: Record<MotherTongue, Strings> = {
     openProfileMenu: "Open profile menu",
     closeMenu: "Close menu",
     previousScreen: "Previous screen",
-    dayStreak: "day streak",
-    experiencePoints: "experience points",
-    hearts: "hearts",
+    gems: "diamonds",
+    sparks: "sparks",
     addToHomeScreen: "Add to Home Screen",
     readyForAdventure: "Ready for a little German adventure?",
     todaysGoal: "TODAY'S GOAL",
@@ -101,7 +100,8 @@ export const TRANSLATIONS: Record<MotherTongue, Strings> = {
     lessonComplete: (xp) => `Complete · ${xp} XP`,
     wordsStartHere: (count) => `${count} words · Start here`,
     wordsLocked: (count) => `${count} words · Locked`,
-    xpProgress: (done, total) => `${done} / ${total} XP`,
+    dailyTimeProgress: (done, total) => `${done} / ${total}`,
+    dailyGoalReached: "Target achieved! Good luck!",
     whoAreYouSubtitle: "Tell us your name and age to start learning!",
     nameLabel: "Name",
     ageLabel: "Age",
@@ -156,7 +156,7 @@ export const TRANSLATIONS: Record<MotherTongue, Strings> = {
     correctMeaning: (word, meaning) => `${word} = ${meaning}!`,
     hintBird: "Hint: this animal has feathers and loves to sing.",
     hintGeneric: "Hint: listen to the word again and think about the picture.",
-    xpStreakContinues: "+25 XP · Your 5 day streak continues!",
+    roundSuccess: "Great job! You finished this lesson.",
     backToPath: "Back to my path",
     expandSection: "Expand",
     collapseSection: "Collapse",
@@ -165,9 +165,8 @@ export const TRANSLATIONS: Record<MotherTongue, Strings> = {
     openProfileMenu: "சுயவிவரப் பட்டியலைத் திற",
     closeMenu: "பட்டியலை மூடு",
     previousScreen: "முந்தைய திரை",
-    dayStreak: "நாள் தொடர்",
-    experiencePoints: "அனுபவப் புள்ளிகள்",
-    hearts: "இதயங்கள்",
+    gems: "வைரங்கள்",
+    sparks: "தீப்பொறிகள்",
     addToHomeScreen: "முகப்புத் திரையில் சேர்",
     readyForAdventure: "ஜெர்மன் மொழி சாகசத்திற்குத் தயாரா?",
     todaysGoal: "இன்றைய இலக்கு",
@@ -175,7 +174,8 @@ export const TRANSLATIONS: Record<MotherTongue, Strings> = {
     lessonComplete: (xp) => `முடிந்தது · ${xp} XP`,
     wordsStartHere: (count) => `${count} சொற்கள் · இங்கிருந்து தொடங்கு`,
     wordsLocked: (count) => `${count} சொற்கள் · பூட்டப்பட்டது`,
-    xpProgress: (done, total) => `${done} / ${total} XP`,
+    dailyTimeProgress: (done, total) => `${done} / ${total}`,
+    dailyGoalReached: "இலக்கை அடைந்துவிட்டாய்! வாழ்த்துகள்!",
     whoAreYouSubtitle: "கற்றலைத் தொடங்க உங்கள் பெயரையும் வயதையும் சொல்லுங்கள்!",
     nameLabel: "பெயர்",
     ageLabel: "வயது",
@@ -231,7 +231,7 @@ export const TRANSLATIONS: Record<MotherTongue, Strings> = {
     correctMeaning: (word, meaning) => `${word} = ${meaning}!`,
     hintBird: "குறிப்பு: இந்த விலங்கிற்கு இறகுகள் உண்டு, பாட விரும்பும்.",
     hintGeneric: "குறிப்பு: சொல்லை மீண்டும் கேட்டு படத்தைப் பற்றி யோசி.",
-    xpStreakContinues: "+25 XP · உங்கள் 5 நாள் தொடர் தொடர்கிறது!",
+    roundSuccess: "அருமை! இந்தப் பாடத்தை முடித்துவிட்டாய்.",
     backToPath: "என் பாதைக்குத் திரும்பு",
     expandSection: "விரிவாக்கு",
     collapseSection: "சுருக்கு",
@@ -240,9 +240,8 @@ export const TRANSLATIONS: Record<MotherTongue, Strings> = {
     openProfileMenu: "පැතිකඩ මෙනුව විවෘත කරන්න",
     closeMenu: "මෙනුව වසන්න",
     previousScreen: "පෙර තිරය",
-    dayStreak: "දින දාමය",
-    experiencePoints: "අත්දැකීම් ලකුණු",
-    hearts: "හදවත්",
+    gems: "දියමන්ති",
+    sparks: "ගිනි පුපුරු",
     addToHomeScreen: "මුල් තිරයට එකතු කරන්න",
     readyForAdventure: "ජර්මානු කුඩා වික්‍රමයකට සූදානම්ද?",
     todaysGoal: "අද දිනයේ ඉලක්කය",
@@ -250,7 +249,8 @@ export const TRANSLATIONS: Record<MotherTongue, Strings> = {
     lessonComplete: (xp) => `සම්පූර්ණයි · ${xp} XP`,
     wordsStartHere: (count) => `වචන ${count} · මෙතනින් පටන් ගන්න`,
     wordsLocked: (count) => `වචන ${count} · අගුලු දමා ඇත`,
-    xpProgress: (done, total) => `${done} / ${total} XP`,
+    dailyTimeProgress: (done, total) => `${done} / ${total}`,
+    dailyGoalReached: "ඉලක්කය සපුරා ගත්තා! සුබ පැතුම්!",
     whoAreYouSubtitle: "ඉගෙනීම ආරම්භ කිරීමට ඔබේ නම සහ වයස කියන්න!",
     nameLabel: "නම",
     ageLabel: "වයස",
@@ -305,7 +305,7 @@ export const TRANSLATIONS: Record<MotherTongue, Strings> = {
     correctMeaning: (word, meaning) => `${word} = ${meaning}!`,
     hintBird: "ඉඟිය: මෙම සතාට පිහාටු ඇති අතර ගායනා කිරීමට කැමතියි.",
     hintGeneric: "ඉඟිය: වචනය නැවත අසා පින්තූරය ගැන සිතන්න.",
-    xpStreakContinues: "+25 XP · ඔබේ දින 5 දාමය දිගටම පවතී!",
+    roundSuccess: "නියමයි! ඔබ මෙම පාඩම අවසන් කළා.",
     backToPath: "මගේ මාවතට ආපසු",
     expandSection: "විස්තීරණය කරන්න",
     collapseSection: "හකුළන්න",
