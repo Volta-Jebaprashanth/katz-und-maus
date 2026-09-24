@@ -192,17 +192,47 @@ function stopActive() {
   activeSource = null;
 }
 
+// Mobile browsers suspend (iOS: "interrupt") the AudioContext when the app is
+// backgrounded or the phone locks, and on return resume() often never brings
+// it back, so every later clip played into a dead context and was silent.
+// Instead the context is dropped whenever the page is hidden and a fresh one
+// is made on the next tap (inside that user gesture, so it's allowed to
+// start). Decoded clips aren't tied to a context (they're decoded with an
+// OfflineAudioContext), so nothing needs re-fetching.
+function dropContext() {
+  stopActive();
+  const ctx = audioCtx;
+  audioCtx = null;
+  void ctx?.close().catch(() => {
+    /* already closed */
+  });
+}
+
+if (typeof document !== "undefined") {
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "hidden") dropContext();
+  });
+  window.addEventListener("pagehide", dropContext);
+}
+
+function context(): AudioContext {
+  const state = audioCtx?.state as string | undefined;
+  if (state === "closed" || state === "interrupted") dropContext();
+  audioCtx ??= new AudioContext();
+  if (audioCtx.state !== "running") void audioCtx.resume();
+  return audioCtx;
+}
+
 function playClip(src: string) {
   stopActive();
   const ready = clips.get(src);
   if (ready) {
     clips.delete(src);
     clips.set(src, ready);
-    audioCtx ??= new AudioContext();
-    if (audioCtx.state !== "running") void audioCtx.resume();
-    const source = audioCtx.createBufferSource();
+    const ctx = context();
+    const source = ctx.createBufferSource();
     source.buffer = ready.buffer;
-    source.connect(audioCtx.destination);
+    source.connect(ctx.destination);
     source.start(0, ready.offset);
     activeSource = source;
     return;
