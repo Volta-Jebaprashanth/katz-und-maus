@@ -1100,18 +1100,24 @@ function PathTree({
                   </span>
                 )}
               </button>
-              <button type="button" onClick={openCard} className="min-w-0 flex-1 text-left">
-                <span
-                  className={cn(
-                    "block font-display font-extrabold",
-                    depth === 0 ? "text-lg" : "text-base",
-                  )}
-                >
-                  {node.title}
+              <button
+                type="button"
+                onClick={openCard}
+                className="flex min-w-0 flex-1 items-center gap-3 self-stretch text-left"
+              >
+                <span className="min-w-0 flex-1">
+                  <span
+                    className={cn(
+                      "block font-display font-extrabold",
+                      depth === 0 ? "text-lg" : "text-base",
+                    )}
+                  >
+                    {node.title}
+                  </span>
+                  <span className="block text-xs font-bold text-ink-soft">{node.meaning}</span>
                 </span>
-                <span className="block text-xs font-bold text-ink-soft">{node.meaning}</span>
+                {currentTier && <TierSteps tier={currentTier} />}
               </button>
-              {currentTier && <TierSteps tier={currentTier} />}
               {hasChildren && (
                 <button
                   type="button"
