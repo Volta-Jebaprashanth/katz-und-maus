@@ -144,3 +144,59 @@ required).
 | order.jpg | bestellen | https://www.pexels.com/photo/waiter-taking-orders-from-customers-4921164/ |
 | pay.jpg | bezahlen | https://www.pexels.com/photo/man-sitting-at-the-table-paying-by-card-and-smiling-at-a-woman-holding-the-payment-terminal-5332487/ |
 | taste.jpg | schmecken | https://www.pexels.com/photo/woman-holding-spoon-trying-to-eat-white-food-733851/ |
+
+## Test 1.2.3 — Haus & Zimmer
+
+The 46 photos under `public/1.2.3 home/images/` are real photos from
+[Pexels](https://www.pexels.com), cropped to a square 640x640, under the same
+[Pexels License](https://www.pexels.com/license/) (free to use, no attribution
+required).
+
+| File | German word | Source |
+| ---- | ----------- | ------ |
+| house.jpg | das Haus | https://www.pexels.com/photo/front-exterior-of-a-family-home-8031873/ |
+| apartment.jpg | die Wohnung | https://www.pexels.com/photo/balconies-on-an-apartment-building-10530185/ |
+| room.jpg | das Zimmer | https://www.pexels.com/photo/an-empty-room-in-a-modern-house-16641359/ |
+| bedroom.jpg | das Schlafzimmer | https://www.pexels.com/photo/bright-luxury-bedroom-interior-design-8135502/ |
+| living-room.jpg | das Wohnzimmer | https://www.pexels.com/photo/living-room-interior-with-cozy-sofa-in-house-5825398/ |
+| bathroom.jpg | das Badezimmer | https://www.pexels.com/photo/interior-of-bathroom-6920614/ |
+| kitchen.jpg | die Küche | https://www.pexels.com/photo/photo-of-kitchen-interior-4713242/ |
+| hallway.jpg | der Flur | https://www.pexels.com/photo/corridor-interior-of-classic-house-with-gray-walls-6587823/ |
+| balcony.jpg | der Balkon | https://www.pexels.com/photo/potted-plant-and-chair-on-balcony-5028853/ |
+| garden.jpg | der Garten | https://www.pexels.com/photo/house-backyard-with-lawn-green-grass-7546775/ |
+| door.jpg | die Tür | https://www.pexels.com/photo/closed-wooden-door-2183865/ |
+| window.jpg | das Fenster | https://www.pexels.com/photo/glass-windows-with-white-wooden-frame-5900792/ |
+| wall.jpg | die Wand | https://www.pexels.com/photo/woman-painting-the-wall-with-a-roller-brush-7218683/ |
+| floor.jpg | der Boden | https://www.pexels.com/photo/a-girl-lying-on-the-wooden-floor-7186621/ |
+| stairs.jpg | die Treppe | https://www.pexels.com/photo/wooden-staircase-at-home-15758635/ |
+| table.jpg | der Tisch | https://www.pexels.com/photo/close-up-of-a-wooden-table-11112739/ |
+| chair.jpg | der Stuhl | https://www.pexels.com/photo/wooden-chair-on-a-white-wall-studio-963486/ |
+| bed.jpg | das Bett | https://www.pexels.com/photo/a-modern-bedroom-interior-18738880/ |
+| sofa.jpg | das Sofa | https://www.pexels.com/photo/gray-sectional-couch-276663/ |
+| wardrobe.jpg | der Schrank | https://www.pexels.com/photo/oak-wood-wardrobe-with-clothes-and-shoes-19878531/ |
+| shelf.jpg | das Regal | https://www.pexels.com/photo/a-white-shelves-with-plants-and-books-5264876/ |
+| lamp.jpg | die Lampe | https://www.pexels.com/photo/powered-on-gold-desk-lamp-on-desk-with-opened-book-2168382/ |
+| television.jpg | der Fernseher | https://www.pexels.com/photo/flat-screen-tv-1571458/ |
+| refrigerator.jpg | der Kühlschrank | https://www.pexels.com/photo/yellow-refrigerator-in-the-kitchen-9914684/ |
+| stove.jpg | der Herd | https://www.pexels.com/photo/gas-stove-3722212/ |
+| oven.jpg | der Ofen | https://www.pexels.com/photo/a-woman-cooking-food-in-the-oven-7669757/ |
+| washing-machine.jpg | die Waschmaschine | https://www.pexels.com/photo/man-taking-laundry-out-of-the-washing-machine-5901622/ |
+| shower.jpg | die Dusche | https://www.pexels.com/photo/tap-water-coming-out-of-shower-head-7300959/ |
+| bathtub.jpg | die Badewanne | https://www.pexels.com/photo/white-bathtub-in-bathroom-1571461/ |
+| toilet.jpg | die Toilette | https://www.pexels.com/photo/a-white-toilet-bowl-inside-the-comfort-room-8146162/ |
+| mirror.jpg | der Spiegel | https://www.pexels.com/photo/boy-looking-at-a-wall-mirror-6336667/ |
+| key.jpg | der Schlüssel | https://www.pexels.com/photo/hand-holding-keys-in-front-of-a-new-home-door-30332492/ |
+| bag.jpg | die Tasche | https://www.pexels.com/photo/tote-bag-by-the-tree-in-a-park-19517458/ |
+| mobile-phone.jpg | das Handy | https://www.pexels.com/photo/a-person-holding-a-smartphone-11772521/ |
+| computer.jpg | der Computer | https://www.pexels.com/photo/turned-on-monitor-keyboard-and-items-on-desk-1714341/ |
+| clean.jpg | sauber | https://www.pexels.com/photo/interior-of-children-bedroom-with-wooden-furniture-and-toys-and-globe-placed-on-shelves-in-room-3932930/ |
+| dirty.jpg | schmutzig | https://www.pexels.com/photo/a-boy-with-dirty-hands-8382811/ |
+| big.jpg | groß | https://www.pexels.com/photo/a-man-standing-beside-the-brown-elephant-11309698/ |
+| small.jpg | klein | https://www.pexels.com/photo/hands-of-a-child-holding-a-cute-kitten-17510905/ |
+| beautiful.jpg | schön | https://www.pexels.com/photo/charming-brick-cottage-with-rose-garden-28497905/ |
+| comfortable.jpg | bequem | https://www.pexels.com/photo/a-girl-sitting-on-red-bean-bag-6209074/ |
+| live.jpg | wohnen | https://www.pexels.com/photo/a-family-standing-in-front-of-their-new-house-7642220/ |
+| open.jpg | öffnen | https://www.pexels.com/photo/little-boy-in-casual-clothes-opening-door-5444930/ |
+| close.jpg | schließen | https://www.pexels.com/photo/man-closing-the-door-8107168/ |
+| cleaning.jpg | putzen | https://www.pexels.com/photo/a-person-wiping-a-table-6684752/ |
+| sleep.jpg | schlafen | https://www.pexels.com/photo/child-sleeping-in-bed-10608041/ |

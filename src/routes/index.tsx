@@ -49,6 +49,7 @@ import type { Tier } from "@/lib/quiz-engine";
 import { GREETINGS_TEST_ID, GREETINGS_WORDS } from "@/data/greetings";
 import { FAMILY_TEST_ID, FAMILY_WORDS } from "@/data/family";
 import { FOOD_TEST_ID, FOOD_WORDS } from "@/data/food";
+import { HOME_TEST_ID, HOME_WORDS } from "@/data/home";
 import { TIERE_WORDS, type VocabWord } from "@/data/vocabulary";
 import { MOTHER_TONGUES, TRANSLATIONS, type MotherTongue, type Strings } from "@/lib/i18n";
 
@@ -86,6 +87,7 @@ type Screen =
   | "greetings"
   | "family"
   | "food"
+  | "house"
   | "picture"
   | "wordPicture"
   | "meaning"
@@ -343,7 +345,9 @@ function Index() {
           ? "family"
           : nodeId === "essenTrinken"
             ? "food"
-            : "picture",
+            : nodeId === "hausZimmer"
+              ? "house"
+              : "picture",
     );
   };
   const speak = () => {
@@ -411,7 +415,17 @@ function Index() {
         />
       )}
 
-      {screen !== "greetings" && screen !== "family" && screen !== "food" && (
+      {screen === "house" && (
+        <VocabQuiz
+          testId={HOME_TEST_ID}
+          words={HOME_WORDS}
+          t={t}
+          lang={lang}
+          onExit={() => go("home")}
+        />
+      )}
+
+      {screen !== "greetings" && screen !== "family" && screen !== "food" && screen !== "house" && (
         <main className="relative z-10 mx-auto max-w-5xl px-4 pb-10 sm:px-6">
           {screen === "home" && (
             <Home
@@ -886,6 +900,11 @@ const PATH_MEANINGS = {
     tamil: "உணவு & பானங்கள்",
     sinhala: "කෑම බීම",
   },
+  hausZimmer: {
+    english: "Home & Rooms",
+    tamil: "வீடு & அறைகள்",
+    sinhala: "ගෙදර සහ කාමර",
+  },
   wortschatz: { english: "Vocabulary", tamil: "சொல்வளம்", sinhala: "වචන මාලාව" },
   tiere: { english: "Animals", tamil: "விலங்குகள்", sinhala: "සතුන්" },
   klassenzimmer: { english: "Classroom", tamil: "வகுப்பறை", sinhala: "පන්ති කාமරය" },
@@ -950,6 +969,14 @@ function Home({
                 state: "active",
                 meaning: PATH_MEANINGS.essenTrinken[lang],
                 testId: FOOD_TEST_ID,
+              },
+              {
+                id: "hausZimmer",
+                title: "Haus & Zimmer",
+                icon: "🏠",
+                state: "active",
+                meaning: PATH_MEANINGS.hausZimmer[lang],
+                testId: HOME_TEST_ID,
               },
               {
                 id: "tiere",
