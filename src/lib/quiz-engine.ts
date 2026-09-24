@@ -185,9 +185,10 @@ export function spellingOf(word: VocabWord): string {
 // uppercases, so a multi-word phrase like "Wie geht's?" becomes "WIEGEHTS"
 // for spelling/comparison purposes. "ß" becomes "SS" (what toUpperCase gives,
 // and the standard German capitalisation), so "Großvater" is spelled
-// "GROSSVATER" from the plain A-Z tiles.
+// "GROSSVATER" from the plain A-Z tiles. "É" is kept for loanwords like
+// "Café", which would otherwise be spelled "CAF".
 export function answerLetters(phrase: string): string {
-  return phrase.toUpperCase().replace(/[^A-ZÄÖÜẞ]/g, "");
+  return phrase.toUpperCase().replace(/[^A-ZÄÖÜÉẞ]/g, "");
 }
 
 // Letter counts per space-separated word, so the letter-builder can render

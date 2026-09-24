@@ -79,3 +79,68 @@ required).
 | single.jpg | ledig | https://www.pexels.com/photo/cozy-cafe-moment-with-relaxed-young-woman-30349926/ |
 | together.jpg | zusammen | https://www.pexels.com/photo/friends-sitting-on-a-blanket-in-the-forest-5506091/ |
 | alone.jpg | allein | https://www.pexels.com/photo/a-woman-sitting-on-the-bench-7155948/ |
+
+## Test 1.2.2 — Essen & Trinken
+
+The 55 photos under `public/1.2.2 food/images/` are real photos from
+[Pexels](https://www.pexels.com), cropped to a square 640x640, under the same
+[Pexels License](https://www.pexels.com/license/) (free to use, no attribution
+required).
+
+| File | German word | Source |
+| ---- | ----------- | ------ |
+| food.jpg | das Essen | https://www.pexels.com/photo/a-meal-on-a-plate-6763224/ |
+| breakfast.jpg | das Frühstück | https://www.pexels.com/photo/boy-eating-breakfast-6529875/ |
+| lunch.jpg | das Mittagessen | https://www.pexels.com/photo/a-family-eating-lunch-together-8841463/ |
+| dinner.jpg | das Abendessen | https://www.pexels.com/photo/a-family-having-dinner-at-a-table-11368700/ |
+| bread.jpg | das Brot | https://www.pexels.com/photo/loaf-of-bread-7541727/ |
+| bread-roll.jpg | das Brötchen | https://www.pexels.com/photo/tasty-soft-buns-in-wicker-basket-4197986/ |
+| rice.jpg | der Reis | https://www.pexels.com/photo/a-bowl-of-cooked-rice-8923092/ |
+| noodles.jpg | die Nudeln | https://www.pexels.com/photo/pasta-noodles-tomato-sauce-spirelli-14737/ |
+| potato.jpg | die Kartoffel | https://www.pexels.com/photo/potatoes-144248/ |
+| meat.jpg | das Fleisch | https://www.pexels.com/photo/raw-meat-on-beige-wooden-surface-618773/ |
+| chicken.jpg | das Hähnchen | https://www.pexels.com/photo/roasted-chicken-616353/ |
+| fish.jpg | der Fisch | https://www.pexels.com/photo/a-fresh-fish-on-the-ice-10892487/ |
+| egg.jpg | das Ei | https://www.pexels.com/photo/six-brown-eggs-with-tray-2959303/ |
+| sausage.jpg | die Wurst | https://www.pexels.com/photo/cooked-sausages-in-close-up-view-2901854/ |
+| cheese.jpg | der Käse | https://www.pexels.com/photo/close-up-of-parmigiano-reggiano-cheese-on-wooden-board-34037769/ |
+| soup.jpg | die Suppe | https://www.pexels.com/photo/a-close-up-shot-of-a-bowl-of-pumpkin-soup-5662122/ |
+| salad.jpg | der Salat | https://www.pexels.com/photo/bowl-of-vegetable-salad-406152/ |
+| vegetables.jpg | das Gemüse | https://www.pexels.com/photo/assorted-variety-of-vegetables-on-basket-2255924/ |
+| fruit.jpg | das Obst | https://www.pexels.com/photo/several-fruits-in-brown-wicker-basket-235294/ |
+| apple.jpg | der Apfel | https://www.pexels.com/photo/red-apple-fruit-209439/ |
+| banana.jpg | die Banane | https://www.pexels.com/photo/ripe-bananas-2316466/ |
+| orange.jpg | die Orange | https://www.pexels.com/photo/orange-fruit-161559/ |
+| tomato.jpg | die Tomate | https://www.pexels.com/photo/red-tomatoes-162830/ |
+| onion.jpg | die Zwiebel | https://www.pexels.com/photo/white-onions-533342/ |
+| carrot.jpg | die Karotte | https://www.pexels.com/photo/orange-carrots-on-table-143133/ |
+| milk.jpg | die Milch | https://www.pexels.com/photo/photo-of-boy-drinking-glass-of-milk-1210005/ |
+| water.jpg | das Wasser | https://www.pexels.com/photo/clear-drinking-glass-filled-with-water-928854/ |
+| coffee.jpg | der Kaffee | https://www.pexels.com/photo/close-up-shot-of-latte-art-coffee-in-white-ceramic-cup-13623762/ |
+| tea.jpg | der Tee | https://www.pexels.com/photo/tea-cup-and-teapot-15675493/ |
+| juice.jpg | der Saft | https://www.pexels.com/photo/selective-focus-photography-of-pure-orange-juice-158053/ |
+| beer.jpg | das Bier | https://www.pexels.com/photo/close-up-shot-of-a-glass-of-beer-6223373/ |
+| wine.jpg | der Wein | https://www.pexels.com/photo/red-wine-in-a-glass-18687127/ |
+| sugar.jpg | der Zucker | https://www.pexels.com/photo/close-up-photo-of-sugar-cubes-in-glass-jar-2523650/ |
+| salt.jpg | das Salz | https://www.pexels.com/photo/wooden-spoon-with-salt-on-table-4475228/ |
+| pepper.jpg | der Pfeffer | https://www.pexels.com/photo/shallow-focus-photography-of-peppercorns-2294291/ |
+| cake.jpg | der Kuchen | https://www.pexels.com/photo/a-slice-of-cake-with-a-birthday-candle-15307373/ |
+| ice-cream.jpg | das Eis | https://www.pexels.com/photo/child-with-melting-ice-cream-cone-5094379/ |
+| chocolate.jpg | die Schokolade | https://www.pexels.com/photo/close-up-shot-of-chocolate-bars-4113342/ |
+| restaurant.jpg | das Restaurant | https://www.pexels.com/photo/people-inside-the-restaurant-5864797/ |
+| cafe.jpg | das Café | https://www.pexels.com/photo/street-view-of-a-coffee-terrace-with-tables-and-chairs-6458/ |
+| menu.jpg | die Speisekarte | https://www.pexels.com/photo/a-couple-on-a-date-looking-at-the-restaurant-menu-5083571/ |
+| bill.jpg | die Rechnung | https://www.pexels.com/photo/women-looking-at-their-bill-5242826/ |
+| hunger.jpg | der Hunger | https://www.pexels.com/photo/a-girl-and-boy-holding-fork-and-knife-6529844/ |
+| thirst.jpg | der Durst | https://www.pexels.com/photo/photography-of-a-man-drinking-water-1126557/ |
+| delicious.jpg | lecker | https://www.pexels.com/photo/a-girl-licking-her-lips-7585982/ |
+| good.jpg | gut | https://www.pexels.com/photo/young-boy-giving-thumbs-up-indoors-29748153/ |
+| bad.jpg | schlecht | https://www.pexels.com/photo/young-man-with-a-sad-face-sitting-by-the-table-with-food-6975523/ |
+| hot.jpg | heiß | https://www.pexels.com/photo/boiling-water-in-pot-on-burner-12673645/ |
+| cold.jpg | kalt | https://www.pexels.com/photo/a-glass-filled-with-ice-cubes-12987267/ |
+| eat.jpg | essen | https://www.pexels.com/photo/boy-sitting-at-a-table-with-food-on-his-plate-4262186/ |
+| drink.jpg | trinken | https://www.pexels.com/photo/a-girl-drinking-water-from-a-glass-5062840/ |
+| cook.jpg | kochen | https://www.pexels.com/photo/mother-cooking-in-the-kitchen-with-her-child-7678046/ |
+| order.jpg | bestellen | https://www.pexels.com/photo/waiter-taking-orders-from-customers-4921164/ |
+| pay.jpg | bezahlen | https://www.pexels.com/photo/man-sitting-at-the-table-paying-by-card-and-smiling-at-a-woman-holding-the-payment-terminal-5332487/ |
+| taste.jpg | schmecken | https://www.pexels.com/photo/woman-holding-spoon-trying-to-eat-white-food-733851/ |

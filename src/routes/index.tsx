@@ -48,6 +48,7 @@ import {
 import type { Tier } from "@/lib/quiz-engine";
 import { GREETINGS_TEST_ID, GREETINGS_WORDS } from "@/data/greetings";
 import { FAMILY_TEST_ID, FAMILY_WORDS } from "@/data/family";
+import { FOOD_TEST_ID, FOOD_WORDS } from "@/data/food";
 import { TIERE_WORDS, type VocabWord } from "@/data/vocabulary";
 import { MOTHER_TONGUES, TRANSLATIONS, type MotherTongue, type Strings } from "@/lib/i18n";
 
@@ -84,6 +85,7 @@ type Screen =
   | "home"
   | "greetings"
   | "family"
+  | "food"
   | "picture"
   | "wordPicture"
   | "meaning"
@@ -334,7 +336,15 @@ function Index() {
         /* fullscreen unsupported (e.g. iOS Safari) — layout still fills the viewport */
       }
     }
-    go(nodeId === "hallo" ? "greetings" : nodeId === "familie" ? "family" : "picture");
+    go(
+      nodeId === "hallo"
+        ? "greetings"
+        : nodeId === "familie"
+          ? "family"
+          : nodeId === "essenTrinken"
+            ? "food"
+            : "picture",
+    );
   };
   const speak = () => {
     setHeard(true);
@@ -391,7 +401,17 @@ function Index() {
         />
       )}
 
-      {screen !== "greetings" && screen !== "family" && (
+      {screen === "food" && (
+        <VocabQuiz
+          testId={FOOD_TEST_ID}
+          words={FOOD_WORDS}
+          t={t}
+          lang={lang}
+          onExit={() => go("home")}
+        />
+      )}
+
+      {screen !== "greetings" && screen !== "family" && screen !== "food" && (
         <main className="relative z-10 mx-auto max-w-5xl px-4 pb-10 sm:px-6">
           {screen === "home" && (
             <Home
@@ -861,6 +881,11 @@ const PATH_MEANINGS = {
   grundlagen: { english: "Basics", tamil: "அடிப்படைகள்", sinhala: "මූලික කරුණු" },
   hallo: { english: "Hello!", tamil: "வணக்கம்!", sinhala: "ආයුබෝවන්!" },
   familie: { english: "Family", tamil: "குடும்பம்", sinhala: "පවුල" },
+  essenTrinken: {
+    english: "Food & Drinks",
+    tamil: "உணவு & பானங்கள்",
+    sinhala: "කෑම බීම",
+  },
   wortschatz: { english: "Vocabulary", tamil: "சொல்வளம்", sinhala: "වචන මාලාව" },
   tiere: { english: "Animals", tamil: "விலங்குகள்", sinhala: "සතුන්" },
   klassenzimmer: { english: "Classroom", tamil: "வகுப்பறை", sinhala: "පන්ති කාமරය" },
@@ -917,6 +942,14 @@ function Home({
                 state: "active",
                 meaning: PATH_MEANINGS.familie[lang],
                 testId: FAMILY_TEST_ID,
+              },
+              {
+                id: "essenTrinken",
+                title: "Essen & Trinken",
+                icon: "🍽️",
+                state: "active",
+                meaning: PATH_MEANINGS.essenTrinken[lang],
+                testId: FOOD_TEST_ID,
               },
               {
                 id: "tiere",
