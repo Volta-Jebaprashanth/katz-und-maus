@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import {
   Check,
   ChevronRight,
@@ -34,6 +34,8 @@ import {
   WordCard,
 } from "@/components/quiz/pieces";
 import { VocabQuiz } from "@/components/quiz/VocabQuiz";
+import { getTestStatus, type TestStatus } from "@/lib/progress-store";
+import { TIER_ORDER, type Tier } from "@/lib/quiz-engine";
 import { GREETINGS_TEST_ID, GREETINGS_WORDS } from "@/data/greetings";
 import { FAMILY_TEST_ID, FAMILY_WORDS } from "@/data/family";
 import { TIERE_WORDS, type VocabWord } from "@/data/vocabulary";
@@ -804,8 +806,61 @@ type PathNode = {
   icon: React.ReactNode;
   state: "done" | "active";
   meaning: string;
+  // The VocabQuiz test this node opens, if any — drives its tier badge and
+  // completed tick (see getTestStatus).
+  testId?: string;
   children?: PathNode[];
 };
+
+// A 4-step "you are here" track, one dot per tier in tier order, joined by
+// short lines: cleared tiers are solid dots in their color, the tier being
+// worked on is a bigger pulsing dot, the rest are grey outlines. Reads as
+// "how far along", not as "how hard this exercise is" — a plain "Basic"
+// label looked like the exercise itself was easy.
+const TIER_STEP_COLORS: Record<Tier, { bg: string; border: string; ring: string }> = {
+  basic: { bg: "bg-sky-500", border: "border-sky-500", ring: "ring-sky-500/30" },
+  easy: { bg: "bg-success", border: "border-success", ring: "ring-success/30" },
+  medium: { bg: "bg-amber-400", border: "border-amber-400", ring: "ring-amber-400/30" },
+  hard: { bg: "bg-berry", border: "border-berry", ring: "ring-berry/30" },
+};
+
+function TierSteps({ tier }: { tier: Tier }) {
+  const current = TIER_ORDER.indexOf(tier);
+  return (
+    <span
+      className="flex shrink-0 items-center"
+      role="img"
+      aria-label={`Level ${current + 1} of ${TIER_ORDER.length}`}
+    >
+      {TIER_ORDER.map((t, i) => (
+        <Fragment key={t}>
+          {i > 0 && (
+            <span
+              className={cn("h-0.5 w-3", i <= current ? TIER_STEP_COLORS[t].bg : "bg-ink-soft/25")}
+            />
+          )}
+          <span
+            className={cn(
+              "rounded-full border-2",
+              i === current ? "size-3.5 animate-pulse" : "size-2.5",
+              i <= current
+                ? cn(TIER_STEP_COLORS[t].bg, TIER_STEP_COLORS[t].border)
+                : "border-ink-soft/30",
+              i === current && cn("ring-2", TIER_STEP_COLORS[t].ring),
+            )}
+          />
+        </Fragment>
+      ))}
+    </span>
+  );
+}
+
+function collectTestIds(nodes: PathNode[]): string[] {
+  return nodes.flatMap((node) => [
+    ...(node.testId ? [node.testId] : []),
+    ...(node.children ? collectTestIds(node.children) : []),
+  ]);
+}
 
 function collectContainerIds(nodes: PathNode[]): string[] {
   return nodes.flatMap((node) =>
@@ -852,8 +907,9 @@ function Home({
             id: "hallo",
             title: "Hallo!",
             icon: "👋",
-            state: "done",
+            state: "active",
             meaning: PATH_MEANINGS.hallo[lang],
+            testId: GREETINGS_TEST_ID,
           },
           {
             id: "wortschatz",
@@ -868,6 +924,7 @@ function Home({
                 icon: "👨‍👩‍👧",
                 state: "active",
                 meaning: PATH_MEANINGS.familie[lang],
+                testId: FAMILY_TEST_ID,
               },
               {
                 id: "tiere",
@@ -913,6 +970,14 @@ function Home({
       return next;
     });
   const handleCardClick = (node: PathNode) => onStart(node.id);
+  // Read after mount rather than during render: progress lives in
+  // localStorage, which the server render can't see.
+  const [statuses, setStatuses] = useState<Record<string, TestStatus>>({});
+  useEffect(() => {
+    setStatuses(
+      Object.fromEntries(collectTestIds(path).map((testId) => [testId, getTestStatus(testId)])),
+    );
+  }, [path]);
 
   return (
     <div className="grid gap-5 lg:grid-cols-[1fr_0.72fr]">
@@ -947,6 +1012,7 @@ function Home({
             nodes={path}
             depth={0}
             expanded={expanded}
+            statuses={statuses}
             onToggle={toggleNode}
             onCardClick={handleCardClick}
           />
@@ -987,6 +1053,7 @@ function PathTree({
   nodes,
   depth,
   expanded,
+  statuses,
   onToggle,
   onCardClick,
 }: {
@@ -994,6 +1061,7 @@ function PathTree({
   nodes: PathNode[];
   depth: number;
   expanded: Set<string>;
+  statuses: Record<string, TestStatus>;
   onToggle: (id: string) => void;
   onCardClick: (node: PathNode) => void;
 }) {
@@ -1003,6 +1071,9 @@ function PathTree({
         const hasChildren = !!node.children?.length;
         const isExpanded = expanded.has(node.id);
         const openCard = () => onCardClick(node);
+        const status = node.testId ? statuses[node.testId] : undefined;
+        const state = status?.kind === "completed" ? "done" : node.state;
+        const currentTier = status?.kind === "inProgress" ? status.tier : undefined;
         return (
           <div key={node.id}>
             <div
@@ -1018,12 +1089,12 @@ function PathTree({
                 className={cn(
                   "relative z-10 grid shrink-0 place-items-center rounded-full border-4 border-frost shadow-md [&>svg]:size-5",
                   depth === 0 ? "size-14 text-2xl" : "size-11 text-lg",
-                  node.state === "done" && "bg-mint",
-                  node.state === "active" && "animate-bob bg-frost",
+                  state === "done" && "bg-mint",
+                  state === "active" && "animate-bob bg-frost",
                 )}
               >
                 {node.icon}
-                {node.state === "done" && (
+                {state === "done" && (
                   <span className="absolute -bottom-1 -right-1 grid size-5 place-items-center rounded-full bg-success ring-2 ring-frost">
                     <Check className="size-3 text-primary-foreground" />
                   </span>
@@ -1040,6 +1111,7 @@ function PathTree({
                 </span>
                 <span className="block text-xs font-bold text-ink-soft">{node.meaning}</span>
               </button>
+              {currentTier && <TierSteps tier={currentTier} />}
               {hasChildren && (
                 <button
                   type="button"
@@ -1063,6 +1135,7 @@ function PathTree({
                 nodes={node.children!}
                 depth={depth + 1}
                 expanded={expanded}
+                statuses={statuses}
                 onToggle={onToggle}
                 onCardClick={onCardClick}
               />

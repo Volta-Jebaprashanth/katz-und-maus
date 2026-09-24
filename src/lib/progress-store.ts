@@ -1,4 +1,4 @@
-import { TIER_ORDER, tierOfType, type TestType } from "@/lib/quiz-engine";
+import { TIER_ORDER, tierOfType, type TestType, type Tier } from "@/lib/quiz-engine";
 
 // Local-only mastery tracking. Each test (e.g. "1.1" for greetings) gets one
 // row per (testType, word) combination — 100 rows for a 10-word/10-type test
@@ -166,4 +166,19 @@ function updateRow(
   test.completed = test.completed || Object.values(test.rows).every((pending) => pending === 0);
   store.tests[testId] = test;
   writeStore(store);
+}
+
+// What the learning path shows for a test: nothing until it's been entered,
+// the tier currently being worked through while in progress, and just a
+// "completed" tick once it's done — completion is permanent, so re-entering
+// a finished test for practice never brings the tier badge back.
+export type TestStatus =
+  { kind: "notStarted" } | { kind: "inProgress"; tier: Tier } | { kind: "completed" };
+
+export function getTestStatus(testId: string): TestStatus {
+  const test = readStore().tests[testId];
+  if (!test || Object.keys(test.rows).length === 0) return { kind: "notStarted" };
+  if (test.completed) return { kind: "completed" };
+  const tier = getActiveTierRows(testId)[0]?.testType;
+  return tier ? { kind: "inProgress", tier: tierOfType(tier) } : { kind: "completed" };
 }
