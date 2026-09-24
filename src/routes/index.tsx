@@ -837,6 +837,8 @@ type PathNode = {
   // The VocabQuiz test this node opens, if any — drives its tier badge and
   // completed tick (see getTestStatus).
   testId?: string;
+  // A numbered test's part, shown in a circle after the title ("Hallo ①").
+  part?: number;
   children?: PathNode[];
 };
 
@@ -890,6 +892,7 @@ function Home({
             id: test.testId,
             title: `${lesson.title} ${test.part}`,
             icon: lesson.icon,
+            part: test.part,
             state: "active",
             meaning: `${lesson.meaning[lang]} ${test.part}`,
             testId: test.testId,
@@ -1092,7 +1095,16 @@ function PathTree({
                       depth === 0 ? "text-lg" : "text-base",
                     )}
                   >
-                    {node.title}
+                    {node.part === undefined ? (
+                      node.title
+                    ) : (
+                      <>
+                        {node.title.slice(0, -String(node.part).length).trimEnd()}{" "}
+                        <span className="ml-0.5 inline-grid size-6 place-items-center rounded-full bg-primary align-middle text-sm leading-none text-primary-foreground">
+                          {node.part}
+                        </span>
+                      </>
+                    )}
                   </span>
                   <span className="block text-xs font-bold text-ink-soft">{node.meaning}</span>
                 </span>
