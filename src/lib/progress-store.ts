@@ -4,7 +4,9 @@ import { TIER_ORDER, tierOfType, type TestType } from "@/lib/quiz-engine";
 // row per (testType, word) combination — 100 rows for a 10-word/10-type test
 // — holding a `pendingAttempts` counter instead of a pass/fail log:
 //   - a test is first entered           -> every row starts at 1
+//                                          (3 for basic-tier rows)
 //   - the FIRST wrong attempt on a row  -> pending = min(pending + 2, 4)
+//                                          (max 5 for basic-tier rows)
 //   - whenever that row is finally passed (first try or after retries)
 //                                       -> pending = max(pending - 1, 0)
 // A test is "complete" once every one of its rows is 0. Re-entering an
@@ -18,19 +20,31 @@ import { TIER_ORDER, tierOfType, type TestType } from "@/lib/quiz-engine";
 // test-type list, so content changes between app builds never strand a
 // kid's saved progress: a row for a word/type that's been removed is
 // dropped (and can no longer block completion), and a row for a newly added
-// word/type is created fresh at 1 — even mid-progress, not just on a fresh
+// word/type is created fresh (see startPending) — even mid-progress, not just on a fresh
 // start. See ensureTestEntered.
 //
-// Rounds are strictly tier-gated (easy -> medium -> hard, see quiz-engine.ts
-// TIER_ORDER): every row across all 3 tiers exists from the moment a test is
-// entered, but getActiveTierRows only ever hands back rows from the
+// Rounds are strictly tier-gated (basic -> easy -> medium -> hard, see
+// quiz-engine.ts TIER_ORDER): every row across all 4 tiers exists from the
+// moment a test is entered, but getActiveTierRows only ever hands back rows from the
 // earliest tier that isn't fully cleared yet, so nothing from medium is
-// ever queued while an easy row is still pending, etc.
+// ever queued while an easy row is still pending, etc. The basic tier
+// starts each row at 3 (and caps at 5) so a kid sees every word several
+// times in its simplest form before anything harder shows up.
 const PROGRESS_KEY = "wortwunder:progress";
 const SCHEMA_VERSION = 2;
 const START_PENDING = 1;
 const FAIL_PENALTY = 2;
 const MAX_PENDING = 4;
+const BASIC_START_PENDING = 3;
+const BASIC_MAX_PENDING = 5;
+
+function startPending(testType: TestType): number {
+  return tierOfType(testType) === "basic" ? BASIC_START_PENDING : START_PENDING;
+}
+
+function maxPending(testType: TestType): number {
+  return tierOfType(testType) === "basic" ? BASIC_MAX_PENDING : MAX_PENDING;
+}
 
 interface TestState {
   completed: boolean;
@@ -85,14 +99,15 @@ export function ensureTestEntered(testId: string, wordIds: string[], testTypes: 
   // Rebuilt from the current word/type lists every time, so a row whose key
   // no longer matches a real word+testType combo simply isn't carried over
   // (dropped), while every combo that IS current gets a row — reusing its
-  // existing pendingAttempts when resuming, or starting at 1 when it's new
-  // or this is a full reset. All 3 tiers' rows are populated up front even
-  // though presentation is tier-gated — see getActiveTierRows.
+  // existing pendingAttempts when resuming, or starting fresh (see
+  // startPending) when it's new or this is a full reset. All 4 tiers' rows
+  // are populated up front even though presentation is tier-gated — see getActiveTierRows.
   const rows: Record<string, number> = {};
   for (const wordId of wordIds) {
     for (const testType of testTypes) {
       const key = rowKey(testType, wordId);
-      rows[key] = resetAll ? START_PENDING : (existing!.rows[key] ?? START_PENDING);
+      const start = startPending(testType);
+      rows[key] = resetAll ? start : (existing!.rows[key] ?? start);
     }
   }
   store.tests[testId] = {
@@ -111,7 +126,8 @@ export function getPendingRows(testId: string): PendingRow[] {
 }
 
 // The rows the queue should draw from right now: whatever's still pending
-// in the earliest tier (easy -> medium -> hard) that isn't fully cleared.
+// in the earliest tier (basic -> easy -> medium -> hard) that isn't fully
+// cleared.
 // Later tiers' rows already exist (see ensureTestEntered) but are withheld
 // until every row ahead of them in tier order hits 0.
 export function getActiveTierRows(testId: string): PendingRow[] {
@@ -128,7 +144,9 @@ export function isTestCompleted(testId: string): boolean {
 }
 
 export function recordFail(testId: string, testType: TestType, wordId: string) {
-  updateRow(testId, testType, wordId, (pending) => Math.min(pending + FAIL_PENALTY, MAX_PENDING));
+  updateRow(testId, testType, wordId, (pending) =>
+    Math.min(pending + FAIL_PENALTY, maxPending(testType)),
+  );
 }
 
 export function recordPass(testId: string, testType: TestType, wordId: string) {
@@ -144,7 +162,7 @@ function updateRow(
   const store = readStore();
   const test = store.tests[testId] ?? { completed: false, rows: {} };
   const key = rowKey(testType, wordId);
-  test.rows[key] = next(test.rows[key] ?? START_PENDING);
+  test.rows[key] = next(test.rows[key] ?? startPending(testType));
   test.completed = test.completed || Object.values(test.rows).every((pending) => pending === 0);
   store.tests[testId] = test;
   writeStore(store);

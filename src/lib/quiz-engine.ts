@@ -1,14 +1,14 @@
 import type { VocabWord } from "@/data/vocabulary";
 
-// Generic quiz-queue builder: N words x 10 test types, grouped into three
-// difficulty tiers (4 easy, 3 medium, 3 hard). Rounds are strictly tier-gated —
-// see buildRoundFromRows below — so nothing from the medium tier is ever
-// queued while any easy row is still outstanding, and likewise hard waits
-// on medium (the "match" test type is grouped rather than per-word, so a
+// Generic quiz-queue builder: N words x 10 test types, grouped into four
+// difficulty tiers (1 basic, 3 easy, 3 medium, 3 hard). Rounds are strictly
+// tier-gated — see buildRoundFromRows below — so nothing from the easy tier
+// is ever queued while any basic row is still outstanding, and likewise
+// medium waits on easy and hard waits on medium (the "match" test type is grouped rather than per-word, so a
 // tier lands at 10 items instead of 40 once it's match's turn).
-export type Tier = "easy" | "medium" | "hard";
+export type Tier = "basic" | "easy" | "medium" | "hard";
 
-export const TIER_ORDER: Tier[] = ["easy", "medium", "hard"];
+export const TIER_ORDER: Tier[] = ["basic", "easy", "medium", "hard"];
 
 export type TestType =
   | "picture"
@@ -23,12 +23,14 @@ export type TestType =
   | "match";
 
 export const TEST_TIERS: Record<Tier, TestType[]> = {
-  easy: ["picture", "wordPicture", "meaning", "listen"],
+  basic: ["wordPicture"],
+  easy: ["picture", "meaning", "listen"],
   medium: ["missing", "listenPicture", "translate"],
   hard: ["build", "listenBuild", "match"],
 };
 
 export const ALL_TEST_TYPES: TestType[] = [
+  ...TEST_TIERS.basic,
   ...TEST_TIERS.easy,
   ...TEST_TIERS.medium,
   ...TEST_TIERS.hard,

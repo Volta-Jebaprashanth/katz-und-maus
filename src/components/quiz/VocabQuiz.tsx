@@ -44,8 +44,8 @@ import type { MotherTongue, Strings } from "@/lib/i18n";
 // ...): every word x 10 test types. Rounds are strictly tier-gated — every round's queue is built
 // from whatever (word, testType) rows are still pending (pendingAttempts >
 // 0 in progress-store.ts) in the EARLIEST tier that isn't fully cleared, so
-// no medium-tier item ever appears while an easy row is outstanding, and
-// likewise hard waits on medium. The lesson keeps looping within (and then
+// no easy-tier item ever appears while a basic row is outstanding, and
+// likewise medium waits on easy and hard on medium. The lesson keeps looping within (and then
 // across) tiers until every row is mastered (pending 0). Renders one item
 // at a time using the shared pieces from components/quiz/pieces.tsx instead
 // of the Vogel lesson's hand-written per-screen JSX in routes/index.tsx.
