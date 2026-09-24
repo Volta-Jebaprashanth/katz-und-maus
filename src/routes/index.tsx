@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Fragment, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Check,
   ChevronRight,
@@ -34,8 +34,9 @@ import {
   WordCard,
 } from "@/components/quiz/pieces";
 import { VocabQuiz } from "@/components/quiz/VocabQuiz";
+import { TierSteps } from "@/components/quiz/TierSteps";
 import { getTestStatus, type TestStatus } from "@/lib/progress-store";
-import { TIER_ORDER, type Tier } from "@/lib/quiz-engine";
+import type { Tier } from "@/lib/quiz-engine";
 import { GREETINGS_TEST_ID, GREETINGS_WORDS } from "@/data/greetings";
 import { FAMILY_TEST_ID, FAMILY_WORDS } from "@/data/family";
 import { TIERE_WORDS, type VocabWord } from "@/data/vocabulary";
@@ -811,49 +812,6 @@ type PathNode = {
   testId?: string;
   children?: PathNode[];
 };
-
-// A 4-step "you are here" track, one dot per tier in tier order, joined by
-// short lines: cleared tiers are solid dots in their color, the tier being
-// worked on is a bigger pulsing dot, the rest are grey outlines. Reads as
-// "how far along", not as "how hard this exercise is" — a plain "Basic"
-// label looked like the exercise itself was easy.
-const TIER_STEP_COLORS: Record<Tier, { bg: string; border: string; ring: string }> = {
-  basic: { bg: "bg-sky-500", border: "border-sky-500", ring: "ring-sky-500/30" },
-  easy: { bg: "bg-success", border: "border-success", ring: "ring-success/30" },
-  medium: { bg: "bg-amber-400", border: "border-amber-400", ring: "ring-amber-400/30" },
-  hard: { bg: "bg-berry", border: "border-berry", ring: "ring-berry/30" },
-};
-
-function TierSteps({ tier }: { tier: Tier }) {
-  const current = TIER_ORDER.indexOf(tier);
-  return (
-    <span
-      className="flex shrink-0 items-center"
-      role="img"
-      aria-label={`Level ${current + 1} of ${TIER_ORDER.length}`}
-    >
-      {TIER_ORDER.map((t, i) => (
-        <Fragment key={t}>
-          {i > 0 && (
-            <span
-              className={cn("h-0.5 w-3", i <= current ? TIER_STEP_COLORS[t].bg : "bg-ink-soft/25")}
-            />
-          )}
-          <span
-            className={cn(
-              "rounded-full border-2",
-              i === current ? "size-3.5 animate-pulse" : "size-2.5",
-              i <= current
-                ? cn(TIER_STEP_COLORS[t].bg, TIER_STEP_COLORS[t].border)
-                : "border-ink-soft/30",
-              i === current && cn("ring-2", TIER_STEP_COLORS[t].ring),
-            )}
-          />
-        </Fragment>
-      ))}
-    </span>
-  );
-}
 
 function collectTestIds(nodes: PathNode[]): string[] {
   return nodes.flatMap((node) => [

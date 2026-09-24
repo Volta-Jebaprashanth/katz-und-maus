@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { playLetter, playWord } from "@/lib/word-audio";
 import { playCorrectSound, playWrongSound } from "@/lib/feedback-sound";
-import { shuffle } from "@/lib/quiz-engine";
+import { shuffle, type Tier } from "@/lib/quiz-engine";
+import { TierSteps } from "@/components/quiz/TierSteps";
 import { placeholderFor } from "@/lib/thumbhash";
 import type { MotherTongue, Strings } from "@/lib/i18n";
 
@@ -21,17 +22,27 @@ export function LessonFrame({
   eyebrow,
   title,
   subtitle,
+  tier,
   children,
 }: {
   t: Strings;
   eyebrow: string;
   title: string;
   subtitle: string;
+  // The tier this question belongs to — shows the tier progress track in the
+  // top-right corner, level with the eyebrow (the test name, e.g. "Word to
+  // picture").
+  tier?: Tier | undefined;
   children: React.ReactNode;
 }) {
   return (
     <section className="glass-panel mx-auto max-w-3xl rounded-[28px] p-5 sm:p-8">
-      <p className="text-xs font-extrabold uppercase tracking-[0.14em] text-ink-soft">{eyebrow}</p>
+      <div className="flex items-center justify-between gap-3">
+        <p className="text-xs font-extrabold uppercase tracking-[0.14em] text-ink-soft">
+          {eyebrow}
+        </p>
+        {tier && <TierSteps tier={tier} />}
+      </div>
       <h1 className="mt-1 font-display text-3xl font-extrabold sm:text-4xl">
         <button
           type="button"
@@ -719,7 +730,7 @@ export function ResultCard({
           correct ? "bg-success-soft" : "bg-danger-soft",
         )}
       >
-        <div className="flex items-center gap-3">
+        <div className="flex items-center justify-between gap-3">
           <span
             className={cn(
               "grid size-11 shrink-0 place-items-center rounded-full",

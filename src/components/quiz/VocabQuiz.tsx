@@ -34,6 +34,7 @@ import {
   missingLetterQuestion,
   shuffle,
   spellingOf,
+  tierOfType,
   wordSegments,
   type QuizItem,
 } from "@/lib/quiz-engine";
@@ -82,6 +83,8 @@ export function VocabQuiz({
   const [attempts, setAttempts] = useState(0);
   const item: QuizItem | undefined = queue[index];
   const spokenWord = item && item.kind !== "match" ? item.word.full : "";
+  // Rounds are tier-gated, so the current item's tier is the test's tier.
+  const tier = item ? tierOfType(item.kind) : undefined;
   const audioReady = useSyncExternalStore(
     subscribeAudio,
     () => isWordReady(spokenWord),
@@ -198,6 +201,7 @@ export function VocabQuiz({
           <LessonFrame
             t={t}
             eyebrow={t.pictureChallenge}
+            tier={tier}
             title="Was ist das?"
             subtitle={t.chooseGermanWordForPicture}
           >
@@ -227,6 +231,7 @@ export function VocabQuiz({
           <LessonFrame
             t={t}
             eyebrow={t.wordPictureChallenge}
+            tier={tier}
             title="Welches Bild ist das?"
             subtitle={t.chooseGermanPictureForWord}
           >
@@ -252,6 +257,7 @@ export function VocabQuiz({
           <LessonFrame
             t={t}
             eyebrow={t.meaningCheck}
+            tier={tier}
             title="Was bedeutet das?"
             subtitle={t.chooseMeaning}
           >
@@ -278,6 +284,7 @@ export function VocabQuiz({
           <LessonFrame
             t={t}
             eyebrow={t.translationChallenge}
+            tier={tier}
             title="Wie sagt man das auf Deutsch?"
             subtitle={t.chooseGermanWord}
           >
@@ -303,6 +310,7 @@ export function VocabQuiz({
           <LessonFrame
             t={t}
             eyebrow={t.wordBuilder}
+            tier={tier}
             title="Baue das Wort"
             subtitle={t.tapLettersToSpell(derived.word.full)}
           >
@@ -342,6 +350,7 @@ export function VocabQuiz({
           <LessonFrame
             t={t}
             eyebrow={t.missingLetter}
+            tier={tier}
             title="Welcher Buchstabe fehlt?"
             subtitle={t.pickLetterThatCompletes}
           >
@@ -404,6 +413,7 @@ export function VocabQuiz({
           <LessonFrame
             t={t}
             eyebrow={t.listeningChallenge}
+            tier={tier}
             title="Was hörst du?"
             subtitle={t.listenThenChoose}
           >
@@ -441,6 +451,7 @@ export function VocabQuiz({
           <LessonFrame
             t={t}
             eyebrow={t.listeningChallenge}
+            tier={tier}
             title="Baue das Wort"
             subtitle={t.listenThenSpell}
           >
@@ -488,6 +499,7 @@ export function VocabQuiz({
           <LessonFrame
             t={t}
             eyebrow={t.listeningChallenge}
+            tier={tier}
             title="Welches Bild hörst du?"
             subtitle={t.listenThenTapPicture}
           >
@@ -525,6 +537,7 @@ export function VocabQuiz({
           <LessonFrame
             t={t}
             eyebrow={t.matchChallenge}
+            tier={tier}
             title="Finde die Paare"
             subtitle={t.matchWordsToMeaning}
           >
