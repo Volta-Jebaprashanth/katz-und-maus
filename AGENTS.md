@@ -128,6 +128,15 @@ Vite 8 + Nitro.
       the photo's own corners getting clipped by the card shape is
       expected, not a bug — don't add padding or switch back to
       `object-contain`.
+    - **Blurred loading placeholders**: after adding or replacing any image,
+      run `bun run generate-image-placeholders` (Python + Pillow). It
+      writes a ThumbHash per image into
+      `src/data/image-placeholders.generated.ts` (auto-generated — don't
+      hand-edit). `LoadingImage` (`pieces.tsx`, used by `Picture`,
+      `PictureOptions` and `MatchPairs`) shows that blur, plus a spinner if
+      loading takes more than 250ms, until the real image arrives. An image
+      with no hash still works; it just gets the spinner alone. This sits on
+      top of `image-preload.ts`, it doesn't replace it.
     - Prefer a **real photo of the actual action/scene** (someone actually
       waving hello, actually stretching awake, actually asleep) over an
       abstract icon or object standing in for it (an alarm clock for

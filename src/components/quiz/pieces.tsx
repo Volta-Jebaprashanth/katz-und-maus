@@ -1,10 +1,11 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { Check, Keyboard, RotateCcw, Star, Volume2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { playLetter, playWord } from "@/lib/word-audio";
 import { playCorrectSound, playWrongSound } from "@/lib/feedback-sound";
 import { shuffle } from "@/lib/quiz-engine";
+import { placeholderFor } from "@/lib/thumbhash";
 import type { MotherTongue, Strings } from "@/lib/i18n";
 
 // Shared presentational building blocks for a lesson screen. Originally
@@ -47,6 +48,90 @@ export function LessonFrame({
   );
 }
 
+// A picture that stays presentable on a slow network: until the real image
+// arrives it shows a blurred preview decoded from the image's ThumbHash
+// (src/lib/thumbhash.ts) plus, if loading takes more than a moment, a
+// spinner — then the photo fades in over it. Images the preloader
+// (image-preload.ts) already fetched are `complete` on mount, so they show
+// straight away with no placeholder flash or fade. `className` sizes the
+// wrapper; `imgClassName` is for the photo itself (object-fit etc.).
+const SPINNER_DELAY_MS = 250;
+
+export function LoadingImage({
+  src,
+  alt,
+  className,
+  imgClassName,
+  spinner = true,
+}: {
+  src: string;
+  alt: string;
+  className?: string;
+  imgClassName?: string;
+  spinner?: boolean;
+}) {
+  const imgRef = useRef<HTMLImageElement>(null);
+  // Tracked per src (not as booleans) so a component reused for the next
+  // question's picture starts over instead of inheriting "loaded".
+  // `fade` is only set when the image arrived after first paint — a cached
+  // one is marked loaded before paint and shouldn't replay the fade-in.
+  const [loadState, setLoadState] = useState<{ src: string; fade: boolean } | null>(null);
+  const [failedSrc, setFailedSrc] = useState<string | null>(null);
+  const [slowSrc, setSlowSrc] = useState<string | null>(null);
+  const loaded = loadState?.src === src;
+  const placeholder = placeholderFor(src);
+
+  useLayoutEffect(() => {
+    const img = imgRef.current;
+    if (img?.complete && img.naturalWidth > 0) setLoadState({ src, fade: false });
+  }, [src]);
+  useEffect(() => {
+    if (loaded) return;
+    const timer = setTimeout(() => setSlowSrc(src), SPINNER_DELAY_MS);
+    return () => clearTimeout(timer);
+  }, [src, loaded]);
+
+  return (
+    <span className={cn("relative block overflow-hidden", className)}>
+      {placeholder && (
+        <img
+          src={placeholder}
+          alt=""
+          aria-hidden
+          className={cn(
+            "absolute inset-0 size-full scale-110 object-cover blur-sm transition-opacity duration-300",
+            loaded && "opacity-0",
+          )}
+        />
+      )}
+      <img
+        ref={imgRef}
+        src={src}
+        alt={alt}
+        onLoad={() => setLoadState((prev) => (prev?.src === src ? prev : { src, fade: true }))}
+        onError={() => setFailedSrc(src)}
+        className={cn(
+          "relative size-full",
+          imgClassName,
+          !loaded && "opacity-0",
+          loaded && loadState.fade && "animate-in fade-in zoom-in-105 duration-300",
+        )}
+      />
+      {spinner && !loaded && slowSrc === src && failedSrc !== src && (
+        <span
+          role="status"
+          aria-label="Loading"
+          className="absolute inset-0 grid place-items-center animate-in fade-in duration-200"
+        >
+          <span className="grid size-11 place-items-center rounded-full bg-card/75 shadow-md backdrop-blur-sm">
+            <span className="size-6 animate-spin rounded-full border-[3px] border-primary/25 border-t-primary" />
+          </span>
+        </span>
+      )}
+    </span>
+  );
+}
+
 // `caption` labels the picture with its word so a photo that can't be told
 // apart from a similar one on its own (e.g. a hello-wave vs. a bye-wave)
 // still reads unambiguously. Pass the language the learner ISN'T being
@@ -68,7 +153,7 @@ export function Picture({
     <div className="mx-auto my-5 flex flex-col items-center gap-2">
       <div className="grid size-36 place-items-center overflow-hidden rounded-[28px] bg-card shadow-inner ring-1 ring-border sm:size-40">
         {src ? (
-          <img src={src} alt={alt} className="size-full object-cover" />
+          <LoadingImage src={src} alt={alt} className="size-full" imgClassName="object-cover" />
         ) : (
           <span className="text-7xl" role="img" aria-label={alt}>
             {icon}
@@ -285,7 +370,12 @@ export function PictureOptions({
         >
           <span className="grid aspect-square w-full place-items-center">
             {option.image ? (
-              <img src={option.image} alt={option.label} className="size-full object-cover" />
+              <LoadingImage
+                src={option.image}
+                alt={option.label}
+                className="size-full"
+                imgClassName="object-cover"
+              />
             ) : (
               <span className="text-5xl" role="img" aria-label={option.label}>
                 {option.icon}
@@ -556,7 +646,13 @@ export function MatchPairs<W extends MatchWord>({
               )}
             >
               {w.image ? (
-                <img src={w.image} alt={w.full} className="size-8 shrink-0 object-contain" />
+                <LoadingImage
+                  src={w.image}
+                  alt={w.full}
+                  className="size-8 shrink-0"
+                  imgClassName="object-contain"
+                  spinner={false}
+                />
               ) : (
                 <span className="text-2xl" role="img" aria-label={w.full}>
                   {w.icon}
