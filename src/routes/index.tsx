@@ -57,6 +57,9 @@ import {
 } from "@/data/lessons";
 import { FAMILY_LESSON_ID } from "@/data/family";
 import { WEATHER_LESSON_ID } from "@/data/weather";
+import { HOBBIES_LESSON_ID } from "@/data/hobbies";
+import { JOBS_LESSON_ID } from "@/data/jobs";
+import { FOOD_LESSON_ID } from "@/data/food";
 import { TIERE_WORDS, type VocabWord } from "@/data/vocabulary";
 import { MOTHER_TONGUES, TRANSLATIONS, type MotherTongue, type Strings } from "@/lib/i18n";
 
@@ -919,6 +922,12 @@ const OESD_LESSONS: {
       tamil: "குடும்ப உறுப்பினர்கள்",
       sinhala: "පවුලේ සාමාජිකයන්",
     },
+  },
+  { lessonId: HOBBIES_LESSON_ID },
+  { lessonId: JOBS_LESSON_ID },
+  {
+    lessonId: FOOD_LESSON_ID,
+    title: "Essen und Trinken",
   },
 ];
 
