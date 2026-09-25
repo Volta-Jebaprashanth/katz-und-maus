@@ -245,6 +245,60 @@ required).
 | to-freeze.jpg | frieren | https://www.pexels.com/photo/woman-in-gray-knitted-beanie-standing-on-snow-covered-ground-6500176/ |
 | to-shine.jpg | scheinen | https://www.pexels.com/photo/sunlight-streaming-through-trees-in-tranquil-park-29409461/ |
 
+## Lesson 1.6 — Die Hobbys
+
+The 44 photos under `public/1.6 hobbies/images/` are real photos from
+[Pexels](https://www.pexels.com), cropped to a square 640x640, under the same
+[Pexels License](https://www.pexels.com/license/) (free to use, no attribution
+required). `hobbies.jpg` is a 2x2 collage of four photos, all listed.
+
+| File | German word | Source |
+| ---- | ----------- | ------ |
+| hobby.jpg | das Hobby | https://www.pexels.com/photo/child-playing-with-lego-blocks-5435599/ |
+| hobbies.jpg | die Hobbys | 2x2 collage of: https://www.pexels.com/photo/young-child-playing-basketball-on-outdoor-court-30637225/, https://www.pexels.com/photo/a-child-playing-drums-9644670/, https://www.pexels.com/photo/a-kid-showing-his-artork-8506342/, https://www.pexels.com/photo/two-children-playing-with-lego-blocks-on-floor-3661453/ |
+| sport.jpg | der Sport | https://www.pexels.com/photo/kids-playing-basketball-8337249/ |
+| playing-football.jpg | das Fußballspielen | https://www.pexels.com/photo/young-kids-playing-football-on-the-field-8813564/ |
+| swimming.jpg | das Schwimmen | https://www.pexels.com/photo/boy-in-swimming-pool-346779/ |
+| running.jpg | das Laufen | https://www.pexels.com/photo/boy-running-on-green-grass-2495564/ |
+| cycling.jpg | das Radfahren | https://www.pexels.com/photo/children-riding-bicycle-206443/ |
+| hiking.jpg | das Wandern | https://www.pexels.com/photo/photo-of-people-hiking-on-mountain-2609459/ |
+| dancing.jpg | das Tanzen | https://www.pexels.com/photo/children-dancing-together-7667554/ |
+| singing.jpg | das Singen | https://www.pexels.com/photo/a-girl-singing-while-holding-the-microphone-7521359/ |
+| cooking.jpg | das Kochen | https://www.pexels.com/photo/little-girl-cooking-1684032/ |
+| baking.jpg | das Backen | https://www.pexels.com/photo/photo-of-girl-baking-cookies-4149015/ |
+| reading.jpg | das Lesen | https://www.pexels.com/photo/focused-black-kids-reading-book-6437505/ |
+| writing.jpg | das Schreiben | https://www.pexels.com/photo/a-girl-writing-on-a-notebook-8121107/ |
+| drawing.jpg | das Zeichnen | https://www.pexels.com/photo/cute-little-toddler-girl-drawing-with-pencil-7978258/ |
+| painting.jpg | das Malen | https://www.pexels.com/photo/a-kid-painting-on-a-white-paper-6978767/ |
+| photography.jpg | das Fotografieren | https://www.pexels.com/photo/a-boy-holding-a-camera-18918155/ |
+| travelling.jpg | das Reisen | https://www.pexels.com/photo/positive-mother-and-daughter-with-suitcase-in-airport-corridor-4173213/ |
+| fishing.jpg | das Angeln | https://www.pexels.com/photo/boy-holding-fishing-rod-386003/ |
+| playing.jpg | das Spielen | https://www.pexels.com/photo/two-children-playing-with-toys-8435803/ |
+| music.jpg | die Musik | https://www.pexels.com/photo/little-boy-playing-on-drums-9509908/ |
+| film.jpg | der Film | https://www.pexels.com/photo/child-eating-popcorn-at-the-cinema-28397777/ |
+| computer-game.jpg | das Computerspiel | https://www.pexels.com/photo/a-boy-playing-games-on-a-computer-10643464/ |
+| video-game.jpg | das Videospiel | https://www.pexels.com/photo/kids-playing-video-games-1103563/ |
+| instrument.jpg | das Instrument | https://www.pexels.com/photo/a-girl-playing-the-violin-8471817/ |
+| guitar.jpg | die Gitarre | https://www.pexels.com/photo/man-and-child-playing-guitars-7521069/ |
+| piano.jpg | das Klavier | https://www.pexels.com/photo/photo-of-a-boy-playing-piano-7570121/ |
+| to-play.jpg | spielen | https://www.pexels.com/photo/two-children-sitting-down-playing-with-toys-3661390/ |
+| to-read.jpg | lesen | https://www.pexels.com/photo/kids-reading-a-book-5608541/ |
+| to-write.jpg | schreiben | https://www.pexels.com/photo/boy-busy-writing-5306413/ |
+| to-swim.jpg | schwimmen | https://www.pexels.com/photo/kids-swimming-underwater-in-a-pool-9044061/ |
+| to-run.jpg | laufen | https://www.pexels.com/photo/teenage-girl-running-in-a-race-23371782/ |
+| to-dance.jpg | tanzen | https://www.pexels.com/photo/children-holding-hands-and-dancing-in-a-circle-19264315/ |
+| to-sing.jpg | singen | https://www.pexels.com/photo/boys-singing-as-a-choir-7568543/ |
+| to-cook.jpg | kochen | https://www.pexels.com/photo/woman-and-kid-cooking-together-on-kitchen-4149020/ |
+| to-bake.jpg | backen | https://www.pexels.com/photo/kids-cutting-christmas-cookies-10634585/ |
+| to-travel.jpg | reisen | https://www.pexels.com/photo/curious-baby-looking-out-airplane-window-36891502/ |
+| to-hike.jpg | wandern | https://www.pexels.com/photo/back-view-of-a-person-carrying-a-backpack-while-hiking-8316328/ |
+| to-take-photos.jpg | fotografieren | https://www.pexels.com/photo/man-taking-a-photo-of-his-baby-girl-with-an-instant-camera-7678209/ |
+| to-draw.jpg | zeichnen | https://www.pexels.com/photo/small-kid-attentively-drawing-in-notebook-3975653/ |
+| to-paint.jpg | malen | https://www.pexels.com/photo/a-boy-and-girl-painting-on-floor-6966373/ |
+| to-listen.jpg | hören | https://www.pexels.com/photo/small-kid-listening-to-music-via-headphones-4017437/ |
+| to-watch.jpg | sehen | https://www.pexels.com/photo/a-father-and-his-children-watching-tv-on-a-sofa-5813753/ |
+| to-do.jpg | machen | https://www.pexels.com/photo/focused-children-doing-homework-at-table-5905845/ |
+
 ## Path icons (`public/<lesson>/icons/`)
 
 The small round pictures on the learning path are 160x160 close-up crops.
