@@ -380,6 +380,58 @@ The path icons in `public/1.7 jobs/icons/` are all cropped from these.
 | employee.jpg | der Mitarbeiter | https://www.pexels.com/photo/12898970/ |
 | female-employee.jpg | die Mitarbeiterin | https://www.pexels.com/photo/6205635/ |
 
+## Lesson 1.8 — Angaben zur Person
+
+The 39 photos under `public/1.8 personal information/images/` are real photos
+from [Pexels](https://www.pexels.com), cropped to a square 640x640, under the
+same [Pexels License](https://www.pexels.com/license/) (free to use, no
+attribution required). 11 of them are copies of photos from earlier lessons
+for words taught there too; their sources are listed in those lessons'
+sections above. The path icons in `public/1.8 personal information/icons/`
+are all cropped from these.
+
+| File | German word | Source |
+| ---- | ----------- | ------ |
+| first-name.jpg | der Vorname | https://www.pexels.com/photo/a-man-wearing-a-name-tag-7339623/ |
+| last-name.jpg | der Nachname | https://www.pexels.com/photo/name-tags-for-door-phone-on-red-wall-14151373/ |
+| age.jpg | das Alter | https://www.pexels.com/photo/little-girl-showing-number-on-fingers-11715527/ |
+| birthday.jpg | der Geburtstag | https://www.pexels.com/photo/little-birthday-girl-blowing-out-candles-6343199/ |
+| date-of-birth.jpg | das Geburtsdatum | https://www.pexels.com/photo/date-marked-in-calendar-15995502/ |
+| birthplace.jpg | der Geburtsort | https://www.pexels.com/photo/hand-placing-pin-on-map-7663519/ |
+| place-of-residence.jpg | der Wohnort | https://www.pexels.com/photo/aerial-view-of-suburban-neighborhood-in-sacramento-28490242/ |
+| address.jpg | die Adresse | https://www.pexels.com/photo/letter-envelopes-1906606/ |
+| street.jpg | die Straße | https://www.pexels.com/photo/narrow-cobblestone-street-between-typical-german-houses-5109402/ |
+| house-number.jpg | die Hausnummer | https://www.pexels.com/photo/retro-house-sign-on-wall-in-plants-14356384/ |
+| telephone-number.jpg | die Telefonnummer | https://www.pexels.com/photo/hand-holding-a-smartphone-with-an-emergency-number-dialed-6034783/ |
+| email-address.jpg | die E-Mail-Adresse | https://www.pexels.com/photo/close-up-shot-of-keyboard-buttons-2882555/ |
+| city.jpg | die Stadt | https://www.pexels.com/photo/aerial-photography-of-city-skyline-97906/ |
+| country.jpg | das Land | https://www.pexels.com/photo/a-close-up-shot-of-a-kid-pointing-on-a-globe-8082785/ |
+| nationality.jpg | die Nationalität | https://www.pexels.com/photo/a-person-holding-passports-7009478/ |
+| language.jpg | die Sprache | https://www.pexels.com/photo/cheerful-diverse-friends-talking-at-table-with-coffee-in-cafe-6457517/ |
+| native-language.jpg | die Muttersprache | https://www.pexels.com/photo/a-mother-talking-to-her-child-7078729/ |
+| person.jpg | die Person | https://www.pexels.com/photo/man-standing-on-light-outdoors-14906344/ |
+| man.jpg | der Mann | https://www.pexels.com/photo/portrait-of-man-in-brown-turtleneck-smiling-6338326/ |
+| woman.jpg | die Frau | https://www.pexels.com/photo/portrait-of-a-woman-smiling-16152597/ |
+| child.jpg | das Kind | https://www.pexels.com/photo/portrait-of-smiling-boy-21642988/ |
+| boy.jpg | der Junge | https://www.pexels.com/photo/portrait-of-a-boy-smiling-14178320/ |
+| girl.jpg | das Mädchen | https://www.pexels.com/photo/portrait-of-a-smiling-girl-in-pigtails-7577046/ |
+| worker.jpg | der Arbeiter | https://www.pexels.com/photo/portrait-of-a-construction-worker-wearing-a-yellow-helmet-7788227/ |
+| to-be-called.jpg | heißen | https://www.pexels.com/photo/a-woman-wearing-a-name-tag-7339627/ |
+| to-be.jpg | sein | https://www.pexels.com/photo/cheerful-man-pointing-at-himself-in-white-t-shirt-33716144/ |
+| to-come.jpg | kommen | https://www.pexels.com/photo/boy-running-on-grass-12613518/ |
+| born.jpg | geboren | https://www.pexels.com/photo/smiling-newborn-baby-3279207/ |
+| name.jpg | der Name | copy of `1.2 family/images/name.jpg` (see above) |
+| married.jpg | verheiratet | copy of `1.2 family/images/married.jpg` (see above) |
+| single.jpg | ledig | copy of `1.2 family/images/single.jpg` (see above) |
+| alone.jpg | allein | copy of `1.2 family/images/alone.jpg` (see above) |
+| to-live.jpg | wohnen | copy of `1.4 home/images/live.jpg` (see above) |
+| profession.jpg | der Beruf | copy of `1.7 jobs/images/profession.jpg` (see above) |
+| work.jpg | die Arbeit | copy of `1.7 jobs/images/work.jpg` (see above) |
+| schoolboy.jpg | der Schüler | copy of `1.7 jobs/images/schoolboy.jpg` (see above) |
+| schoolgirl.jpg | die Schülerin | copy of `1.7 jobs/images/schoolgirl.jpg` (see above) |
+| university-student.jpg | der Student | copy of `1.7 jobs/images/university-student.jpg` (see above) |
+| female-university-student.jpg | die Studentin | copy of `1.7 jobs/images/female-university-student.jpg` (see above) |
+
 ## Path icons (`public/<lesson>/icons/`)
 
 The small round pictures on the learning path are 160x160 close-up crops.
