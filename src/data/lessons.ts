@@ -4,6 +4,7 @@ import { GREETINGS_LESSON_ID, GREETINGS_WORDS } from "@/data/greetings";
 import { FAMILY_LESSON_ID, FAMILY_WORDS } from "@/data/family";
 import { FOOD_LESSON_ID, FOOD_WORDS } from "@/data/food";
 import { HOME_LESSON_ID, HOME_WORDS } from "@/data/home";
+import { WEATHER_LESSON_ID, WEATHER_WORDS } from "@/data/weather";
 
 // Every vocabulary test holds 10-15 words. A lesson's word list is split
 // evenly into as few tests as fit that range (24 -> 12+12, 37 -> 13+12+12),
@@ -83,6 +84,14 @@ export const VOCAB_LESSONS: VocabLesson[] = [
     icon: "🏠",
     meaning: { english: "Home & Rooms", tamil: "வீடு & அறைகள்", sinhala: "ගෙදර සහ කාමර" },
     tests: splitIntoTests(HOME_LESSON_ID, HOME_WORDS),
+  },
+  {
+    id: WEATHER_LESSON_ID,
+    assetDir: "1.5 weather",
+    title: "Das Wetter",
+    icon: "🌦️",
+    meaning: { english: "The Weather", tamil: "வானிலை", sinhala: "කාලගුණය" },
+    tests: splitIntoTests(WEATHER_LESSON_ID, WEATHER_WORDS),
   },
 ];
 

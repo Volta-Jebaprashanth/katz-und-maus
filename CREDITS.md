@@ -201,6 +201,50 @@ required).
 | cleaning.jpg | putzen | https://www.pexels.com/photo/a-person-wiping-a-table-6684752/ |
 | sleep.jpg | schlafen | https://www.pexels.com/photo/child-sleeping-in-bed-10608041/ |
 
+## Lesson 1.5 — Das Wetter
+
+The 34 photos under `public/1.5 weather/images/` are real photos from
+[Pexels](https://www.pexels.com), cropped to a square 640x640, under the same
+[Pexels License](https://www.pexels.com/license/) (free to use, no attribution
+required).
+
+| File | German word | Source |
+| ---- | ----------- | ------ |
+| weather.jpg | das Wetter | https://www.pexels.com/photo/double-rainbow-636388/ |
+| sun.jpg | die Sonne | https://www.pexels.com/photo/sunlight-and-clouds-with-blue-sky-7085605/ |
+| rain.jpg | der Regen | https://www.pexels.com/photo/people-walking-on-the-sidewalk-while-raining-12542146/ |
+| snow.jpg | der Schnee | https://www.pexels.com/photo/snow-covered-leafless-trees-on-snow-covered-ground-6373236/ |
+| wind.jpg | der Wind | https://www.pexels.com/photo/wind-blowing-through-green-leaves-by-a-lake-39191655/ |
+| cloud.jpg | die Wolke | https://www.pexels.com/photo/white-cloud-in-blue-sky-on-sunny-day-4570006/ |
+| sky.jpg | der Himmel | https://www.pexels.com/photo/clear-blue-sky-with-fluffy-clouds-31195940/ |
+| fog.jpg | der Nebel | https://www.pexels.com/photo/gray-concrete-road-between-trees-covered-with-fog-3808853/ |
+| thunderstorm.jpg | das Gewitter | https://www.pexels.com/photo/lightning-in-the-sky-9780705/ |
+| storm.jpg | der Sturm | https://www.pexels.com/photo/palm-trees-during-a-hurricane-16313103/ |
+| temperature.jpg | die Temperatur | https://www.pexels.com/photo/brown-wooden-wall-thermometer-on-the-wall-9685858/ |
+| degree.jpg | der Grad | https://www.pexels.com/photo/close-up-shot-of-a-thermometer-4022769/ |
+| summer.jpg | der Sommer | https://www.pexels.com/photo/a-young-girl-sitting-on-the-beach-sand-12641777/ |
+| winter.jpg | der Winter | https://www.pexels.com/photo/two-children-playing-in-the-snow-with-sleds-27642780/ |
+| spring.jpg | der Frühling | https://www.pexels.com/photo/branches-with-blossoms-20758155/ |
+| autumn.jpg | der Herbst | https://www.pexels.com/photo/happy-kids-throwing-foliage-in-park-5859323/ |
+| sunny.jpg | sonnig | https://www.pexels.com/photo/child-standing-on-green-lawn-11523/ |
+| rainy.jpg | regnerisch | https://www.pexels.com/photo/photo-of-a-kid-with-a-green-umbrella-walking-11114163/ |
+| windy.jpg | windig | https://www.pexels.com/photo/joyful-child-playing-outdoors-on-a-windy-day-33218817/ |
+| cloudy.jpg | bewölkt | https://www.pexels.com/photo/a-gloomy-sky-4533919/ |
+| foggy.jpg | neblig | https://www.pexels.com/photo/forest-in-fog-6006712/ |
+| cold.jpg | kalt | https://www.pexels.com/photo/portrait-of-boy-in-hat-and-scarf-in-winter-19524516/ |
+| warm.jpg | warm | https://www.pexels.com/photo/little-girls-playing-at-a-park-5290396/ |
+| hot.jpg | heiß | https://www.pexels.com/photo/desert-under-yellow-sunset-712392/ |
+| cool.jpg | kühl | https://www.pexels.com/photo/portrait-of-boy-posing-with-leaves-in-autumn-park-5715027/ |
+| dry.jpg | trocken | https://www.pexels.com/photo/cracked-brown-soil-216692/ |
+| wet.jpg | nass | https://www.pexels.com/photo/joyful-child-playing-in-the-rain-outdoors-34202083/ |
+| nice.jpg | schön | https://www.pexels.com/photo/idyllic-summer-meadow-with-fluffy-clouds-38296833/ |
+| bad.jpg | schlecht | https://www.pexels.com/photo/man-with-pink-umbrella-under-stormy-sky-in-pampore-36932746/ |
+| clear.jpg | klar | https://www.pexels.com/photo/blue-sky-over-green-hill-12619762/ |
+| to-rain.jpg | regnen | https://www.pexels.com/photo/rain-drops-459451/ |
+| to-snow.jpg | schneien | https://www.pexels.com/photo/snow-covering-tree-and-buildings-in-background-19390783/ |
+| to-freeze.jpg | frieren | https://www.pexels.com/photo/woman-in-gray-knitted-beanie-standing-on-snow-covered-ground-6500176/ |
+| to-shine.jpg | scheinen | https://www.pexels.com/photo/sunlight-streaming-through-trees-in-tranquil-park-29409461/ |
+
 ## Path icons (`public/<lesson>/icons/`)
 
 The small round pictures on the learning path are 160x160 close-up crops.
