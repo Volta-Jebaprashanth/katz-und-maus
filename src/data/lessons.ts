@@ -103,6 +103,12 @@ export function testPicture(lesson: VocabLesson, test: VocabTest): string {
   return `/${lesson.assetDir}/icons/test-${test.part}.jpg`;
 }
 
+export function findVocabLesson(lessonId: string): VocabLesson {
+  const lesson = VOCAB_LESSONS.find((l) => l.id === lessonId);
+  if (!lesson) throw new Error(`Unknown vocab lesson ${lessonId}`);
+  return lesson;
+}
+
 export function findVocabTest(testId: string): VocabTest | undefined {
   for (const lesson of VOCAB_LESSONS) {
     const test = lesson.tests.find((t) => t.testId === testId);

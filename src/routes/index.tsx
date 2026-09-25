@@ -47,12 +47,16 @@ import {
 } from "@/lib/stats-store";
 import type { Tier } from "@/lib/quiz-engine";
 import {
+  findVocabLesson,
   findVocabTest,
   lessonPicture,
   testPicture,
   VOCAB_LESSONS,
+  type VocabLesson,
   type VocabTest,
 } from "@/data/lessons";
+import { FAMILY_LESSON_ID } from "@/data/family";
+import { WEATHER_LESSON_ID } from "@/data/weather";
 import { TIERE_WORDS, type VocabWord } from "@/data/vocabulary";
 import { MOTHER_TONGUES, TRANSLATIONS, type MotherTongue, type Strings } from "@/lib/i18n";
 
@@ -872,6 +876,52 @@ function collectTestIds(nodes: PathNode[]): string[] {
   ]);
 }
 
+// A vocab lesson as a path node, expanding to its numbered tests. ÖSD lists
+// some Grundlagen lessons again under its own title: those copies get an
+// id prefix (node ids must be unique in the tree) but open the same tests,
+// so progress is shared between both places.
+function lessonPathNode(
+  lesson: VocabLesson,
+  lang: MotherTongue,
+  opts: { idPrefix?: string; title?: string | undefined; meaning?: string | undefined } = {},
+): PathNode {
+  const { idPrefix = "", title = lesson.title, meaning = lesson.meaning[lang] } = opts;
+  return {
+    id: `${idPrefix}${lesson.id}`,
+    title,
+    icon: <PathPicture src={lessonPicture(lesson)} fallback={lesson.icon} />,
+    state: "active",
+    meaning,
+    children: lesson.tests.map((test) => ({
+      id: `${idPrefix}${test.testId}`,
+      title: `${title} ${test.part}`,
+      icon: <PathPicture src={testPicture(lesson, test)} fallback={lesson.icon} />,
+      part: test.part,
+      state: "active",
+      meaning: `${meaning} ${test.part}`,
+      testId: test.testId,
+    })),
+  };
+}
+
+// Grundlagen lessons repeated under the ÖSD section, optionally renamed.
+const OESD_LESSONS: {
+  lessonId: string;
+  title?: string;
+  meaning?: Record<MotherTongue, string>;
+}[] = [
+  { lessonId: WEATHER_LESSON_ID },
+  {
+    lessonId: FAMILY_LESSON_ID,
+    title: "Die Familienmitglieder",
+    meaning: {
+      english: "Family members",
+      tamil: "குடும்ப உறுப்பினர்கள்",
+      sinhala: "පවුලේ සාමාජිකයන්",
+    },
+  },
+];
+
 const PATH_MEANINGS = {
   grundlagen: { english: "Basics", tamil: "அடிப்படைகள்", sinhala: "මූලික කරුණු" },
   oesd: { english: "ÖSD exam", tamil: "ÖSD தேர்வு", sinhala: "ÖSD විභාගය" },
@@ -905,22 +955,7 @@ function Home({
         icon: "🔤",
         state: "active",
         meaning: PATH_MEANINGS.grundlagen[lang],
-        children: VOCAB_LESSONS.map((lesson) => ({
-          id: lesson.id,
-          title: lesson.title,
-          icon: <PathPicture src={lessonPicture(lesson)} fallback={lesson.icon} />,
-          state: "active",
-          meaning: lesson.meaning[lang],
-          children: lesson.tests.map((test) => ({
-            id: test.testId,
-            title: `${lesson.title} ${test.part}`,
-            icon: <PathPicture src={testPicture(lesson, test)} fallback={lesson.icon} />,
-            part: test.part,
-            state: "active",
-            meaning: `${lesson.meaning[lang]} ${test.part}`,
-            testId: test.testId,
-          })),
-        })),
+        children: VOCAB_LESSONS.map((lesson) => lessonPathNode(lesson, lang)),
       },
       {
         id: "oesd",
@@ -928,6 +963,13 @@ function Home({
         icon: "📘",
         state: "active",
         meaning: PATH_MEANINGS.oesd[lang],
+        children: OESD_LESSONS.map(({ lessonId, title, meaning }) =>
+          lessonPathNode(findVocabLesson(lessonId), lang, {
+            idPrefix: "oesd-",
+            title,
+            meaning: meaning?.[lang],
+          }),
+        ),
       },
       {
         id: "testing",
@@ -961,10 +1003,11 @@ function Home({
       return next;
     });
   // Sections/lessons toggle open; only playable nodes (a vocab test or the
-  // Tiere demo) start a lesson. ÖSD is a placeholder with nothing to open yet.
+  // Tiere demo) start a lesson.
   const handleCardClick = (node: PathNode) => {
     if (node.children?.length) toggleNode(node.id);
-    else if (node.testId || node.id === "tiere") onStart(node.id);
+    else if (node.testId) onStart(node.testId);
+    else if (node.id === "tiere") onStart(node.id);
   };
   // Read after mount rather than during render: progress lives in
   // localStorage, which the server render can't see.

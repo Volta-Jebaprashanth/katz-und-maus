@@ -200,5 +200,7 @@ Vite 8 + Nitro.
   der/die/das in `full` (shown and spoken); spelling screens drop it via
   `spellingOf`.
 - **Path layout**: 1 Grundlagen (the vocabulary lessons), 2 ÖSD
-  (placeholder, nothing to open yet), 3 Testing (the hand-written "Tiere" /
+  (no lessons of its own: `OESD_LESSONS` in `index.tsx` lists
+  Grundlagen lessons again, optionally renamed, e.g. 1.2 Familie as "Die
+  Familienmitglieder"; they open the same tests and share progress), 3 Testing (the hand-written "Tiere" /
   der Vogel walkthrough screens in `index.tsx`).
