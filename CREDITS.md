@@ -299,6 +299,87 @@ required). `hobbies.jpg` is a 2x2 collage of four photos, all listed.
 | to-watch.jpg | sehen | https://www.pexels.com/photo/a-father-and-his-children-watching-tv-on-a-sofa-5813753/ |
 | to-do.jpg | machen | https://www.pexels.com/photo/focused-children-doing-homework-at-table-5905845/ |
 
+## Lesson 1.7 — Der Beruf
+
+The 70 photos under `public/1.7 jobs/images/` are real photos from
+[Pexels](https://www.pexels.com), cropped to a square 640x640, under the same
+[Pexels License](https://www.pexels.com/license/) (free to use, no attribution
+required). `profession.jpg` is a 2x2 collage of four of the other photos.
+The path icons in `public/1.7 jobs/icons/` are all cropped from these.
+
+| File | German word | Source |
+| ---- | ----------- | ------ |
+| profession.jpg | der Beruf | 2x2 collage of this lesson's doctor.jpg, cook.jpg, police-officer.jpg and farmer.jpg (listed below) |
+| work.jpg | die Arbeit | https://www.pexels.com/photo/30223853/ |
+| doctor.jpg | der Arzt | https://www.pexels.com/photo/5888160/ |
+| female-doctor.jpg | die Ärztin | https://www.pexels.com/photo/8376309/ |
+| teacher.jpg | der Lehrer | https://www.pexels.com/photo/8617763/ |
+| female-teacher.jpg | die Lehrerin | https://www.pexels.com/photo/8087867/ |
+| schoolboy.jpg | der Schüler | https://www.pexels.com/photo/13198517/ |
+| schoolgirl.jpg | die Schülerin | https://www.pexels.com/photo/7753670/ |
+| university-student.jpg | der Student | https://www.pexels.com/photo/5940864/ |
+| female-university-student.jpg | die Studentin | https://www.pexels.com/photo/31367501/ |
+| engineer.jpg | der Ingenieur | https://www.pexels.com/photo/3772616/ |
+| female-engineer.jpg | die Ingenieurin | https://www.pexels.com/photo/8487402/ |
+| programmer.jpg | der Programmierer | https://www.pexels.com/photo/6804595/ |
+| female-programmer.jpg | die Programmiererin | https://www.pexels.com/photo/3861958/ |
+| salesperson.jpg | der Verkäufer | https://www.pexels.com/photo/8422717/ |
+| female-salesperson.jpg | die Verkäuferin | https://www.pexels.com/photo/6925799/ |
+| cook.jpg | der Koch | https://www.pexels.com/photo/2544829/ |
+| female-cook.jpg | die Köchin | https://www.pexels.com/photo/5737252/ |
+| waiter.jpg | der Kellner | https://www.pexels.com/photo/3769740/ |
+| waitress.jpg | die Kellnerin | https://www.pexels.com/photo/6684786/ |
+| driver.jpg | der Fahrer | https://www.pexels.com/photo/5835344/ |
+| female-driver.jpg | die Fahrerin | https://www.pexels.com/photo/6817008/ |
+| police-officer.jpg | der Polizist | https://www.pexels.com/photo/7715250/ |
+| female-police-officer.jpg | die Polizistin | https://www.pexels.com/photo/7714968/ |
+| mechanic.jpg | der Mechaniker | https://www.pexels.com/photo/7561181/ |
+| female-mechanic.jpg | die Mechanikerin | https://www.pexels.com/photo/279949/ |
+| baker.jpg | der Bäcker | https://www.pexels.com/photo/3218467/ |
+| female-baker.jpg | die Bäckerin | https://www.pexels.com/photo/8349713/ |
+| journalist.jpg | der Journalist | https://www.pexels.com/photo/6950229/ |
+| female-journalist.jpg | die Journalistin | https://www.pexels.com/photo/10464784/ |
+| musician.jpg | der Musiker | https://www.pexels.com/photo/1966012/ |
+| female-musician.jpg | die Musikerin | https://www.pexels.com/photo/15789086/ |
+| artist.jpg | der Künstler | https://www.pexels.com/photo/1640765/ |
+| female-artist.jpg | die Künstlerin | https://www.pexels.com/photo/13421532/ |
+| male-nurse.jpg | der Krankenpfleger | https://www.pexels.com/photo/6303552/ |
+| female-nurse.jpg | die Krankenpflegerin | https://www.pexels.com/photo/5430213/ |
+| dentist.jpg | der Zahnarzt | https://www.pexels.com/photo/6627424/ |
+| female-dentist.jpg | die Zahnärztin | https://www.pexels.com/photo/3881817/ |
+| pharmacist.jpg | der Apotheker | https://www.pexels.com/photo/12332074/ |
+| female-pharmacist.jpg | die Apothekerin | https://www.pexels.com/photo/19471015/ |
+| electrician.jpg | der Elektriker | https://www.pexels.com/photo/27928760/ |
+| female-electrician.jpg | die Elektrikerin | https://www.pexels.com/photo/3862623/ |
+| hairdresser.jpg | der Friseur | https://www.pexels.com/photo/1836983/ |
+| female-hairdresser.jpg | die Friseurin | https://www.pexels.com/photo/6599031/ |
+| farmer.jpg | der Bauer | https://www.pexels.com/photo/10039955/ |
+| female-farmer.jpg | die Bäuerin | https://www.pexels.com/photo/34097733/ |
+| photographer.jpg | der Fotograf | https://www.pexels.com/photo/16597255/ |
+| female-photographer.jpg | die Fotografin | https://www.pexels.com/photo/15638351/ |
+| designer.jpg | der Designer | https://www.pexels.com/photo/3760615/ |
+| female-designer.jpg | die Designerin | https://www.pexels.com/photo/4348195/ |
+| manager.jpg | der Manager | https://www.pexels.com/photo/7964414/ |
+| female-manager.jpg | die Managerin | https://www.pexels.com/photo/4872020/ |
+| job.jpg | der Job | https://www.pexels.com/photo/5439381/ |
+| to-work.jpg | arbeiten | https://www.pexels.com/photo/7438090/ |
+| to-learn.jpg | lernen | https://www.pexels.com/photo/8613117/ |
+| to-study.jpg | studieren | https://www.pexels.com/photo/16420457/ |
+| company.jpg | die Firma | https://www.pexels.com/photo/19248667/ |
+| office.jpg | das Büro | https://www.pexels.com/photo/8606292/ |
+| school.jpg | die Schule | https://www.pexels.com/photo/8500421/ |
+| university.jpg | die Universität | https://www.pexels.com/photo/7972512/ |
+| hospital.jpg | das Krankenhaus | https://www.pexels.com/photo/5364345/ |
+| shop.jpg | das Geschäft | https://www.pexels.com/photo/10427698/ |
+| workplace.jpg | der Arbeitsplatz | https://www.pexels.com/photo/12903116/ |
+| colleague.jpg | der Kollege | https://www.pexels.com/photo/7653989/ |
+| female-colleague.jpg | die Kollegin | https://www.pexels.com/photo/2041392/ |
+| boss.jpg | der Chef | https://www.pexels.com/photo/8353832/ |
+| female-boss.jpg | die Chefin | https://www.pexels.com/photo/4342352/ |
+| team.jpg | das Team | https://www.pexels.com/photo/9072250/ |
+| employee.jpg | der Mitarbeiter | https://www.pexels.com/photo/12898970/ |
+| female-employee.jpg | die Mitarbeiterin | https://www.pexels.com/photo/6205635/ |
+
 ## Path icons (`public/<lesson>/icons/`)
 
 The small round pictures on the learning path are 160x160 close-up crops.

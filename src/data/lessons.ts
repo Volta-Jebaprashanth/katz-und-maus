@@ -6,6 +6,7 @@ import { FOOD_LESSON_ID, FOOD_WORDS } from "@/data/food";
 import { HOME_LESSON_ID, HOME_WORDS } from "@/data/home";
 import { WEATHER_LESSON_ID, WEATHER_WORDS } from "@/data/weather";
 import { HOBBIES_LESSON_ID, HOBBIES_WORDS } from "@/data/hobbies";
+import { JOBS_LESSON_ID, JOBS_WORDS } from "@/data/jobs";
 
 // Every vocabulary test holds 10-15 words. A lesson's word list is split
 // evenly into as few tests as fit that range (24 -> 12+12, 37 -> 13+12+12),
@@ -101,6 +102,14 @@ export const VOCAB_LESSONS: VocabLesson[] = [
     icon: "⚽",
     meaning: { english: "Hobbies", tamil: "பொழுதுபோக்குகள்", sinhala: "විනෝදාංශ" },
     tests: splitIntoTests(HOBBIES_LESSON_ID, HOBBIES_WORDS),
+  },
+  {
+    id: JOBS_LESSON_ID,
+    assetDir: "1.7 jobs",
+    title: "Der Beruf",
+    icon: "💼",
+    meaning: { english: "Jobs", tamil: "தொழில்கள்", sinhala: "රැකියා" },
+    tests: splitIntoTests(JOBS_LESSON_ID, JOBS_WORDS),
   },
 ];
 
